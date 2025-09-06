@@ -1,0 +1,35 @@
+.gameCategories {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 4rem; /* space between items */
+  padding: 2rem 3rem;
+  background-color: var(--color-bg-muted);
+  margin-bottom: 2rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  overflow-x: auto; /* allow horizontal scroll */
+  overflow-y: hidden; /* prevent vertical scrollbar */
+  white-space: nowrap; /* avoid wrapping */
+  -webkit-overflow-scrolling: touch; /* smooth scroll on mobile */
+}
+
+.gameCategoryItem {
+  flex: 0 0 auto; /* prevent shrinking so items stay their size */
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.gameCategoryItemIcon {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.gameCategoryItem span {
+  font-weight: 700;
+  font-size: 1.5rem;
+}

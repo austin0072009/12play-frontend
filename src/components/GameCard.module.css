@@ -1,0 +1,21 @@
+.gameCard {
+  overflow: hidden;
+  border-radius: 1rem;
+  flex: 0 0 auto; /* prevent shrinking so items stay their size */
+  background-color: var(--color-bg-muted);
+  width: 30%;
+}
+
+.gameCardImage {
+  width: 100%;
+}
+
+.gameCardLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.5rem;
+  padding: 1rem;
+  font-weight: 700;
+}

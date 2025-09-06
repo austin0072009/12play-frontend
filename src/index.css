@@ -1,0 +1,96 @@
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 18px; /* bumped up from 16px */
+  line-height: 1.6;
+  font-weight: 400;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* === CSS RESET for html and basics === */
+
+/* Apply border-box sizing to all elements */
+html {
+  box-sizing: border-box;
+  font-size: 18px; /* or your preferred base font size */
+  -webkit-text-size-adjust: 100%; /* prevent font scaling on iOS */
+}
+
+/* Inherit box-sizing for all elements */
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* Remove default margin and padding */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove list styles on ul, ol */
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Set a comfortable line-height */
+body {
+  line-height: 1.5;
+  font-family: "Inter";
+  background-color: var(--color-bg);
+  color: #fff;
+  height: auto;
+  min-height: 100%;
+  overflow-y: auto;
+}
+
+/* Make images and videos responsive */
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  display: block;
+  height: auto;
+}
+
+/* Remove default link styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Inherit fonts for form elements */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove outline but keep focus accessibility for keyboard users */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #007aff;
+  outline-offset: 2px;
+}

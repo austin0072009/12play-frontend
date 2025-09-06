@@ -1,0 +1,56 @@
+.footer {
+  width: 100%;
+  height: 360px !important;
+  background-color: var(--color-bg-dark);
+  display: flex;
+  justify-content: space-between; /* Space evenly, no overlap */
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+}
+
+/* Each button takes equal space */
+.navItem {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: none;
+  outline: none;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--color-bg-dark);
+  outline: none;
+}
+
+.navItem:focus {
+  outline: none;
+}
+
+/* Remove border from the first button */
+.navItem:first-child {
+  border-left: none;
+}
+
+.navIcon {
+  width: 3.5rem;
+  color: var(--color-muted);
+}
+
+.navLabel {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-top: 0.5rem;
+}
+
+.navItemActive .navLabel {
+  color: var(--color-primary);
+}
+
+.navItemActive .navIcon {
+  color: var(--color-primary);
+}

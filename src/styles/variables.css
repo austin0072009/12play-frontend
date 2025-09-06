@@ -1,0 +1,15 @@
+:root {
+  --color-primary: #cb0000;
+  --color-secondary: #6c757d;
+  --color-bg: #1d1d1d;
+  --color-bg-dark: #010100;
+  --color-text: #333;
+  --color-text-muted: #9d9c9d;
+  --color-muted: #9c9c9c;
+  --color-bg-muted: #373636;
+  --font-size-base: 16px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --color-sidebar-bg: #303131;
+}

@@ -1,0 +1,63 @@
+.gameRowHeader {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
+.gameRowHeaderLeft {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+
+  svg {
+    color: var(--color-primary);
+  }
+
+  span {
+    font-size: 1.8rem;
+    font-weight: 900;
+  }
+}
+
+.gameRowHeaderRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.arrowButton {
+  border: none;
+  width: 3.5rem;
+  height: 3.5rem;
+  outline: none;
+  border-radius: 0.3rem;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-muted);
+  color: #fff;
+  justify-content: center;
+}
+
+.arrowIcon {
+  width: 3rem;
+  height: 3rem;
+}
+
+.gameCardRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* space between items */
+  padding: 1rem 1rem;
+  margin-bottom: 2rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  overflow-x: auto; /* allow horizontal scroll */
+  overflow-y: hidden; /* prevent vertical scrollbar */
+  white-space: nowrap; /* avoid wrapping */
+  -webkit-overflow-scrolling: touch; /* smooth scroll on mobile */
+}
