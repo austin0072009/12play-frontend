@@ -1,0 +1,203 @@
+.container {
+  position: relative;
+}
+
+.tabContainer {
+  width: 100%;
+  background-color: var(--color-bg-muted);
+  padding: 1rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tabItem {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  color: var(--color-secondary);
+
+  .tabItemIcon {
+    width: 3.5rem;
+    color: var(--color-secondary);
+  }
+
+  span {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+}
+
+.tabItem.active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+
+  .tabItemIcon {
+    color: var(--color-white);
+  }
+}
+
+.subTabContainer {
+  margin: 1rem;
+  background-color: var(--color-bg-muted);
+  border-radius: 1rem;
+  padding: 2rem 2rem 0 2rem;
+  display: flex;
+  margin-top: 2rem;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.subTabItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-secondary);
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  padding-bottom: 1rem;
+
+  span {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+}
+
+.subTabItemIcon {
+  width: 3.5rem;
+  color: var(--color-secondary);
+}
+
+.subTabItem.active {
+  color: var(--color-white);
+  border-bottom: 0.5rem solid var(--color-primary);
+
+  .subTabItemIcon {
+    width: 3.5rem;
+    color: var(--color-white);
+  }
+}
+
+.channelBankDiv {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 2rem;
+}
+
+.channelDiv {
+  padding: 2rem;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    span {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.bankImage {
+  width: 8.5rem;
+  height: 8.5rem;
+  border-radius: 1rem;
+}
+
+.channelInfoDiv {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+  background-color: var(--color-primary);
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-top: 2rem;
+  p {
+    font-weight: 800;
+    font-size: 1.6rem;
+  }
+}
+
+.selectBtnDiv {
+  width: 100%;
+  position: relative;
+  padding: 0 2rem;
+}
+
+.selectBtn {
+  display: flex;
+  background-color: var(--color-bg-muted);
+  flex-direction: row;
+  border: none;
+  color: var(--color-white);
+  outline: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+
+  .selectBtnLabel {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+  }
+
+  p {
+    font-size: 1.6rem;
+    padding: 0;
+    margin: 0;
+    color: var(--color-secondary);
+    span {
+      color: var(--color-primary);
+    }
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0;
+  }
+}
+
+.selectBtn:focus{
+  outline: none;
+}
+
+.selectContentDiv{
+  position: absolute;
+  display: flex;
+  left: 10;
+  right: 10;
+  margin-top: 1rem;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  background-color: var(--color-bg-muted);
+  padding: 2rem 2rem;
+  border-radius: 1rem;
+}
+
+.selectItem{
+  padding: 1rem;
+  font-size: 1.8rem;
+  width: 100%;
+}
+
+.inputEl{
+  width: 100%;
+  background-color: var(--color-bg-muted);
+  border: none;
+  outline: none;
+  padding: 2rem 2rem;
+  font-size: 1.8rem;
+  border-radius: 1rem;
+
+}
