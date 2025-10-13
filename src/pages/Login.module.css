@@ -1,0 +1,136 @@
+.container {
+  padding-bottom: 50%;
+}
+
+.topHeader {
+  padding: 4rem 2rem;
+  margin-bottom: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+
+  .backBtn {
+    width: 4rem;
+    height: 4rem;
+  }
+  .logo {
+    height: 100%;
+    width: 14rem;
+  }
+}
+
+.leftHeader {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 2rem;
+}
+
+.closeBtn {
+  width: 4rem;
+  height: 4rem;
+}
+
+.content {
+  padding: 2rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.inputGroup {
+  margin-bottom: 3rem;
+  border: 1px solid #fff;
+  border-radius: 1rem;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+
+  input {
+    position: relative;
+    outline: none;
+    border: none;
+    font-size: 2rem;
+    color: #fff;
+    background: transparent;
+    padding: 2rem 1rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+}
+
+.showPasswordBtn {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+}
+
+.showPasswordBtn:focus {
+  outline: none;
+  border: none;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8rem;
+}
+
+.actionLink {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-size: 2rem;
+}
+
+.actionBtn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  outline: none;
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  border-radius: 0.8rem;
+  font-weight: 700;
+}
+
+.footerActions {
+  position: fixed;
+  bottom: 4rem;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+}
+
+.actionLink div {
+  margin-left: 1rem;
+  text-decoration: underline;
+}
+
+.checkBoxDiv {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+  input {
+    outline: none;
+    border: none;
+    width: 2rem;
+    height: 2rem;
+    accent-color: var(--color-primary);
+  }
+
+  label {
+    font-size: 2rem;
+  }
+}
