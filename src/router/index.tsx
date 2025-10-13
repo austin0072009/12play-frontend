@@ -4,6 +4,7 @@ import Wallet from "../pages/Wallet";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import MainLayout from "../layout/MainLayout";
+import Promotions from "../pages/Promotions";
 
 export default function AppRouter() {
   return (
@@ -18,6 +19,7 @@ export default function AppRouter() {
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<Home />} />
           <Route path="/wallet" element={<Wallet />} />
+          <Route path="/promotion" element={<Promotions />} />
         </Route>
       </Routes>
     </BrowserRouter>
