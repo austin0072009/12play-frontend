@@ -1,0 +1,103 @@
+.topActionsContainer {
+  background-color: #525252;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  p {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.alertIcon {
+  position: absolute;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  top: -1.5rem;
+  right: -1.5rem;
+}
+
+.topActionsDiv {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  padding: 2rem 4rem;
+
+  a {
+    display: block;
+    position: relative;
+    svg {
+      width: 5rem;
+      height: 5rem;
+    }
+  }
+}
+
+.infoContainer {
+  padding: 2rem;
+}
+
+.infoDiv {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-muted);
+  border-radius: 1rem;
+  font-size: 2rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.infoLabel {
+  padding: 1rem 2rem;
+  width: 100%;
+}
+
+.infoValue {
+  padding: 1rem 1rem 1rem 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    background-color: transparent;
+    outline: none;
+    border: 0;
+    color: #fff;
+    padding: 0;
+
+    svg {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+}
+
+.issue {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+  padding: 0 2rem;
+  button {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 5rem !important;
+    outline: none;
+    border: none;
+    height: 5rem !important;
+    border-radius: 999999px !important;
+    justify-content: center;
+    color: #fff;
+    background-color: var(--color-primary);
+  }
+
+  p {
+    font-size: 1.8rem;
+  }
+}
