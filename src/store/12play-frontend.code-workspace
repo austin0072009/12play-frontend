@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../../rk/rk-frontend"
+		}
+	],
+	"settings": {}
+}

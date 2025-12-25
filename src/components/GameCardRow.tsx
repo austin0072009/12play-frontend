@@ -1,7 +1,17 @@
 import GameCard from "./GameCard";
 import styles from "./GameCardRow.module.css";
 
-export default function GameCardRow() {
+export default function GameCardRow({
+  title,
+  games = [],
+  onGameClick,
+}: {
+  title: string;
+  games?: any[];
+  onGameClick?: (g: any) => void;
+}) {
+  if (!games || games.length === 0) return null;
+
   return (
     <div>
       <div className={styles.gameRowHeader}>
@@ -25,7 +35,7 @@ export default function GameCardRow() {
               </clipPath>
             </defs>
           </svg>
-          <span>Hot Games</span>
+          <span>{title}</span>
         </div>
         <div className={styles.gameRowHeaderRight}>
           <button className={styles.arrowButton}>
@@ -64,12 +74,9 @@ export default function GameCardRow() {
       </div>
 
       <div className={styles.gameCardRow}>
-        <GameCard />
-        <GameCard />
-        <GameCard />
-        <GameCard />
-        <GameCard />
-        <GameCard />
+        {games.slice(0, 10).map((g, i) => (
+          <GameCard key={i} game={g} onClick={() => onGameClick && onGameClick(g)} />
+        ))}
       </div>
     </div>
   );

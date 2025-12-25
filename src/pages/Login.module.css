@@ -1,136 +1,153 @@
+/* Login.module.css */
 .container {
-  padding-bottom: 50%;
-}
-
-.topHeader {
-  padding: 4rem 2rem;
-  margin-bottom: 4rem;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0a101e 0%, #000000 100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-
-  .backBtn {
-    width: 4rem;
-    height: 4rem;
-  }
-  .logo {
-    height: 100%;
-    width: 14rem;
-  }
-}
-
-.leftHeader {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  gap: 2rem;
-}
-
-.closeBtn {
-  width: 4rem;
-  height: 4rem;
-}
-
-.content {
-  padding: 2rem;
-}
-
-.title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-}
-
-.inputGroup {
-  margin-bottom: 3rem;
-  border: 1px solid #fff;
-  border-radius: 1rem;
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  gap: 1rem;
-
-  input {
-    position: relative;
-    outline: none;
-    border: none;
-    font-size: 2rem;
-    color: #fff;
-    background: transparent;
-    padding: 2rem 1rem;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    min-width: 0;
-  }
-}
-
-.showPasswordBtn {
-  background: transparent;
-  border: none;
-  outline: none;
+  justify-content: center;
+  padding: 24px;
   color: #fff;
+  font-family: 'Inter', sans-serif;
 }
 
-.showPasswordBtn:focus {
-  outline: none;
-  border: none;
+.header {
+  margin-bottom: 32px;
+  text-align: center;
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8rem;
-}
 
-.actionLink {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  font-size: 2rem;
-}
-
-.actionBtn {
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  outline: none;
-  font-size: 2rem;
-  padding: 1rem 2rem;
-  border-radius: 0.8rem;
+.header h1 {
+  font-size: 28px;
   font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
 }
 
-.footerActions {
-  position: fixed;
-  bottom: 4rem;
-  left: 0;
-  right: 0;
-  padding: 2rem;
+.formContainer {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.actionLink div {
-  margin-left: 1rem;
+.form_div {
+  position: relative;
+  width: 100%;
+}
+
+.form_input {
+  width: 100%;
+  padding: 16px 20px 16px 48px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #1a2233;
+  border: 1px solid #2e3a50;
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form_input::placeholder {
+  color: #6b7280;
+}
+
+.form_input:focus {
+  border-color: #d81e28;
+  background-color: #1f293a;
+}
+
+.form_icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #9ca3af;
+}
+
+.password_toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #9ca3af;
+  width: 20px;
+  height: 20px;
+}
+
+.form_check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.form_check input[type="checkbox"] {
+  accent-color: #d81e28;
+  width: 16px;
+  height: 16px;
+}
+
+.form_submit_btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #d81e28 0%, #b01019 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(216, 30, 40, 0.3);
+  transition: transform 0.1s;
+}
+
+.form_submit_btn:active {
+  transform: scale(0.98);
+}
+
+.form_submit_btn:disabled {
+  background: #4b5563;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.form_actions {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #9ca3af;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.link:hover {
   text-decoration: underline;
 }
 
-.checkBoxDiv {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  gap: 1rem;
-  input {
-    outline: none;
-    border: none;
-    width: 2rem;
-    height: 2rem;
-    accent-color: var(--color-primary);
-  }
-
-  label {
-    font-size: 2rem;
-  }
+.error_bar {
+  width: 100%;
+  max-width: 360px;
+  background-color: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #ef4444;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  text-align: center;
 }

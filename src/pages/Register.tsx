@@ -1,479 +1,219 @@
-import { useState } from "react";
-import styles from "./Login.module.css";
+// src/pages/Register.tsx
 import { useNavigate } from "react-router-dom";
-export default function Login() {
-  const navigate = useNavigate();
+import styles from "./Register.module.css";
+import { UserIcon, PhoneIcon, LockClosedIcon, EyeIcon, EyeSlashIcon, IdentificationIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import { registerApi, loginApi } from "../services/auth";
+import { useUserStore } from "../store/user";
+import { useTranslation } from "react-i18next";
+import AlertModal from "../components/AlertModal";
 
-  const [showPassword, setShowPassword] = useState(false);
+// Client-side password rule
+function isValidPassword(password: string): boolean {
+  return password.length >= 6;
+}
+
+export default function Register() {
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const setToken = useUserStore((s) => s.setToken);
+  const setUserInfo = useUserStore((s) => s.setUserInfo);
+
+  // Fields
+  const [username, setUsername] = useState("");
+  const [realName, setRealName] = useState(""); // Visual only for now
+  const [phone, setPhone] = useState(""); // Visual for now
+
+  const [password, setPassword] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const [confirmPwd, setConfirmPwd] = useState("");
+  const [showConfirmPwd, setShowConfirmPwd] = useState(false);
+
+  // const [referral, setReferral] = useState(""); // Referral hidden per reference UI focus
+
+  // State
+  const [submitting, setSubmitting] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [confirmInfo, setConfirmInfo] = useState<{ username: string; password: string }>({
+    username: "",
+    password: "",
+  });
+
+  async function handleSubmit(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    setAlertMessage("");
+
+    if (!username) { setAlertMessage("Username is required"); return; }
+    // if (!realName) { setAlertMessage("Real Name is required"); return; }
+    if (!password) { setAlertMessage("Password is required"); return; }
+    if (!isValidPassword(password)) { setAlertMessage("Password must be at least 6 characters"); return; }
+    if (password !== confirmPwd) { setAlertMessage("Passwords do not match"); return; }
+
+    setSubmitting(true);
+    try {
+      // NOTE: We map the visuals to the backend API as best as possible.
+      // 'username' -> 'name'
+      const res = await registerApi({
+        password,
+        captcha: "",
+        yqm: "", // referral empty
+        name: username,
+      });
+
+      const ok = res && res.status && Number(res.status.errorCode) === 0;
+      if (ok) {
+        setConfirmInfo({ username: username, password });
+        setModalOpen(true);
+      } else {
+        setAlertMessage(String(res?.status?.mess || res?.status?.msg || "Register failed"));
+      }
+    } catch {
+      setAlertMessage("Network error during register.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleConfirmAndAutoLogin() {
+    setModalOpen(false);
+    try {
+      const r = await loginApi({ name: username, password });
+      const ok = r && r.status && Number(r.status.errorCode) === 0;
+      if (ok && r.data && typeof r.data === "object") {
+        const token = String((r.data as any).token || "");
+        const member = (r.data as any).member || {};
+        // ... props
+        if (token) {
+          setToken(token);
+          setUserInfo({ ...member });
+          navigate("/home", { replace: true });
+          return;
+        }
+      }
+      setAlertMessage("Auto login failed, please login manually.");
+    } catch {
+      setAlertMessage("Auto login failed, please login manually.");
+    }
+  }
+
   return (
     <div className={styles.container}>
-      <div className={styles.topHeader}>
-        <div className={styles.leftHeader}>
-          <div onClick={() => navigate("/home")}>
-            <svg
-              viewBox="0 0 413 122"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className={styles.logo}
-            >
-              <path
-                d="M143.609 3.42062H174.637C183.028 3.42062 189.479 4.07844 193.993 5.39818C198.503 6.7138 201.895 8.61734 204.164 11.1047C206.434 13.592 207.972 16.6056 208.773 20.1414C209.579 23.6812 209.982 29.1534 209.982 36.5703V46.8897C209.982 54.4504 209.201 59.9637 207.639 63.4296C206.076 66.8954 203.211 69.5513 199.042 71.4055C194.869 73.2597 189.417 74.1848 182.687 74.1848H174.419V121.897H143.613V3.42062H143.609ZM174.415 23.6895V53.8378C175.295 53.8872 176.047 53.9118 176.684 53.9118C179.513 53.9118 181.478 53.217 182.576 51.8274C183.674 50.4378 184.22 47.5475 184.22 43.1566V33.4251C184.22 29.3754 183.587 26.7401 182.317 25.5231C181.051 24.3021 178.415 23.6895 174.415 23.6895Z"
-                fill="white"
-              ></path>
-              <path
-                d="M249.644 3.42062V98.1867H268.379V121.897H218.838V3.42062H249.644Z"
-                fill="white"
-              ></path>
-              <path
-                d="M332.828 3.42062L350.445 121.893H318.961L317.308 100.6H306.29L304.44 121.893H272.589L288.303 3.42062H332.828ZM316.498 79.5994C314.94 66.18 313.374 49.5949 311.807 29.84C308.67 52.5263 306.697 69.1114 305.895 79.5994H316.498Z"
-                fill="white"
-              ></path>
-              <path
-                d="M412.317 3.42062L389.853 79.0115V121.893H361.312V79.0115L339.653 3.42062H367.956C372.379 26.5468 374.871 42.1082 375.438 50.1089C377.144 37.4706 380.006 21.9051 384.019 3.42062H412.317Z"
-                fill="white"
-              ></path>
-              <path
-                d="M49.9814 2.26533V120.737H20.4169V57.2215C20.4169 48.0491 20.199 42.5399 19.759 40.6816C19.3191 38.8274 18.1145 37.4254 16.137 36.4757C14.1594 35.526 9.75618 35.0491 2.92727 35.0491H0V21.235C14.2951 18.1597 25.149 11.8365 32.5658 2.26533H49.9814Z"
-                fill="#BA1818"
-              ></path>
-              <path
-                d="M125.206 100.543V120.741H60.1528L60.1693 103.836C79.4391 72.3224 90.8932 52.8223 94.5277 45.3315C98.1621 37.8448 99.9793 32.0026 99.9793 27.8049C99.9793 24.5857 99.4284 22.1806 98.3306 20.5977C97.2288 19.0149 95.5596 18.2214 93.3107 18.2214C91.0618 18.2214 89.3885 19.1012 88.2908 20.8568C87.1889 22.6123 86.6421 26.1028 86.6421 31.3201V42.5892H60.1528V38.2724C60.1528 31.6367 60.4941 26.4071 61.1766 22.5753C61.859 18.7477 63.5406 14.9776 66.2253 11.2692C68.9059 7.56073 72.3964 4.75681 76.6886 2.85326C80.9808 0.949718 86.1282 0 92.1308 0C103.885 0 112.778 2.91493 118.805 8.74479C124.828 14.5747 127.842 21.9545 127.842 30.8802C127.842 37.6598 126.148 44.834 122.756 52.3948C119.364 59.9555 109.378 76.0061 92.7886 100.547H125.206V100.543Z"
-                fill="#BA1818"
-              ></path>
-            </svg>
+      <div className={styles.header}>
+        <h1>{t("register.title") || "Join 12Play"}</h1>
+        <p style={{ fontSize: 14, color: '#9ca3af', marginTop: 4 }}>Best Online Casino in Thailand</p>
+      </div>
+
+      {alertMessage && (
+        <AlertModal
+          message={alertMessage}
+          onClose={() => setAlertMessage(null)}
+        />
+      )}
+
+      <form className={styles.formContainer} onSubmit={handleSubmit}>
+        {/* Username */}
+        <div className={styles.form_div}>
+          <input
+            type="text"
+            className={styles.form_input}
+            placeholder={t("register.username") || "Username"}
+            value={username}
+            onChange={(e) => setUsername(e.target.value.trim())}
+          />
+          <UserIcon className={styles.form_icon} />
+        </div>
+
+        {/* Real Name (Visual) */}
+        <div className={styles.form_div}>
+          <input
+            type="text"
+            className={styles.form_input}
+            placeholder={t("register.realname") || "Full Name"}
+            value={realName}
+            onChange={(e) => setRealName(e.target.value)}
+          />
+          <IdentificationIcon className={styles.form_icon} />
+        </div>
+
+        {/* Phone (Visual) */}
+        <div className={styles.form_div}>
+          <input
+            type="text"
+            className={styles.form_input}
+            placeholder={t("register.phone") || "Phone Number"}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          <PhoneIcon className={styles.form_icon} />
+        </div>
+
+        {/* Password */}
+        <div className={styles.form_div}>
+          <input
+            type={showPwd ? "text" : "password"}
+            className={styles.form_input}
+            placeholder={t("register.password") || "Password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="new-password"
+          />
+          {showPwd ? (
+            <EyeSlashIcon className={styles.password_toggle} onClick={() => setShowPwd(!showPwd)} />
+          ) : (
+            <EyeIcon className={styles.password_toggle} onClick={() => setShowPwd(!showPwd)} />
+          )}
+          <LockClosedIcon className={styles.form_icon} />
+        </div>
+
+        {/* Confirm Password */}
+        <div className={styles.form_div}>
+          <input
+            type={showConfirmPwd ? "text" : "password"}
+            className={styles.form_input}
+            placeholder={t("register.confirm") || "Confirm Password"}
+            value={confirmPwd}
+            onChange={(e) => setConfirmPwd(e.target.value)}
+            autoComplete="new-password"
+          />
+          <LockClosedIcon className={styles.form_icon} />
+        </div>
+
+        <div className={styles.form_submit}>
+          <button className={styles.form_submit_btn} type="submit" disabled={submitting}>
+            {submitting ? "Processing..." : t("register.submit") || "Register Now"}
+          </button>
+        </div>
+      </form>
+
+      <div className={styles.form_actions}>
+        <p>
+          Already have an account?{" "}
+          <span className={styles.link} onClick={() => navigate("/login")}>
+            Login here
+          </span>
+        </p>
+      </div>
+
+      {modalOpen && (
+        <>
+          <div className={styles.reset_backdrop}></div>
+          <div className={styles.reset_modal}>
+            <div className={styles.content}>
+              <div style={{ textAlign: 'center', marginBottom: 20 }}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#10b981" style={{ width: 48, height: 48, margin: '0 auto' }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+              </div>
+              <p style={{ marginBottom: 10, fontWeight: 'bold' }}>Registration Successful!</p>
+              <p style={{ fontSize: 13, color: '#ccc' }}>Username: {confirmInfo.username}</p>
+            </div>
+            <button className={styles.action_btn} onClick={handleConfirmAndAutoLogin}>
+              Start Playing
+            </button>
           </div>
-        </div>
-
-        <div onClick={() => navigate("/home")}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            className={styles.closeBtn}
-          >
-            <path d="M18 6 6 18"></path>
-            <path d="m6 6 12 12"></path>
-          </svg>
-        </div>
-      </div>
-
-      <div className={styles.content}>
-        <h1 className={styles.title}>Create Account</h1>
-
-        <div className={styles.inputGroup}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            width="24px"
-            height="24px"
-          >
-            <g clip-path="url(#Username_svg__a)">
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
-                d="M21 19s0 2-2 2H5c-2 0-2-2-1-5 2-2 5-4 8-4s5 1 8 4m-4-9a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
-              ></path>
-            </g>
-            <defs>
-              <clipPath id="Username_svg__a">
-                <path fill="#fff" d="M0 0h24v24H0z"></path>
-              </clipPath>
-            </defs>
-          </svg>
-          <input type="text" placeholder="Username" />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            width="24px"
-            height="24px"
-          >
-            <g clip-path="url(#FullName_svg__a)">
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m5 18 1.775-5.918a1 1 0 0 1 .237-.405l7.614-7.928a1 1 0 0 1 1.44-.002l3.265 3.382a1 1 0 0 1 .002 1.387l-7.617 7.932a1 1 0 0 1-.521.287z"
-              ></path>
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
-                d="M3 21h18"
-              ></path>
-              <path
-                fill="currentColor"
-                d="M13.293 8.707a1 1 0 1 0 1.414-1.414zm-2-2 2 2 1.414-1.414-2-2z"
-              ></path>
-            </g>
-            <defs>
-              <clipPath id="FullName_svg__a">
-                <path fill="#fff" d="M0 0h24v24H0z"></path>
-              </clipPath>
-            </defs>
-          </svg>
-          <input type="text" placeholder="Full Name" />
-        </div>
-
-        <div>
-          <p
-            style={{
-              fontSize: "1.8rem",
-              color: "#ff0000",
-              marginBottom: "2rem",
-            }}
-          >
-            Full Name must match with your bank account name for deposit &
-            withdrawal purposes
-          </p>
-        </div>
-
-        <div className={styles.inputGroup}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            width="24px"
-            height="24px"
-          >
-            <g clip-path="url(#Phone_svg__a)">
-              <rect
-                width="10"
-                height="16"
-                x="7"
-                y="4"
-                stroke="currentColor"
-                stroke-linejoin="round"
-                stroke-width="2"
-                rx="1"
-              ></rect>
-              <circle cx="12" cy="17" r="1" fill="currentColor"></circle>
-              <path
-                fill="currentColor"
-                d="M9 5a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1"
-              ></path>
-            </g>
-            <defs>
-              <clipPath id="Phone_svg__a">
-                <path fill="#fff" d="M0 0h24v24H0z"></path>
-              </clipPath>
-            </defs>
-          </svg>
-          <input type="text" placeholder="Contact Number" />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            width="24px"
-            height="24px"
-          >
-            <g clip-path="url(#Mail_svg__a)">
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
-                d="M9.5 13 4 18m16 .5L15 13"
-              ></path>
-              <g filter="url(#Mail_svg__b)">
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m3 6 8.313 7.851a1 1 0 0 0 1.374 0L21 6"
-                ></path>
-              </g>
-              <rect
-                width="18"
-                height="14"
-                x="3"
-                y="5"
-                stroke="currentColor"
-                stroke-linejoin="round"
-                stroke-width="2"
-                rx="1"
-              ></rect>
-            </g>
-            <defs>
-              <clipPath id="Mail_svg__a">
-                <path fill="#fff" d="M0 0h24v24H0z"></path>
-              </clipPath>
-              <filter
-                id="Mail_svg__b"
-                width="28"
-                height="18.125"
-                x="-2"
-                y="5"
-                color-interpolation-filters="sRGB"
-                filterUnits="userSpaceOnUse"
-              >
-                <feFlood
-                  flood-opacity="0"
-                  result="BackgroundImageFix"
-                ></feFlood>
-                <feColorMatrix
-                  in="SourceAlpha"
-                  result="hardAlpha"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                ></feColorMatrix>
-                <feOffset dy="4"></feOffset>
-                <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                <feComposite in2="hardAlpha" operator="out"></feComposite>
-                <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
-                <feBlend
-                  in2="BackgroundImageFix"
-                  result="effect1_dropShadow_299_229"
-                ></feBlend>
-                <feBlend
-                  in="SourceGraphic"
-                  in2="effect1_dropShadow_299_229"
-                  result="shape"
-                ></feBlend>
-              </filter>
-            </defs>
-          </svg>
-          <input type="email" placeholder="Email" />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            width="24px"
-            height="24px"
-          >
-            <g
-              stroke="currentColor"
-              stroke-width="2"
-              clip-path="url(#Password_svg__a)"
-            >
-              <path d="M16 10V7.429C16 5.535 14.21 4 12 4S8 5.535 8 7.429V10"></path>
-              <rect
-                width="14"
-                height="10"
-                x="5"
-                y="10"
-                stroke-linejoin="round"
-                rx="1"
-              ></rect>
-              <path stroke-linecap="round" d="M12 16v1"></path>
-            </g>
-            <defs>
-              <clipPath id="Password_svg__a">
-                <path fill="#fff" d="M0 0h24v24H0z"></path>
-              </clipPath>
-            </defs>
-          </svg>
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-          />
-          <button
-            className={styles.showPasswordBtn}
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {!showPassword ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                width="24px"
-                height="24px"
-              >
-                <g clip-path="url(#EyeShow_svg__a)">
-                  <path
-                    fill="currentColor"
-                    d="m2 12-.97-.242a1 1 0 0 0 .042.613zm20 0 .923.385a1 1 0 0 0-.042-.86zm-19.03.242c.072-.287.326-.774.836-1.378A10.6 10.6 0 0 1 5.81 9.07C7.474 7.906 9.653 7 12 7V5C9.147 5 6.576 6.094 4.664 7.43a12.6 12.6 0 0 0-2.386 2.143c-.599.709-1.07 1.472-1.248 2.184l1.94.486ZM12 7c4.708 0 8.06 3.505 9.12 5.474l1.76-.948C21.609 9.162 17.693 5 12 5zm9.077 4.615a8.25 8.25 0 0 1-2.62 3.339C16.998 16.064 14.797 17 11.5 17v2c3.704 0 6.337-1.063 8.167-2.454a10.25 10.25 0 0 0 3.256-4.161zM11.5 17c-1.994 0-3.922-.78-5.487-1.88-1.58-1.113-2.677-2.472-3.085-3.491l-1.856.742c.592 1.481 1.996 3.122 3.79 4.384C6.672 18.03 8.994 19 11.5 19z"
-                  ></path>
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="3"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  ></circle>
-                </g>
-                <defs>
-                  <clipPath id="EyeShow_svg__a">
-                    <path fill="#fff" d="M0 0h24v24H0z"></path>
-                  </clipPath>
-                </defs>
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                width="24px"
-                height="24px"
-              >
-                <g clip-path="url(#EyeHide_svg__a)">
-                  <path
-                    fill="currentColor"
-                    d="m2 12-.97-.242a1 1 0 0 0 .042.613zm20 0 .923.385a1 1 0 0 0-.042-.86zm-2.455-4.287a1 1 0 0 0-1.234 1.574zm-6.166 9.177a1 1 0 0 0 .242 1.985zM16.487 7l.859.512.57-.955-1.01-.465-.42.908ZM10 17.873l-.166.986.675.113.35-.587zm-7.03-5.63c.072-.288.326-.775.836-1.379A10.6 10.6 0 0 1 5.81 9.07C7.474 7.906 9.653 7 12 7V5C9.147 5 6.576 6.094 4.664 7.43a12.6 12.6 0 0 0-2.386 2.143c-.599.709-1.07 1.472-1.248 2.184zm15.341-2.956c1.382 1.083 2.343 2.322 2.808 3.187l1.762-.948c-.604-1.121-1.75-2.569-3.336-3.813L18.31 9.287Zm2.766 2.328c-.651 1.563-2.627 4.656-7.698 5.275l.242 1.985c5.974-.729 8.456-4.46 9.302-6.49zM12 7c1.505 0 2.869.355 4.068.908l.838-1.816A11.65 11.65 0 0 0 12 5zm-1.834 9.887c-1.735-.292-3.36-1.12-4.663-2.147-1.315-1.038-2.215-2.212-2.575-3.111l-1.856.742c.527 1.32 1.695 2.757 3.192 3.938 1.51 1.192 3.44 2.192 5.57 2.55zm5.462-10.4L9.141 17.36l1.718 1.025 6.487-10.873z"
-                  ></path>
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-width="2"
-                    d="M19 3 8 21"
-                  ></path>
-                  <path
-                    stroke="currentColor"
-                    stroke-width="2"
-                    d="M12 15a3 3 0 1 1 2.5-4.659"
-                  ></path>
-                </g>
-                <defs>
-                  <clipPath id="EyeHide_svg__a">
-                    <path fill="#fff" d="M0 0h24v24H0z"></path>
-                  </clipPath>
-                </defs>
-              </svg>
-            )}
-          </button>
-        </div>
-
-        <div className={styles.inputGroup}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            width="24px"
-            height="24px"
-          >
-            <g
-              stroke="currentColor"
-              stroke-width="2"
-              clip-path="url(#ConfirmPassword_svg__a)"
-            >
-              <path d="M16 10V7.429C16 5.535 14.21 4 12 4S8 5.535 8 7.429V10"></path>
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M19 11a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h3m8.344 0H18a1 1 0 0 0 1-1v-1"
-              ></path>
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m10.5 17.5 1.817 1.817a1 1 0 0 0 1.39.024L20.5 13"
-              ></path>
-            </g>
-            <defs>
-              <clipPath id="ConfirmPassword_svg__a">
-                <path fill="#fff" d="M0 0h24v24H0z"></path>
-              </clipPath>
-            </defs>
-          </svg>
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Confirm Password"
-          />
-          <button
-            className={styles.showPasswordBtn}
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {!showPassword ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                width="24px"
-                height="24px"
-              >
-                <g clip-path="url(#EyeShow_svg__a)">
-                  <path
-                    fill="currentColor"
-                    d="m2 12-.97-.242a1 1 0 0 0 .042.613zm20 0 .923.385a1 1 0 0 0-.042-.86zm-19.03.242c.072-.287.326-.774.836-1.378A10.6 10.6 0 0 1 5.81 9.07C7.474 7.906 9.653 7 12 7V5C9.147 5 6.576 6.094 4.664 7.43a12.6 12.6 0 0 0-2.386 2.143c-.599.709-1.07 1.472-1.248 2.184l1.94.486ZM12 7c4.708 0 8.06 3.505 9.12 5.474l1.76-.948C21.609 9.162 17.693 5 12 5zm9.077 4.615a8.25 8.25 0 0 1-2.62 3.339C16.998 16.064 14.797 17 11.5 17v2c3.704 0 6.337-1.063 8.167-2.454a10.25 10.25 0 0 0 3.256-4.161zM11.5 17c-1.994 0-3.922-.78-5.487-1.88-1.58-1.113-2.677-2.472-3.085-3.491l-1.856.742c.592 1.481 1.996 3.122 3.79 4.384C6.672 18.03 8.994 19 11.5 19z"
-                  ></path>
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="3"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  ></circle>
-                </g>
-                <defs>
-                  <clipPath id="EyeShow_svg__a">
-                    <path fill="#fff" d="M0 0h24v24H0z"></path>
-                  </clipPath>
-                </defs>
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                width="24px"
-                height="24px"
-              >
-                <g clip-path="url(#EyeHide_svg__a)">
-                  <path
-                    fill="currentColor"
-                    d="m2 12-.97-.242a1 1 0 0 0 .042.613zm20 0 .923.385a1 1 0 0 0-.042-.86zm-2.455-4.287a1 1 0 0 0-1.234 1.574zm-6.166 9.177a1 1 0 0 0 .242 1.985zM16.487 7l.859.512.57-.955-1.01-.465-.42.908ZM10 17.873l-.166.986.675.113.35-.587zm-7.03-5.63c.072-.288.326-.775.836-1.379A10.6 10.6 0 0 1 5.81 9.07C7.474 7.906 9.653 7 12 7V5C9.147 5 6.576 6.094 4.664 7.43a12.6 12.6 0 0 0-2.386 2.143c-.599.709-1.07 1.472-1.248 2.184zm15.341-2.956c1.382 1.083 2.343 2.322 2.808 3.187l1.762-.948c-.604-1.121-1.75-2.569-3.336-3.813L18.31 9.287Zm2.766 2.328c-.651 1.563-2.627 4.656-7.698 5.275l.242 1.985c5.974-.729 8.456-4.46 9.302-6.49zM12 7c1.505 0 2.869.355 4.068.908l.838-1.816A11.65 11.65 0 0 0 12 5zm-1.834 9.887c-1.735-.292-3.36-1.12-4.663-2.147-1.315-1.038-2.215-2.212-2.575-3.111l-1.856.742c.527 1.32 1.695 2.757 3.192 3.938 1.51 1.192 3.44 2.192 5.57 2.55zm5.462-10.4L9.141 17.36l1.718 1.025 6.487-10.873z"
-                  ></path>
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-width="2"
-                    d="M19 3 8 21"
-                  ></path>
-                  <path
-                    stroke="currentColor"
-                    stroke-width="2"
-                    d="M12 15a3 3 0 1 1 2.5-4.659"
-                  ></path>
-                </g>
-                <defs>
-                  <clipPath id="EyeHide_svg__a">
-                    <path fill="#fff" d="M0 0h24v24H0z"></path>
-                  </clipPath>
-                </defs>
-              </svg>
-            )}
-          </button>
-        </div>
-
-        <div className={styles.checkBoxDiv}>
-          <input type="checkbox" id="agree" />
-          <label htmlFor="agree">
-            I am at least 18 years of age and agree to 12Play
-          </label>
-        </div>
-
-        <div className={styles.actions} style={{ marginTop: "2rem" }}>
-          <button
-            className={styles.actionBtn}
-            style={{ width: "100%", padding: "2rem" }}
-          >
-            Create Account
-          </button>
-        </div>
-
-        <div className={styles.footerActions}>
-          <p className={styles.actionLink}>
-            You already have an account?{" "}
-            <div onClick={() => navigate("/login")}>Login</div>
-          </p>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }

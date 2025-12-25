@@ -1,10 +1,10 @@
-import { useNavigate, useLocation } from "react-router-dom";
+
 import styles from "./Banners.module.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function Banners() {
+export default function Banners({ banners = [] }: { banners?: any[] }) {
   const settings = {
     dots: false,
     infinite: true,
@@ -17,23 +17,23 @@ export default function Banners() {
     cssEase: "linear",
   };
 
+  if (!banners || banners.length === 0) return null;
+
   return (
     <div className={styles.sliderContainer}>
       <Slider {...settings}>
-        <div className={styles.sliderItem}>
-          <img
-            className={styles.sliderImage}
-            src="../assets/images/banner.webp"
-            alt=""
-          />
-        </div>
-        <div className={styles.sliderItem}>
-          <img
-            className={styles.sliderImage}
-            src="../assets/images/banner1.webp"
-            alt=""
-          />
-        </div>
+        {banners.map((b, i) => (
+          <div key={i} className={styles.sliderItem}>
+            <img
+              className={styles.sliderImage}
+              src={b.img}
+              alt=""
+              onClick={() => {
+                if (b.href) window.open(b.href, "_blank");
+              }}
+            />
+          </div>
+        ))}
       </Slider>
     </div>
   );
