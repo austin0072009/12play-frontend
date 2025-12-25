@@ -6,6 +6,7 @@ import Register from "../pages/Register";
 import MainLayout from "../layout/MainLayout";
 import Promotions from "../pages/Promotions";
 import Profile from "../pages/Profile";
+import BankAdd from "../pages/BankAdd";
 
 export default function AppRouter() {
   return (
@@ -14,6 +15,7 @@ export default function AppRouter() {
         {/* No layout */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/bank/add" element={<BankAdd />} />
 
         {/* Layout routes */}
         <Route element={<MainLayout />}>

@@ -13,9 +13,8 @@ export default function Wallet() {
     <div className={styles.container}>
       <div className={styles.tabContainer}>
         <div
-          className={`${styles.tabItem}  ${
-            activeTab === "deposit" && styles.active
-          }`}
+          className={`${styles.tabItem}  ${activeTab === "deposit" && styles.active
+            }`}
           onClick={() => handleChangeTab("deposit")}
         >
           <svg
@@ -70,9 +69,8 @@ export default function Wallet() {
           <span>Deposit</span>
         </div>
         <div
-          className={`${styles.tabItem} ${
-            activeTab === "withdrawal" && styles.active
-          }`}
+          className={`${styles.tabItem} ${activeTab === "withdrawal" && styles.active
+            }`}
           onClick={() => handleChangeTab("withdrawal")}
         >
           <svg
@@ -116,9 +114,8 @@ export default function Wallet() {
           <span>Withdrawal</span>
         </div>
         <div
-          className={`${styles.tabItem} ${
-            activeTab === "history" && styles.active
-          }`}
+          className={`${styles.tabItem} ${activeTab === "history" && styles.active
+            }`}
           onClick={() => handleChangeTab("history")}
         >
           <svg
