@@ -22,8 +22,9 @@ export default function Register() {
 
   // Fields
   const [username, setUsername] = useState("");
-  const [realName, setRealName] = useState(""); // Visual only for now
-  const [phone, setPhone] = useState(""); // Visual for now
+  const [inviteCode, setInviteCode] = useState("");
+  // const [realName, setRealName] = useState(""); // Visual only for now
+  // const [phone, setPhone] = useState(""); // Visual for now
 
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
@@ -125,7 +126,7 @@ export default function Register() {
         </div>
 
         {/* Real Name (Visual) */}
-        <div className={styles.form_div}>
+        {/* <div className={styles.form_div}>
           <input
             type="text"
             className={styles.form_input}
@@ -134,10 +135,10 @@ export default function Register() {
             onChange={(e) => setRealName(e.target.value)}
           />
           <IdentificationIcon className={styles.form_icon} />
-        </div>
+        </div> */}
 
         {/* Phone (Visual) */}
-        <div className={styles.form_div}>
+        {/* <div className={styles.form_div}>
           <input
             type="text"
             className={styles.form_input}
@@ -146,7 +147,7 @@ export default function Register() {
             onChange={(e) => setPhone(e.target.value)}
           />
           <PhoneIcon className={styles.form_icon} />
-        </div>
+        </div> */}
 
         {/* Password */}
         <div className={styles.form_div}>
@@ -175,6 +176,23 @@ export default function Register() {
             value={confirmPwd}
             onChange={(e) => setConfirmPwd(e.target.value)}
             autoComplete="new-password"
+          />
+          {showConfirmPwd ? (
+            <EyeSlashIcon className={styles.password_toggle} onClick={() => setShowConfirmPwd(!showConfirmPwd)} />
+          ) : (
+            <EyeIcon className={styles.password_toggle} onClick={() => setShowConfirmPwd(!showConfirmPwd)} />
+          )}
+          <LockClosedIcon className={styles.form_icon} />
+        </div>
+
+        {/* Invite Code */}
+        <div className={styles.form_div}>
+          <input
+            type="text"
+            className={styles.form_input}
+            placeholder={t("register.inviteCode") || "Invite Code"}
+            value={inviteCode}
+            onChange={(e) => setInviteCode(e.target.value)}
           />
           <LockClosedIcon className={styles.form_icon} />
         </div>
@@ -207,6 +225,7 @@ export default function Register() {
               </div>
               <p style={{ marginBottom: 10, fontWeight: 'bold' }}>Registration Successful!</p>
               <p style={{ fontSize: 13, color: '#ccc' }}>Username: {confirmInfo.username}</p>
+              <p style={{ fontSize: 13, color: '#ccc' }}>Password: {confirmInfo.password}</p>
             </div>
             <button className={styles.action_btn} onClick={handleConfirmAndAutoLogin}>
               Start Playing

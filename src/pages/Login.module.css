@@ -1,35 +1,39 @@
 /* Login.module.css */
 .container {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #0a101e 0%, #000000 100%);
+  min-height: 100dvh;
+  background-color: #000;
+  /* Premium Dark Gradient Background similar to 12Play */
+  background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000000 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 2.4rem;
   color: #fff;
   font-family: 'Inter', sans-serif;
 }
 
 .header {
-  margin-bottom: 32px;
+  margin-bottom: 4rem;
   text-align: center;
 }
 
-
 .header h1 {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 3.2rem;
+  font-weight: 800;
   color: #fff;
-  margin-bottom: 8px;
+  margin-bottom: 1rem;
+  letter-spacing: -0.05rem;
+  /* Gold/Premium Text Gradient optional, keeping white for clarity or adding later */
 }
 
+/* Form Container */
 .formContainer {
   width: 100%;
-  max-width: 480px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 2rem;
 }
 
 .form_div {
@@ -37,117 +41,149 @@
   width: 100%;
 }
 
+/* Premium Input Styles */
 .form_input {
   width: 100%;
-  padding: 16px 20px 16px 48px;
-  font-size: 16px;
+  padding: 1.8rem 2rem 1.8rem 5rem; /* Spacious padding */
+  font-size: 1.6rem;
   color: #fff;
-  background-color: #1a2233;
-  border: 1px solid #2e3a50;
-  border-radius: 10px;
+  background-color: #111; /* Darker input bg */
+  border: 1px solid #333; /* Subtle border */
+  border-radius: 1.2rem;
   outline: none;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); /* Inner shadow for depth */
 }
 
 .form_input::placeholder {
-  color: #6b7280;
+  color: #555;
+  font-weight: 500;
 }
 
 .form_input:focus {
   border-color: #d81e28;
-  background-color: #1f293a;
+  background-color: #161616;
+  box-shadow: 0 0 0 4px rgba(216, 30, 40, 0.1); /* Glow effect */
 }
 
+/* Icons */
 .form_icon {
   position: absolute;
-  left: 14px;
+  left: 1.8rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  color: #9ca3af;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.form_input:focus + .form_icon { /* This selector relies on icon being after input in DOM, usually simpler to change icon color via state if needed, but for CSS-only we can try sibling if structure allows or just leave static */
+  color: #d81e28; /* NOTE: In current DOM structure icon is AFTER input? Need to check structure. Assuming Structure: div > input + icon. If icon is BEFORE, this won't work. Structure was: input ... icon. Correct. */
+}
+/* Wait, in Login.tsx structure is: input ... icon. So input + icon works if they are direct siblings. Checking: div > input ~ icon actually */
+.form_input:focus ~ .form_icon,
+.form_input:focus ~ .password_toggle {
+    color: #d81e28;
 }
 
 .password_toggle {
   position: absolute;
-  right: 14px;
+  right: 1.8rem;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #9ca3af;
-  width: 20px;
-  height: 20px;
+  color: #666;
+  width: 2.2rem;
+  height: 2.2rem;
+  transition: color 0.3s;
 }
 
+/* Checkbox */
 .form_check {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #9ca3af;
+  gap: 1rem;
+  font-size: 1.4rem;
+  color: #888;
+  margin-top: 0.5rem;
 }
 
 .form_check input[type="checkbox"] {
   accent-color: #d81e28;
-  width: 16px;
-  height: 16px;
+  width: 1.8rem;
+  height: 1.8rem;
+  cursor: pointer;
 }
 
+/* Submit Button */
 .form_submit_btn {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(90deg, #d81e28 0%, #b01019 100%);
+  padding: 1.8rem;
+  margin-top: 1rem;
+  /* 12Play Red Gradient */
+  background: linear-gradient(180deg, #e62e38 0%, #b01019 100%);
   color: white;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 1.8rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 1.2rem;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(216, 30, 40, 0.3);
-  transition: transform 0.1s;
+  box-shadow: 0 4px 15px rgba(216, 30, 40, 0.4);
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form_submit_btn:active {
   transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(216, 30, 40, 0.3);
 }
 
 .form_submit_btn:disabled {
-  background: #4b5563;
+  background: #333;
+  color: #666;
   cursor: not-allowed;
   box-shadow: none;
 }
 
+/* Footer Links */
 .form_actions {
-  margin-top: 24px;
+  margin-top: 3.2rem;
   text-align: center;
-  font-size: 14px;
-  color: #9ca3af;
+  font-size: 1.5rem;
+  color: #666;
   width: 100%;
-  max-width: 360px;
+  max-width: 36rem;
   display: flex;
   justify-content: space-between;
+  padding: 0 1rem;
 }
 
 .link {
-  color: #fff;
+  color: #999;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
+  transition: color 0.2s;
 }
 
 .link:hover {
-  text-decoration: underline;
+  color: #fff;
+  text-decoration: none;
 }
 
+/* Error Bar */
 .error_bar {
   width: 100%;
-  max-width: 360px;
-  background-color: rgba(220, 38, 38, 0.1);
-  border: 1px solid rgba(220, 38, 38, 0.2);
-  color: #ef4444;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 16px;
-  font-size: 13px;
+  max-width: 100%;
+  background-color: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  color: #ff4d4f;
+  padding: 1.2rem;
+  border-radius: 0.8rem;
+  margin-bottom: 2rem;
+  font-size: 1.4rem;
   text-align: center;
+  font-weight: 500;
 }

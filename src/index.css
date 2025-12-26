@@ -14,7 +14,7 @@
 /* Apply border-box sizing to all elements */
 html {
   box-sizing: border-box;
-  font-size: 18px; /* or your preferred base font size */
+  font-size: 18px;
   -webkit-text-size-adjust: 100%; /* prevent font scaling on iOS */
 }
 
@@ -53,12 +53,11 @@ ol {
 /* Set a comfortable line-height */
 body {
   line-height: 1.5;
-  font-family: "Inter";
-  background-color: var(--color-bg);
+  font-family: "Inter", sans-serif;
+  background-color: #000;
   color: #fff;
-  height: auto;
-  min-height: 100%;
-  overflow-y: auto;
+  min-height: 100vh;
+  margin: 0;
 }
 
 /* Make images and videos responsive */

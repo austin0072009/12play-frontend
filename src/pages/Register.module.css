@@ -1,37 +1,46 @@
 /* Register.module.css */
-/* Reusing core styles from Login.module.css for consistency but customized for larger UI */
+/* Consistent 12Play Premium Theme */
+
 .container {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #0a101e 0%, #000000 100%);
+  min-height: 100dvh;
+  background-color: #000;
+  background: radial-gradient(circle at 50% 10%, #1a1a1a 0%, #000000 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 2.4rem;
   color: #fff;
   font-family: 'Inter', sans-serif;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .header {
-  margin-bottom: 32px;
+  margin-bottom: 3.2rem;
   text-align: center;
+  width: 100%;
 }
 
 .header h1 {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 3rem;
+  font-weight: 800;
   color: #fff;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.05rem;
+}
+
+.header p {
+  color: #666;
+  font-size: 1.4rem;
 }
 
 .formContainer {
   width: 100%;
-  max-width: 480px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.6rem; /* Slightly tighter gap for more fields */
 }
 
 .form_div {
@@ -41,62 +50,74 @@
 
 .form_input {
   width: 100%;
-  padding: 16px 20px 16px 48px;
-  font-size: 16px;
+  padding: 1.8rem 2rem 1.8rem 5rem;
+  font-size: 1.6rem;
   color: #fff;
-  background-color: #1a2233;
-  border: 1px solid #2e3a50;
-  border-radius: 10px;
+  background-color: #111;
+  border: 1px solid #333;
+  border-radius: 1.2rem;
   outline: none;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .form_input::placeholder {
-  color: #6b7280;
+  color: #555;
+  font-weight: 500;
 }
 
 .form_input:focus {
   border-color: #d81e28;
-  background-color: #1f293a;
+  background-color: #161616;
+  box-shadow: 0 0 0 4px rgba(216, 30, 40, 0.1);
 }
 
 .form_icon {
   position: absolute;
-  left: 16px;
+  left: 1.8rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 22px;
-  height: 22px;
-  color: #9ca3af;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.form_input:focus ~ .form_icon,
+.form_input:focus ~ .password_toggle {
+    color: #d81e28;
 }
 
 .password_toggle {
   position: absolute;
-  right: 16px;
+  right: 1.8rem;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #9ca3af;
-  width: 22px;
-  height: 22px;
+  color: #666;
+  width: 2.2rem;
+  height: 2.2rem;
+  transition: color 0.3s;
 }
 
 .form_submit {
-  margin-top: 10px;
+  margin-top: 1.6rem;
 }
 
 .form_submit_btn {
   width: 100%;
-  padding: 16px;
-  background: linear-gradient(90deg, #d81e28 0%, #b01019 100%);
+  padding: 1.8rem;
+  background: linear-gradient(180deg, #e62e38 0%, #b01019 100%);
   color: white;
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 1.8rem;
   border: none;
-  border-radius: 10px;
+  border-radius: 1.2rem;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(216, 30, 40, 0.3);
-  transition: transform 0.1s;
+  box-shadow: 0 4px 15px rgba(216, 30, 40, 0.4);
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form_submit_btn:active {
@@ -104,23 +125,25 @@
 }
 
 .form_submit_btn:disabled {
-  background: #4b5563;
+  background: #333;
+  color: #666;
   cursor: not-allowed;
   box-shadow: none;
 }
 
 .form_actions {
-  margin-top: 32px;
+  margin-top: 3.2rem;
   text-align: center;
-  font-size: 15px;
-  color: #9ca3af;
+  font-size: 1.5rem;
+  color: #888;
 }
 
 .link {
-  color: #fff;
+  color: #d81e28;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
+  margin-left: 0.5rem;
 }
 
 .link:hover {
@@ -134,8 +157,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.85); /* Darker backdrop */
   z-index: 100;
+  backdrop-filter: blur(4px);
 }
 
 .reset_modal {
@@ -143,32 +167,34 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #1f293a;
-  padding: 32px;
-  border-radius: 16px;
+  background: #1a1a1a;
+  padding: 3.2rem;
+  border-radius: 2rem;
   width: 90%;
-  max-width: 360px;
+  max-width: 36rem;
   z-index: 101;
   text-align: center;
   color: #fff;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.8);
 }
 
 .reset_icon {
-  width: 56px;
-  height: 56px;
+  width: 6rem;
+  height: 6rem;
   color: #10b981;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 }
 
 .action_btn {
-  background: #d81e28;
+  background: linear-gradient(180deg, #e62e38 0%, #b01019 100%);
   color: #fff;
   border: none;
-  padding: 12px 32px;
-  border-radius: 8px;
-  margin-top: 24px;
+  padding: 1.4rem 3.2rem;
+  border-radius: 1rem;
+  margin-top: 2.4rem;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 1.6rem;
+  width: 100%;
 }
