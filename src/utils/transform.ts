@@ -100,15 +100,9 @@ export function normalizeInitData(raw: any) {
         };
     };
 
-    const gameList = hotGames
-        .map(function (g: RawGame) {
-            return mapGame(g, true);
-        })
-        .concat(
-            games.map(function (g: RawGame) {
-                return mapGame(g, false);
-            })
-        );
+    const gameList = games.map(function (g: RawGame) {
+        return mapGame(g, false);
+    });
 
     // 联系方式
     const sys = raw && raw.sysconfig ? raw.sysconfig : {};
@@ -141,5 +135,8 @@ export function normalizeInitData(raw: any) {
         contacts: contacts,
         serviceList: serviceList,
         cate: Array.isArray(raw && raw.cate) ? raw.cate : [],
+        tj_games: hotGames.map(function (g: RawGame) {
+            return mapGame(g, true);
+        }),
     };
 }

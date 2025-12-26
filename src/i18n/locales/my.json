@@ -21,5 +21,11 @@
   "register.hasAccount": "အကောင့်ရှိပြီးသားလား?",
   "register.loginHere": "ဒီမှာ လော့ဂ်အင်ဝင်မည်",
   "register.success": "စာရင်းသွင်းခြင်း အောင်မြင်ပါသည်!",
-  "register.startPlaying": "စတင်ကစားမည်"
+  "register.startPlaying": "စတင်ကစားမည်",
+  "home.slots": "စလော့",
+  "home.fish": "ငါးဖမ်း",
+  "home.casino": "ကာစီနို",
+  "home.sports": "အားကစား",
+  "home.lottery2": "ထီ",
+  "home.cock": "ကြက်တိုက်"
 }

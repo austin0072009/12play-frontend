@@ -4,34 +4,42 @@
   display: flex;
   position: absolute;
   background-color: var(--color-bg-dark);
+  display: flex;
   align-items: center;
-  padding: 4rem 2rem;
   justify-content: space-between;
+  background-color: var(--color-bg);
+  padding: 1rem 1.5rem; /* Reduced from 4rem 2rem */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 6rem; /* Fixed height for consistency */
 }
 
-.leftHeader,
+.leftHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .rightHeader {
   display: flex;
   align-items: center;
-  justify-content: start;
-  gap: 1.5rem;
-  width: 100%;
-}
-
-.rightHeader{
-  justify-content: end;
+  gap: 1rem; /* Reduced from 2rem */
 }
 
 .logoImage {
-  width: 40%;
+  height: 3.5rem; /* Reduced from larger size */
+  width: auto;
 }
 
 .menuButton {
   background: none;
-  color: #fff;
-  padding: 0;
-  margin: 0;
   border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menuButton:focus {
@@ -39,26 +47,29 @@
 }
 
 .menuIcon {
-  width: 3rem;
-  height: 3rem;
   color: #fff;
+  width: 2.4rem; /* Reduced from larger size */
+  height: 2.4rem;
 }
 
 .loginButton,
 .registerButton {
-  color: #fff;
   font-weight: 900;
   outline: none;
-  font-size: 1.6rem;
-  padding: 1rem 1.5rem;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 1.2rem;
+  text-wrap-mode: nowrap;
+  font-size: 1.4rem; /* Reduced from 1.6rem */
+  padding: 0.8rem 1.2rem; /* Reduced from 1rem 1.5rem */
 }
 
 .loginButton {
   background-color: transparent;
+  color: #fff;
+  border: 1px solid #444 !important;
 }
 
 .registerButton {
-  background: var(--color-primary);
+  background: linear-gradient(135deg, #d81e28 0%, #a01419 100%);
+  color: #fff;
 }

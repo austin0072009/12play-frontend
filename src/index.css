@@ -1,7 +1,7 @@
 :root {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
-  font-size: 18px; /* bumped up from 16px */
+  font-size: 10px; /* Base for rem: 1rem = 10px */
   line-height: 1.6;
   font-weight: 400;
 
@@ -14,8 +14,9 @@
 /* Apply border-box sizing to all elements */
 html {
   box-sizing: border-box;
-  font-size: 18px;
+  font-size: 10px; /* Base for rem calculations: 1rem = 10px */
   -webkit-text-size-adjust: 100%; /* prevent font scaling on iOS */
+  scroll-behavior: smooth; /* Smooth scrolling */
 }
 
 /* Inherit box-sizing for all elements */
@@ -58,6 +59,15 @@ body {
   color: #fff;
   min-height: 100vh;
   margin: 0;
+  padding: 0;
+  /* Enable elastic bounce scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
 }
 
 /* Make images and videos responsive */

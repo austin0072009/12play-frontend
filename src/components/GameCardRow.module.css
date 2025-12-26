@@ -34,7 +34,7 @@
   width: 3.5rem;
   height: 3.5rem;
   outline: none;
-  border-radius: 0.3rem;
+  border-radius: 1rem;
   display: flex;
   align-items: center;
   background-color: var(--color-bg-muted);
@@ -60,4 +60,13 @@
   overflow-y: hidden; /* prevent vertical scrollbar */
   white-space: nowrap; /* avoid wrapping */
   -webkit-overflow-scrolling: touch; /* smooth scroll on mobile */
+  scroll-behavior: smooth; /* Smooth scrolling */
+  /* Scroll snap for better control */
+  scroll-snap-type: x proximity;
+  scroll-padding: 1rem;
+}
+
+/* Hide scrollbar for webkit browsers */
+.gameCardRow::-webkit-scrollbar {
+  display: none;
 }

@@ -2,10 +2,13 @@ import styles from "./Header.module.css";
 import { useSidebarStore } from "../store/sidebar";
 import { useNavigate } from "react-router-dom";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useUserStore } from "../store/user";
+
 
 export default function Header() {
   const { open } = useSidebarStore();
   const navigate = useNavigate();
+  const token = useUserStore(s => s.token);
 
   return (
     <header className={styles.header}>
@@ -72,22 +75,26 @@ export default function Header() {
       </div>
       <div className={styles.rightHeader}>
         <LanguageSwitcher />
-        <button
-          onClick={() => {
-            navigate("/login");
-          }}
-          className={styles.loginButton}
-        >
-          Login
-        </button>
-        <button
-          onClick={() => {
-            navigate("/register");
-          }}
-          className={styles.registerButton}
-        >
-          Join Now
-        </button>
+        {token && (
+          <>
+            <button
+              onClick={() => {
+                navigate("/login");
+              }}
+              className={styles.loginButton}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => {
+                navigate("/register");
+              }}
+              className={styles.registerButton}
+            >
+              Join Now
+            </button>
+          </>
+        )}
       </div>
     </header>
   );

@@ -12,6 +12,7 @@ type AppData = {
     contacts?: any[];
     serviceList?: Record<string, any>; // ✅ 改成对象
     cate?: any[];
+    tj_games?: any[]; // Popular/recommended games
 };
 
 interface AppState {

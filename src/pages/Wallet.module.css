@@ -19,7 +19,7 @@
   justify-content: center;
   gap: 0.8rem;
   padding: 1rem 2rem;
-  border-radius: 1rem;
+  border-radius: 1.2rem;
   color: var(--color-secondary);
 
   .tabItemIcon {
@@ -45,7 +45,7 @@
 .subTabContainer {
   margin: 1rem;
   background-color: var(--color-bg-muted);
-  border-radius: 1rem;
+  border-radius: 2rem;
   padding: 2rem 2rem 0 2rem;
   display: flex;
   margin-top: 2rem;
@@ -107,7 +107,7 @@
 .bankImage {
   width: 8.5rem;
   height: 8.5rem;
-  border-radius: 1rem;
+  border-radius: 1.6rem;
 }
 
 .channelInfoDiv {
@@ -117,7 +117,7 @@
   gap: 1rem;
   background-color: var(--color-primary);
   padding: 1rem;
-  border-radius: 1rem;
+  border-radius: 1.6rem;
   margin-top: 2rem;
   p {
     font-weight: 800;
@@ -141,7 +141,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  border-radius: 1rem;
+  border-radius: 1.6rem;
   padding: 1.5rem 2rem;
 
   .selectBtnLabel {
@@ -182,7 +182,7 @@
   justify-content: start;
   background-color: var(--color-bg-muted);
   padding: 2rem 2rem;
-  border-radius: 1rem;
+  border-radius: 1.6rem;
 }
 
 .selectItem{
@@ -198,6 +198,6 @@
   outline: none;
   padding: 2rem 2rem;
   font-size: 1.8rem;
-  border-radius: 1rem;
+  border-radius: 1.6rem;
 
 }

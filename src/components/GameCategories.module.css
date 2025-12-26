@@ -1,11 +1,11 @@
 .gameCategories {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 8.5rem;
   width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 4rem; /* space between items */
-  padding: 2rem 3rem;
+  padding: 0.8rem;
+  gap: .4rem;
   background-color: var(--color-bg-muted);
-  margin-bottom: 2rem;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
   overflow-x: auto; /* allow horizontal scroll */
@@ -16,17 +16,41 @@
 
 .gameCategoryItem {
   flex: 0 0 auto; /* prevent shrinking so items stay their size */
-  color: var(--color-text-muted);
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.5rem;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 1rem;
+  border-radius: 1.2rem;
+  color: var(--color-text-muted);
+
+}
+
+.gameCategoryItem:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.gameCategoryItem.active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
 }
 
 .gameCategoryItemIcon {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3rem;
+  height: 3rem;
+  transition: transform 0.3s ease;
+  color: var(--color-text-muted);
+}
+
+.gameCategoryItemIcon.active{
+  color: var(--color-white);
+}
+
+.gameCategoryItem.active .gameCategoryItemIcon {
+  transform: scale(1.1);
 }
 
 .gameCategoryItem span {

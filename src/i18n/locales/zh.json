@@ -21,5 +21,11 @@
   "register.hasAccount": "已有账户？",
   "register.loginHere": "点击登录",
   "register.success": "注册成功！",
-  "register.startPlaying": "开始游戏"
+  "register.startPlaying": "开始游戏",
+  "home.slots": "老虎机",
+  "home.fish": "捕鱼",
+  "home.casino": "真人娱乐场",
+  "home.sports": "体育",
+  "home.lottery2": "彩票",
+  "home.cock": "斗鸡"
 }

@@ -1,0 +1,29 @@
+/* Smooth Scrolling Enhancements */
+
+/* Add smooth transitions to all interactive elements */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhance button interactions with elastic feel */
+button {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Smooth scroll for all scrollable containers */
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+/* Add momentum scrolling to specific elements */
+[class*="scroll"],
+[class*="overflow"] {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}

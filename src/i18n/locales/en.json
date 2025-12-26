@@ -21,5 +21,11 @@
   "register.hasAccount": "Already have an account?",
   "register.loginHere": "Login here",
   "register.success": "Registration Successful!",
-  "register.startPlaying": "Start Playing"
+  "register.startPlaying": "Start Playing",
+  "home.slots": "Slots",
+  "home.fish": "Fish",
+  "home.casino": "Casino",
+  "home.sports": "Sports",
+  "home.lottery2": "Lottery",
+  "home.cock": "Cock"
 }
