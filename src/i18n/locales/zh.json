@@ -1,5 +1,25 @@
 {
   "login": "登录",
   "logout": "退出登录",
-  "welcome": "欢迎"
+  "welcome": "欢迎",
+  "login.title": "登录",
+  "login.account": "用户名",
+  "login.password": "密码",
+  "login.remember": "记住我",
+  "login.submit": "登录",
+  "login.forgot": "忘记密码？",
+  "login.register": "立即注册",
+  "register.title": "加入 12Play",
+  "register.subtitle": "泰国最佳在线赌场",
+  "register.username": "用户名",
+  "register.realname": "真实姓名",
+  "register.phone": "手机号码",
+  "register.password": "密码",
+  "register.confirm": "确认密码",
+  "register.inviteCode": "邀请码（可选）",
+  "register.submit": "立即注册",
+  "register.hasAccount": "已有账户？",
+  "register.loginHere": "点击登录",
+  "register.success": "注册成功！",
+  "register.startPlaying": "开始游戏"
 }

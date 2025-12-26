@@ -1,7 +1,7 @@
 // src/pages/Register.tsx
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
-import { UserIcon, PhoneIcon, LockClosedIcon, EyeIcon, EyeSlashIcon, IdentificationIcon } from "@heroicons/react/24/solid";
+import { UserIcon, LockClosedIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { registerApi, loginApi } from "../services/auth";
 import { useUserStore } from "../store/user";
@@ -102,7 +102,7 @@ export default function Register() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>{t("register.title") || "Join 12Play"}</h1>
-        <p style={{ fontSize: 14, color: '#9ca3af', marginTop: 4 }}>Best Online Casino in Thailand</p>
+        <p style={{ fontSize: 14, color: '#9ca3af', marginTop: 4 }}>{t("register.subtitle")}</p>
       </div>
 
       {alertMessage && (
@@ -206,9 +206,9 @@ export default function Register() {
 
       <div className={styles.form_actions}>
         <p>
-          Already have an account?{" "}
+          {t("register.hasAccount")}{" "}
           <span className={styles.link} onClick={() => navigate("/login")}>
-            Login here
+            {t("register.loginHere")}
           </span>
         </p>
       </div>
@@ -223,12 +223,12 @@ export default function Register() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
               </div>
-              <p style={{ marginBottom: 10, fontWeight: 'bold' }}>Registration Successful!</p>
+              <p style={{ marginBottom: 10, fontWeight: 'bold' }}>{t("register.success")}</p>
               <p style={{ fontSize: 13, color: '#ccc' }}>Username: {confirmInfo.username}</p>
               <p style={{ fontSize: 13, color: '#ccc' }}>Password: {confirmInfo.password}</p>
             </div>
             <button className={styles.action_btn} onClick={handleConfirmAndAutoLogin}>
-              Start Playing
+              {t("register.startPlaying")}
             </button>
           </div>
         </>

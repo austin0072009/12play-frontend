@@ -1,7 +1,7 @@
 import styles from "./Header.module.css";
 import { useSidebarStore } from "../store/sidebar";
-import { Bars3Icon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Header() {
   const { open } = useSidebarStore();
@@ -71,6 +71,7 @@ export default function Header() {
         </svg>
       </div>
       <div className={styles.rightHeader}>
+        <LanguageSwitcher />
         <button
           onClick={() => {
             navigate("/login");
