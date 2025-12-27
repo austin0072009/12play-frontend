@@ -5,6 +5,7 @@ import { InformationCircleIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/2
 import { useState } from "react";
 import { useUserStore } from '../store/user';
 import { loginApi } from '../services/auth';
+import { fetchBalance } from '../services/api';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 
@@ -48,8 +49,13 @@ export default function Login() {
     try {
       if (remember && username) {
         localStorage.setItem(REMEMBER_KEY, username);
+        // Also store password for auto-login (encoded for basic security)
+        localStorage.setItem("RedCow-username", username);
+        localStorage.setItem("RedCow-password", btoa(password)); // Base64 encode
       } else {
         localStorage.removeItem(REMEMBER_KEY);
+        localStorage.removeItem("RedCow-username");
+        localStorage.removeItem("RedCow-password");
       }
     } catch { }
 
@@ -63,13 +69,36 @@ export default function Login() {
         const yzflag = !!res.data.yzflag;
         const qk_pwd = !!res.data.qk_pwd;
 
+        console.log("=== LOGIN MEMBER DATA ===", member);
+        console.log("=== LOGIN TOKEN ===", token);
+
         if (!token) {
           setErr("Missing token in response.");
           return;
         }
 
         setToken(token);
-        setUserInfo({ ...member, yzflag, qk_pwd });
+
+        // Store token expiration time (24 hours from now)
+        const expirationTime = Date.now() + 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+        localStorage.setItem("RedCow-token-expiration", String(expirationTime));
+        console.log("=== TOKEN EXPIRATION SET ===", new Date(expirationTime).toISOString());
+        let balance = 0;
+        try {
+          const balanceRes = await fetchBalance(token);
+          console.log("=== BALANCE RESPONSE ===", balanceRes);
+          if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && balanceRes.data) {
+            balance = balanceRes.data;
+            console.log("=== BALANCE VALUE ===", balance);
+          }
+        } catch (err) {
+          console.error("Failed to fetch balance:", err);
+        }
+        
+        // Set all user info at once (member + balance)
+        const finalUserInfo = { ...member, yzflag, qk_pwd, balance };
+        console.log("=== FINAL USER INFO TO SET ===", finalUserInfo);
+        setUserInfo(finalUserInfo);
 
         let to = "/home";
         if (location?.state?.from) {

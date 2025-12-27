@@ -1,8 +1,9 @@
 import styles from "./Header.module.css";
 import { useSidebarStore } from "../store/sidebar";
 import { useNavigate } from "react-router-dom";
-import LanguageSwitcher from "./LanguageSwitcher";
 import { useUserStore } from "../store/user";
+import UserBalance from "./UserBalance";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 
 export default function Header() {
@@ -22,11 +23,11 @@ export default function Header() {
             height="24px"
             className={styles.menuIcon}
           >
-            <g clip-path="url(#Menu_svg__a)">
+            <g clipPath="url(#Menu_svg__a)">
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeWidth="2"
                 d="M3 5h11.363M3 12h15M3 19h11.363"
               ></path>
               <path
@@ -74,7 +75,7 @@ export default function Header() {
         </svg>
       </div>
       <div className={styles.rightHeader}>
-        <LanguageSwitcher />
+        <UserBalance headerStyle={true} />
         {!token && (
           <>
             <button

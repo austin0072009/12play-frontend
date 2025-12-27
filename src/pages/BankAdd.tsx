@@ -77,7 +77,7 @@ export default function BankAdd() {
 
     return (
         <div style={{ background: '#111', minHeight: '100vh', color: '#fff', paddingBottom: '2rem' }}>
-            {/* Header - Reusing styles loosely or inline to match 12play dark theme */}
+            {/* Header - Reusing styles loosely or inline to match RedCow dark theme */}
             <div style={{ padding: '1rem', display: 'flex', alignItems: 'center', background: '#222', borderBottom: '1px solid #333' }}>
                 <span onClick={() => navigate(-1)} style={{ fontSize: '1.5rem', marginRight: '1rem', cursor: 'pointer' }}>&lt;</span>
                 <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Bind Bank Account</span>

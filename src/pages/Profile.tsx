@@ -28,8 +28,8 @@ export default function Profile() {
           >
             <g
               stroke="currentColor"
-              stroke-width="2"
-              clip-path="url(#Profile2_svg__a)"
+              strokeWidth="2"
+              clipPath="url(#Profile2_svg__a)"
             >
               <circle cx="12" cy="7" r="4"></circle>
               <path d="M4 17a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"></path>
@@ -56,12 +56,12 @@ export default function Profile() {
             height="24px"
             className={styles.tabItemIcon}
           >
-            <g clip-path="url(#Banking_svg__a)">
+            <g clipPath="url(#Banking_svg__a)">
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M4.292 18h15.416M2 21h20M21 9H3l9-6z"
               ></path>
               <rect

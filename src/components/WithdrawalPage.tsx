@@ -3,7 +3,7 @@ import styles from "../pages/Wallet.module.css";
 import { fetchBankList, fetchBalance, withdrawal, transferOut } from "../services/api";
 import type { BankInfo } from "../services/types";
 import { useNavigate } from "react-router-dom";
-import AlertModal from "./AlertModal";
+import Dialog from "./Dialog";
 
 export default function WithdrawalPage() {
     const navigate = useNavigate();
@@ -172,9 +172,13 @@ export default function WithdrawalPage() {
                 </div>
             )}
 
-            {alertMessage && (
-                <AlertModal message={alertMessage} onClose={() => setAlertMessage(null)} />
-            )}
+            <Dialog
+                open={!!alertMessage}
+                onClose={() => setAlertMessage(null)}
+                title="Alert"
+            >
+                {alertMessage}
+            </Dialog>
         </div>
     );
 }

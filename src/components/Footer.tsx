@@ -72,7 +72,7 @@ const Footer = () => {
 
       {/* Copyright Section */}
       <div className={styles.copyright}>
-        <p>© 2025 12Play</p>
+        <p>© 2025 RedCow</p>
         <p className={styles.ageRestriction}>18+</p>
       </div>
     </footer>

@@ -44,7 +44,7 @@ export default function WalletHistoryPage() {
                     onClick={() => setActiveTab('deposit')}
                     style={{ justifyContent: 'center' }}
                 >
-                    {/* Reusing icons from main tabs logic or simplifying since 12play original history page structure was slightly different but tabs fit well */}
+                    {/* Reusing icons from main tabs logic or simplifying since RedCow original history page structure was slightly different but tabs fit well */}
                     <svg className={styles.subTabItemIcon} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24px" height="24px">
                         <path stroke="currentColor" strokeWidth="2" d="M12 5v14M5 12h14" />
                     </svg>

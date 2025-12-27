@@ -25,24 +25,24 @@ export default function Wallet() {
             className={styles.tabItemIcon}
             height="24px"
           >
-            <g clip-path="url(#Deposit_svg__a)">
+            <g clipPath="url(#Deposit_svg__a)">
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M15 8.176 12 11.5m0 0L9 8.176m3 3.324V3"
               ></path>
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeWidth="2"
                 d="M6 8H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1.5M18 8h1a2 2 0 0 1 2 2v3"
               ></path>
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeWidth="2"
                 d="M14.782 13c.14.337.218.705.218 1.09 0 1.608-1.343 2.91-3 2.91s-3-1.302-3-2.91c0-.385.077-.753.218-1.09"
               ></path>
               <circle
@@ -81,27 +81,27 @@ export default function Wallet() {
             height="24px"
             className={styles.tabItemIcon}
           >
-            <g clip-path="url(#Withdraw_svg__a)">
+            <g clipPath="url(#Withdraw_svg__a)">
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeWidth="2"
                 d="M9.218 11A2.8 2.8 0 0 1 9 9.91C9 8.301 10.343 7 12 7s3 1.302 3 2.91c0 .385-.077.753-.218 1.09"
               ></path>
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M7.5 16H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3m-4 8h2a2 2 0 0 0 2-2v-1"
               ></path>
               <circle cx="6" cy="10" r="1" fill="currentColor"></circle>
               <circle cx="18" cy="10" r="1" fill="currentColor"></circle>
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m9 19 3 2.5m0 0 3-2.5m-3 2.5v-9"
               ></path>
             </g>
@@ -128,12 +128,12 @@ export default function Wallet() {
           >
             <g
               stroke="currentColor"
-              stroke-width="2"
-              clip-path="url(#History_svg__a)"
+              strokeWidth="2"
+              clipPath="url(#History_svg__a)"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M12 7v6h5"
               ></path>
               <circle cx="12" cy="12" r="9"></circle>

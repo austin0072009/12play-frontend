@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './GameFrame.module.css';
 import BackIcon from '../assets/icons/back.svg?react';
@@ -13,7 +13,12 @@ export default function GameFrame() {
   const location = useLocation();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(true); // Default to fullscreen mode
+
+  // Enable fullscreen on mount
+  useEffect(() => {
+    console.log("=== GAME FRAME LOADED - FULLSCREEN MODE ENABLED ===");
+  }, []);
 
   // Get game URL from location state
   const gameUrl = (location.state as any)?.gameUrl || '';

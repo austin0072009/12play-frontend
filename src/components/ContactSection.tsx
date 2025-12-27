@@ -29,7 +29,7 @@ export default function ContactSection({ contacts = [] }: ContactSectionProps) {
           </div>
           <div className={styles.contactItem}>
             <span className={styles.label}>📧 Email:</span>
-            <span className={styles.value}>support@12play.com</span>
+            <span className={styles.value}>support@RedCow.com</span>
           </div>
           <div className={styles.contactItem}>
             <span className={styles.label}>📱 Phone:</span>

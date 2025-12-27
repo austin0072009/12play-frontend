@@ -1,4 +1,4 @@
-# Copilot / AI agent instructions for 12play-frontend
+# Copilot / AI agent instructions for RedCow-frontend
 
 Purpose: Give an AI coding agent the minimal, actionable project knowledge
 to be productive quickly in this repository (React + Vite + TypeScript).

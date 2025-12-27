@@ -2,7 +2,7 @@
 .container {
   min-height: 100dvh;
   background-color: #000;
-  /* Premium Dark Gradient Background similar to 12Play */
+  /* Premium Dark Gradient Background similar to RedCow */
   background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000000 100%);
   display: flex;
   flex-direction: column;

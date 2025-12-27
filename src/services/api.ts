@@ -139,10 +139,9 @@ export async function fetchActionLog(payload: Omit<GetActionLogReq, "token">) {
     return res as any;
 }
 
-export async function fetchBalance() {
-    const token = useUserStore.getState().token || "";
-    const res = await getData<any>("/nweb/wallet_balance", { params: { token } });
-    console.log("fetchbalanceapiResp=", res);
+export async function fetchBalance(token?: string) {
+    const finalToken = token || useUserStore.getState().token || "";
+    const res = await getData<any>("/nweb/wallet_balance", { params: { token: finalToken } });
 
     return res as any;
 }

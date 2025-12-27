@@ -9,6 +9,7 @@ import Promotions from "../pages/Promotions";
 import Profile from "../pages/Profile";
 import BankAdd from "../pages/BankAdd";
 import GameFrame from "../pages/GameFrame";
+import ChangePassword from "../pages/ChangePassword";
 
 export default function AppRouter() {
   return (
@@ -28,6 +29,7 @@ export default function AppRouter() {
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/promotion" element={<Promotions />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/change-password" element={<ChangePassword />} />
         </Route>
       </Routes>
     </BrowserRouter>

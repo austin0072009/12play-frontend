@@ -76,7 +76,6 @@ export default function Home() {
   // Use recommended games (tj_games) - already transformed by normalizeInitData
   const recommendedGames = useMemo(() => {
     const tjGames: any[] = app?.data?.tj_games || [];
-    console.log('tj_games:', tjGames); // Debug log
     return tjGames
       .filter((g) => g && g.m_img) // Only filter by image
       .map((g) => ({
@@ -89,7 +88,6 @@ export default function Home() {
   // Use popular games (hot_games) - already transformed by normalizeInitData
   const popularGames = useMemo(() => {
     const hotGames: any[] = app?.data?.hot_games || [];
-    console.log('hot_games:', hotGames); // Debug log
     return hotGames
       .filter((g) => g && g.m_img) // Only filter by image
       .map((g) => ({

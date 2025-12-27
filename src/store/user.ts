@@ -16,7 +16,11 @@ export const useUserStore = create<UserState>()(
       userInfo: {},
       setToken: (token) => set({ token }),
       setUserInfo: (info) => set({ userInfo: info }),
-      logout: () => set({ token: null, userInfo: {} }),
+      logout: () => {
+        // Clear token expiration on logout
+        localStorage.removeItem("RedCow-token-expiration");
+        set({ token: null, userInfo: {} });
+      },
     }),
     {
       name: 'user-store',

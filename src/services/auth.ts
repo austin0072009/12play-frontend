@@ -17,7 +17,13 @@ export function loginApi(payload: LoginReq) {
         "/nweb/login",
         {},
         { params: { name: payload.name, password: payload.password } }
-    );
+    ).then((res) => {
+        console.log("=== LOGIN RESULT ===", res);
+        return res;
+    }).catch((error) => {
+        console.error("=== LOGIN ERROR ===", error);
+        throw error;
+    });
 }
 
 // POST /nweb/send-otp-register

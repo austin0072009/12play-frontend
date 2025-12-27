@@ -6,7 +6,7 @@ import { useState } from "react";
 import { registerApi, loginApi } from "../services/auth";
 import { useUserStore } from "../store/user";
 import { useTranslation } from "react-i18next";
-import AlertModal from "../components/AlertModal";
+import Dialog from "../components/Dialog";
 
 // Client-side password rule
 function isValidPassword(password: string): boolean {
@@ -101,16 +101,17 @@ export default function Register() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>{t("register.title") || "Join 12Play"}</h1>
+        <h1>{t("register.title") || "Join RedCow"}</h1>
         <p style={{ fontSize: 14, color: '#9ca3af', marginTop: 4 }}>{t("register.subtitle")}</p>
       </div>
 
-      {alertMessage && (
-        <AlertModal
-          message={alertMessage}
-          onClose={() => setAlertMessage(null)}
-        />
-      )}
+      <Dialog
+        open={!!alertMessage}
+        onClose={() => setAlertMessage(null)}
+        title="Alert"
+      >
+        {alertMessage}
+      </Dialog>
 
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         {/* Username */}
