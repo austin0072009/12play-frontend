@@ -1,0 +1,133 @@
+.footer {
+  background: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem 1rem;
+  color: var(--color-text);
+  margin-top: 3rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.sectionTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* Social Links Grid */
+.socialGrid {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.socialLink:hover {
+  background: rgba(255, 51, 51, 0.15);
+  transform: translateY(-3px);
+}
+
+.socialIcon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
+
+/* License Section */
+.licenseGrid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.licenseCert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+}
+
+.certIcon {
+  height: 50px;
+  object-fit: contain;
+  display: block;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.licenseCert:hover .certIcon {
+  opacity: 1;
+}
+
+/* Copyright Section */
+.copyright {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.copyright p {
+  margin: 0.25rem 0;
+}
+
+.ageRestriction {
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer {
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+  }
+
+  .section {
+    margin-bottom: 1.5rem;
+  }
+
+  .socialGrid {
+    gap: 1rem;
+  }
+
+  .socialLink {
+    width: 45px;
+    height: 45px;
+  }
+
+  .socialIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .licenseGrid {
+    gap: 1.5rem;
+  }
+
+  .certIcon {
+    height: 40px;
+  }
+}

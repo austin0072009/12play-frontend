@@ -2,9 +2,10 @@ import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Banners from "../components/Banners";
-import GameCardRow from "../components/GameCardRow";
 import GameCategories from "../components/GameCategories";
-import PopularGames from "../components/PopularGames";
+import HorizontalGameList from "../components/HorizontalGameList";
+import FeatureCards from "../components/FeatureCards";
+import Footer from "../components/Footer";
 import styles from "./Home.module.css";
 
 import { fetchInitMeta, fetchInitData } from "../services/api";
@@ -30,18 +31,17 @@ export default function Home() {
   const { data } = useAppStore();
   const token = useUserStore((s) => s.token);
 
-  const [loading, setLoading] = useState(false);
   const [activeCat, setActiveCat] = useState('');
 
-  // URL to category type mapping
-  const url2Cate: Record<string, string> = {
-    '/slots': 'slot',
-    '/fish': 'fish',
-    '/live': 'live',
-    '/sports': 'sports',
-    '/lottery': 'lottery',
-    '/cock': 'cock',
-  };
+  // URL to category type mapping (kept for future use)
+  // const url2Cate: Record<string, string> = {
+  //   '/slots': 'slot',
+  //   '/fish': 'fish',
+  //   '/live': 'live',
+  //   '/sports': 'sports',
+  //   '/lottery': 'lottery',
+  //   '/cock': 'cock',
+  // };
 
   const categories = useMemo(() => ([
     {
@@ -73,34 +73,8 @@ export default function Home() {
 
 
 
-  // Transform games to gamebrands with images
-  const gamebrands = useMemo(() => {
-    const domain: string = app?.data?.domain || '';
-    const games: any[] = app?.data?.games || [];
-    return games.map((g) => {
-      const raw = g.m_img || g.img || '';
-      const img = raw ? (raw.startsWith('http') ? raw : (domain ? domain + raw : raw)) : '';
-      return {
-        ...g,
-        id: g.id,
-        title: g.gameName || g.plat_type || 'Game',
-        img,
-        url: 'none',
-        gameType: (g.gameType || '').toLowerCase(),
-        productCode: g.plat_type,
-      };
-    });
-  }, [app?.data]);
-
-  // Filter games by active category
-  const filteredGamebrands = useMemo(() => {
-    const cate = (url2Cate[activeCat] || '').toLowerCase();
-    if (!cate) return gamebrands;
-    return gamebrands.filter(g => g.gameType === cate && g.is_show);
-  }, [activeCat, gamebrands, url2Cate]);
-
-  // Transform popular games (tj_games) with images
-  const popularGames = useMemo(() => {
+  // Transform recommended games (tj_games) with images
+  const recommendedGames = useMemo(() => {
     const domain: string = app?.data?.domain || '';
     const tjGames: any[] = app?.data?.tj_games || [];
     return tjGames.map((g) => {
@@ -118,8 +92,26 @@ export default function Home() {
     });
   }, [app?.data]);
 
+  // Transform popular games (hot_games) with images
+  const popularGames = useMemo(() => {
+    const domain: string = app?.data?.domain || '';
+    const hotGames: any[] = app?.data?.hot_games || [];
+    return hotGames.map((g) => {
+      const raw = g.m_img || g.img || '';
+      const img = raw ? (raw.startsWith('http') ? raw : (domain ? domain + raw : raw)) : '';
+      return {
+        ...g,
+        id: g.id,
+        title: g.gameName || g.game_name || 'Game',
+        img,
+        game_name: g.gameName || g.game_name || 'Game',
+        plat_type: g.plat_type,
+        game_code: g.game_code,
+      };
+    });
+  }, [app?.data]);
+
   useEffect(function () {
-    setLoading(true);
     fetchInitMeta()
       .then(function (res) {
         var theme = res && res.data ? String(res.data) : '';
@@ -135,7 +127,7 @@ export default function Home() {
       .catch(function (e) {
         console.error('Init error:', e);
       })
-      .finally(function () { setLoading(false); });
+      .finally(function () { });
   }, [setMeta, setData]);
 
   const handleEnterGame = async (g: any) => {
@@ -175,29 +167,34 @@ export default function Home() {
           navigate(`/category${url}`);
         }}
       />
+
+      {/* Recommended Games Section */}
+      {recommendedGames.length > 0 && (
+        <HorizontalGameList
+          title="推荐游戏"
+          icon="recommend"
+          games={recommendedGames}
+          onGameClick={handleEnterGame}
+          domain={data?.domain || ''}
+        />
+      )}
+
       {/* Popular Games Section */}
       {popularGames.length > 0 && (
-        <PopularGames
-          title="Popular Games"
+        <HorizontalGameList
+          title="热门游戏"
+          icon="hot"
           games={popularGames}
           onGameClick={handleEnterGame}
+          domain={data?.domain || ''}
         />
       )}
 
-      {filteredGamebrands.length > 0 && (
-        <GameCardRow
-          title={categories.find(c => c.url === activeCat)?.title || 'Games'}
-          games={filteredGamebrands}
-          onGameClick={handleEnterGame}
-        />
-      )}
+      {/* Feature Cards Section */}
+      <FeatureCards />
 
-      {/* Fallback if no games */}
-      {filteredGamebrands.length === 0 && !loading && (
-        <div style={{ padding: '4rem', textAlign: 'center', color: '#666' }}>
-          No games available in this category
-        </div>
-      )}
+      {/* Footer Section */}
+      <Footer />
     </div>
   );
 }

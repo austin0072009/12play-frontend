@@ -75,7 +75,7 @@ export default function Header() {
       </div>
       <div className={styles.rightHeader}>
         <LanguageSwitcher />
-        {token && (
+        {!token && (
           <>
             <button
               onClick={() => {

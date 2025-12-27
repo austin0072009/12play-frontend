@@ -2,10 +2,15 @@ import { useTranslation } from 'react-i18next';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
+// Import flag images
+import flagMy from '../assets/icons/flag-my.png';
+import flagEn from '../assets/icons/flag-en.png';
+import flagZh from '../assets/icons/flag-zh.png';
+
 const languages = [
-    { code: 'my', name: 'မြန်မာ', flag: '🇲🇲' },
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'zh', name: '中文', flag: '🇨🇳' },
+    { code: 'my', name: 'မြန်မာ', flag: flagMy },
+    { code: 'en', name: 'English', flag: flagEn },
+    { code: 'zh', name: '中文', flag: flagZh },
 ];
 
 export default function LanguageSwitcher() {
@@ -34,7 +39,7 @@ export default function LanguageSwitcher() {
                     transition: 'all 0.2s',
                 }}
             >
-                <span style={{ fontSize: '1.8rem' }}>{currentLang.flag}</span>
+                <img src={currentLang.flag} alt={currentLang.code} style={{ width: '2rem', height: '1.2rem', objectFit: 'cover', borderRadius: '0.3rem' }} />
                 <span>{currentLang.name}</span>
                 <ChevronDownIcon style={{ width: '1.6rem', height: '1.6rem' }} />
             </MenuButton>
@@ -75,7 +80,7 @@ export default function LanguageSwitcher() {
                                     transition: 'all 0.2s',
                                 }}
                             >
-                                <span style={{ fontSize: '1.8rem' }}>{lang.flag}</span>
+                                <img src={lang.flag} alt={lang.code} style={{ width: '2rem', height: '1.2rem', objectFit: 'cover', borderRadius: '0.3rem' }} />
                                 <span>{lang.name}</span>
                                 {i18n.language === lang.code && (
                                     <span style={{ marginLeft: 'auto', fontSize: '1.2rem' }}>✓</span>

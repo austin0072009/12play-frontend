@@ -1,0 +1,47 @@
+.container {
+  padding: 20px;
+  margin: 20px 0;
+  background: linear-gradient(135deg, rgba(255,165,0,0.1) 0%, rgba(255,215,0,0.1) 100%);
+  border-radius: 12px;
+  border-left: 4px solid #ffa500;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.noticeList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.noticeItem {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #ffa500;
+}
+
+.noticeTitle {
+  font-weight: 600;
+  color: #ffa500;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.noticeContent {
+  color: #ccc;
+  font-size: 12px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

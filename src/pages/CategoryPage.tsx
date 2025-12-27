@@ -1,8 +1,9 @@
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import GameCategories from '../components/GameCategories';
+import GameBrandList from '../components/GameBrandList';
 import GameCard from '../components/GameCard';
 import styles from './CategoryPage.module.css';
 import { useAppStore } from '../store/app';
@@ -18,8 +19,6 @@ export default function CategoryPage() {
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
   const app = useAppStore();
-
-  const [filter, setFilter] = useState<'all' | 'new' | 'popular'>('all');
 
   const categories = useMemo(() => ([
     { title: t('home.slots') || 'Slots', Icon: SlotIcon, url: '/slots' },
@@ -64,33 +63,9 @@ export default function CategoryPage() {
     return gamebrands.filter(g => g.gameType === cate && g.is_show);
   }, [activeCat, gamebrands]);
 
-  const popularGames = useMemo(() => {
-    const domain: string = app?.data?.domain || '';
-    const tjGames: any[] = app?.data?.tj_games || [];
-    return tjGames.map((g) => {
-      const raw = g.m_img || g.img || '';
-      const img = raw ? (raw.startsWith('http') ? raw : (domain ? domain + raw : raw)) : '';
-      return {
-        ...g,
-        id: g.id,
-        title: g.gameName || g.game_name || 'Game',
-        img,
-        game_name: g.gameName || g.game_name || 'Game',
-        plat_type: g.plat_type,
-        game_code: g.game_code,
-      };
-    });
-  }, [app?.data]);
-
   const gamesToShow = useMemo(() => {
-    if (filter === 'all') return filteredByCategory;
-    if (filter === 'popular') {
-      const cate = (url2Cate[activeCat] || '').toLowerCase();
-      if (!cate) return popularGames;
-      return popularGames.filter((g: any) => (g.plat_type || '').toLowerCase() === cate || (g.game_type || '').toLowerCase() === cate);
-    }
-    return filteredByCategory.slice().sort((a, b) => (b.id || 0) - (a.id || 0));
-  }, [filter, filteredByCategory, popularGames, activeCat]);
+    return filteredByCategory;
+  }, [filteredByCategory]);
 
   const handleEnterGame = async (g: any) => {
     try {
@@ -101,6 +76,9 @@ export default function CategoryPage() {
     }
   };
 
+  // Show filter bar only for slots and fish
+  const showFilter = activeCat === '/slots' || activeCat === '/fish';
+
   return (
     <div className={styles.container}>
       <GameCategories
@@ -109,24 +87,21 @@ export default function CategoryPage() {
         onCategoryClick={(u: string) => navigate(`/category${u}`)}
       />
 
-      <div className={styles.filterBar}>
-        <div className={styles.filterLeft}>{categories.find(c => c.url === activeCat)?.title || t('home.all') || 'All'}</div>
-        <div className={styles.filterRight}>
-          <select value={filter} onChange={(e) => setFilter(e.target.value as any)}>
-            <option value="all">All</option>
-            <option value="popular">Popular</option>
-            <option value="new">Newest</option>
-          </select>
+      {/* Show GameBrandList for slots and fish ONLY */}
+      {showFilter && (
+        <GameBrandList key={activeCat} gameType={url2Cate[activeCat] || ''} />
+      )}
+
+      {/* Show regular game grid for other categories ONLY */}
+      {!showFilter && (
+        <div className={styles.grid}>
+          {gamesToShow.map((g: any, i: number) => (
+            <GameCard key={i} game={g} onClick={() => handleEnterGame(g)} />
+          ))}
         </div>
-      </div>
+      )}
 
-      <div className={styles.grid}>
-        {gamesToShow.map((g: any, i: number) => (
-          <GameCard key={i} game={g} onClick={() => handleEnterGame(g)} />
-        ))}
-      </div>
-
-      {gamesToShow.length === 0 && (
+      {!showFilter && gamesToShow.length === 0 && (
         <div className={styles.empty}>No games found</div>
       )}
     </div>

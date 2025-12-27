@@ -1,0 +1,64 @@
+.container {
+  padding: 1.5rem 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.scrollWrapper {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding: 0.5rem 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  flex-shrink: 0;
+  width: 180px;
+  background: var(--color-bg-muted);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.title {
+  font-weight: 700;
+  color: #fff;
+  font-size: 1rem;
+  word-break: break-word;
+}
+
+.subtitle {
+  font-weight: 600;
+  color: #ff3333;
+  font-size: 0.8rem;
+  word-break: break-word;
+}
+
+.description {
+  color: #9c9c9c;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
