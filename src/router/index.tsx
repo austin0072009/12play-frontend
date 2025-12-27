@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home";
+import CategoryPage from "../pages/CategoryPage";
 import Wallet from "../pages/Wallet";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -21,6 +22,7 @@ export default function AppRouter() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/promotion" element={<Promotions />} />
           <Route path="/profile" element={<Profile />} />

@@ -77,6 +77,7 @@ export function normalizeInitData(raw: any) {
 
     const hotGames = Array.isArray(raw && raw.tj_games) ? raw.tj_games : [];
     const games = Array.isArray(raw && raw.games) ? raw.games : [];
+    const hotGames2 = Array.isArray(raw && raw.hot_games) ? raw.hot_games : [];
 
     const mapGame = function (el: RawGame, isHot: boolean) {
         return {
@@ -136,6 +137,9 @@ export function normalizeInitData(raw: any) {
         serviceList: serviceList,
         cate: Array.isArray(raw && raw.cate) ? raw.cate : [],
         tj_games: hotGames.map(function (g: RawGame) {
+            return mapGame(g, true);
+        }),
+        hot_games: hotGames2.map(function (g: RawGame) {
             return mapGame(g, true);
         }),
     };

@@ -170,7 +170,10 @@ export default function Home() {
       <GameCategories
         categories={categories}
         activeCat={activeCat}
-        onCategoryClick={setActiveCat}
+        onCategoryClick={(url) => {
+          setActiveCat(url);
+          navigate(`/category${url}`);
+        }}
       />
       {/* Popular Games Section */}
       {popularGames.length > 0 && (

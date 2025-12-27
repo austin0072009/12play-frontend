@@ -1,0 +1,30 @@
+.container {
+  padding: 1rem 0;
+}
+.filterBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 0 1rem;
+}
+.filterLeft {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.filterRight select {
+  padding: 0.3rem 0.7rem;
+  font-size: 1rem;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+.empty {
+  text-align: center;
+  color: #888;
+  margin: 2rem 0;
+  font-size: 1.1rem;
+}
