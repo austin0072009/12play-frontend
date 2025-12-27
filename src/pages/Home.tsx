@@ -73,42 +73,30 @@ export default function Home() {
 
 
 
-  // Transform recommended games (tj_games) with images
+  // Use recommended games (tj_games) - already transformed by normalizeInitData
   const recommendedGames = useMemo(() => {
-    const domain: string = app?.data?.domain || '';
     const tjGames: any[] = app?.data?.tj_games || [];
-    return tjGames.map((g) => {
-      const raw = g.m_img || g.img || '';
-      const img = raw ? (raw.startsWith('http') ? raw : (domain ? domain + raw : raw)) : '';
-      return {
+    console.log('tj_games:', tjGames); // Debug log
+    return tjGames
+      .filter((g) => g && g.m_img) // Only filter by image
+      .map((g) => ({
         ...g,
-        id: g.id,
-        title: g.gameName || g.game_name || 'Game',
-        img,
-        game_name: g.gameName || g.game_name || 'Game',
-        plat_type: g.plat_type,
-        game_code: g.game_code,
-      };
-    });
+        title: g.game_name || 'Game',
+        img: g.m_img, // Use m_img which already includes domain prefix from transform.ts
+      }));
   }, [app?.data]);
 
-  // Transform popular games (hot_games) with images
+  // Use popular games (hot_games) - already transformed by normalizeInitData
   const popularGames = useMemo(() => {
-    const domain: string = app?.data?.domain || '';
     const hotGames: any[] = app?.data?.hot_games || [];
-    return hotGames.map((g) => {
-      const raw = g.m_img || g.img || '';
-      const img = raw ? (raw.startsWith('http') ? raw : (domain ? domain + raw : raw)) : '';
-      return {
+    console.log('hot_games:', hotGames); // Debug log
+    return hotGames
+      .filter((g) => g && g.m_img) // Only filter by image
+      .map((g) => ({
         ...g,
-        id: g.id,
-        title: g.gameName || g.game_name || 'Game',
-        img,
-        game_name: g.gameName || g.game_name || 'Game',
-        plat_type: g.plat_type,
-        game_code: g.game_code,
-      };
-    });
+        title: g.game_name || 'Game',
+        img: g.m_img, // Use m_img which already includes domain prefix from transform.ts
+      }));
   }, [app?.data]);
 
   useEffect(function () {
@@ -142,15 +130,33 @@ export default function Home() {
     }
 
     try {
+      const gameId = g.id || g.game_id;
+      const platType = g.plat_type || g.productCode;
+      const gameCode = g.game_code || g.code;
+      
+      if (!gameId || !platType) {
+        throw new Error('Missing required game parameters: id or plat_type');
+      }
+
       const url = await startGame({
-        id: g.id,
-        plat_type: g.plat_type,
-        game_code: g.game_code,
+        id: gameId,
+        plat_type: platType,
+        game_code: gameCode,
         game_type: 0,
-        devices: 0
+        devices: 0,
+        tgp: '',
       });
-      if (url) window.location.assign(url);
+      if (url) {
+        // Check is_outopen field: 1 = direct assignment, 2 = iframe
+        if (g.is_outopen === 1) {
+          window.location.assign(url);
+        } else {
+          // Default to iframe for is_outopen === 2 or undefined
+          navigate('/game', { state: { gameUrl: url } });
+        }
+      }
     } catch (err) {
+      console.error('Game launch error:', err);
       alert(err);
     }
   };

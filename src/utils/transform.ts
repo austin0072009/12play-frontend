@@ -80,11 +80,15 @@ export function normalizeInitData(raw: any) {
     const hotGames2 = Array.isArray(raw && raw.hot_games) ? raw.hot_games : [];
 
     const mapGame = function (el: RawGame, isHot: boolean) {
+        // For m_img, prefer m_img but fallback to img if m_img is not available
+        const rawMImg = el && el.m_img ? el.m_img : (el && el.img ? el.img : "");
+        const mimg = rawMImg ? (rawMImg.indexOf("http") === 0 ? rawMImg : domain + rawMImg) : "";
+        
         return {
             id: el && el.bind_gid,
             maintain: el && el.maintain,
             img: el && el.img ? domain + el.img : "",
-            m_img: el && el.m_img ? domain + el.m_img : "",
+            m_img: mimg,
             plat_type: el && el.productCode,
             game_type: el && el.productType,
             game_code: el && el.tcgGameCode,
@@ -98,6 +102,33 @@ export function normalizeInitData(raw: any) {
             sort: el && el.sort,
             is_rec: el && el.is_rec,
             is_cate: el && el.is_cate,
+        };
+    };
+
+    // Special mapping for tj_games and hot_games which have a different structure (id instead of bind_gid)
+    const mapTjHotGame = function (el: any) {
+        const rawMImg = el && el.m_img ? el.m_img : (el && el.img ? el.img : "");
+        const mimg = rawMImg ? (rawMImg.indexOf("http") === 0 ? rawMImg : domain + rawMImg) : "";
+        
+        return {
+            id: el && el.id,  // Direct id field
+            maintain: el && el.maintain,
+            img: el && el.img ? domain + el.img : "",
+            m_img: mimg,
+            plat_type: el && el.productCode,
+            game_type: el && el.productType,
+            game_code: el && el.tcgGameCode,
+            game_name: el && el.gameName,
+            rel_game_type: el && el.gameType,
+            level: el && el.is_cate,
+            is_outopen: el && el.is_outopen,
+            ios_outer: el && el.is_ios_outopen,
+            gameType: "hot",
+            is_show: el && el.is_show,
+            sort: el && el.sort,
+            is_rec: el && el.is_rec,
+            is_cate: el && el.is_cate,
+            view_count: el && el.view_count,
         };
     };
 
@@ -136,11 +167,11 @@ export function normalizeInitData(raw: any) {
         contacts: contacts,
         serviceList: serviceList,
         cate: Array.isArray(raw && raw.cate) ? raw.cate : [],
-        tj_games: hotGames.map(function (g: RawGame) {
-            return mapGame(g, true);
+        tj_games: hotGames.map(function (g: any) {
+            return mapTjHotGame(g);
         }),
-        hot_games: hotGames2.map(function (g: RawGame) {
-            return mapGame(g, true);
+        hot_games: hotGames2.map(function (g: any) {
+            return mapTjHotGame(g);
         }),
     };
 }

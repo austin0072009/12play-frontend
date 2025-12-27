@@ -7,6 +7,7 @@ import GameBrandList from '../components/GameBrandList';
 import GameCard from '../components/GameCard';
 import styles from './CategoryPage.module.css';
 import { useAppStore } from '../store/app';
+import { useUserStore } from '../store/user';
 import { startGame } from '../services/games';
 import SlotIcon from '../assets/icons/slot.svg?react';
 import FishIcon from '../assets/icons/fish.svg?react';
@@ -19,6 +20,7 @@ export default function CategoryPage() {
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
   const app = useAppStore();
+  const token = useUserStore((s) => s.token);
 
   const categories = useMemo(() => ([
     { title: t('home.slots') || 'Slots', Icon: SlotIcon, url: '/slots' },
@@ -68,9 +70,39 @@ export default function CategoryPage() {
   }, [filteredByCategory]);
 
   const handleEnterGame = async (g: any) => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
     try {
-      const url = await startGame({ id: g.id, plat_type: g.plat_type, game_code: g.game_code, game_type: 0, devices: 0 });
-      if (url) window.location.assign(url);
+      // If this is a game brand (is_cate = 1), find the bound game
+      let gameToStart = g;
+      if (g.is_cate === 1 || g.level === 1) {
+        // This is a game brand, find the actual game it binds to
+        const allGames: any[] = app?.data?.games || [];
+        const boundGame = allGames.find((game) => game.plat_type === g.plat_type && game.is_cate !== 1);
+        if (boundGame) {
+          gameToStart = boundGame;
+        }
+      }
+
+      const url = await startGame({ 
+        id: gameToStart.id, 
+        plat_type: gameToStart.plat_type, 
+        game_code: gameToStart.game_code, 
+        game_type: 0, 
+        devices: 0 
+      });
+      if (url) {
+        // Check is_outopen field of the actual game being started: 1 = direct assignment, 2 = iframe
+        if (gameToStart.is_outopen === 1) {
+          window.location.assign(url);
+        } else {
+          // Default to iframe for is_outopen === 2 or undefined
+          navigate('/game', { state: { gameUrl: url } });
+        }
+      }
     } catch (err) {
       alert(err);
     }

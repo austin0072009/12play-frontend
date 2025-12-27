@@ -1,6 +1,8 @@
 import { useMemo, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/app';
-import { fetchGamesByBrand } from '../services/games';
+import { useUserStore } from '../store/user';
+import { fetchGamesByBrand, startGame } from '../services/games';
 import LazyImg from './LazyImg';
 import styles from './GameBrandList.module.css';
 
@@ -9,7 +11,9 @@ interface GameBrandListProps {
 }
 
 export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
+  const navigate = useNavigate();
   const app = useAppStore();
+  const token = useUserStore((s) => s.token);
   const [selectedBrand, setSelectedBrand] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [brandGames, setBrandGames] = useState<any[]>([]);
@@ -98,9 +102,50 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
       return {
         ...g,
         _img: img,
+        id: g.id || g.game_id,
+        plat_type: g.plat_type || selectedBrand,
+        game_code: g.game_code || g.code,
       };
     });
-  }, [brandGames, searchQuery, app?.data?.domain]);
+  }, [brandGames, searchQuery, app?.data?.domain, selectedBrand]);
+
+  const handleEnterGame = async (game: any) => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const gameId = game.id || game.game_id;
+      const platType = game.plat_type || selectedBrand;
+      const gameCode = game.game_code || game.code;
+      
+      if (!gameId || !platType) {
+        throw new Error('Missing required game parameters: id or plat_type');
+      }
+
+      const url = await startGame({
+        id: gameId,
+        plat_type: platType,
+        game_code: gameCode,
+        game_type: 0,
+        devices: 0,
+        tgp: '',
+      });
+      if (url) {
+        // Check is_outopen field: 1 = direct assignment, 2 = iframe
+        if (game.is_outopen === 1) {
+          window.location.assign(url);
+        } else {
+          // Default to iframe for is_outopen === 2 or undefined
+          navigate('/game', { state: { gameUrl: url } });
+        }
+      }
+    } catch (err) {
+      console.error('Game launch error:', err);
+      alert(err);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -146,7 +191,7 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
         {!loading && filteredGames.length > 0 && (
           <div className={styles.gamesList}>
             {filteredGames.map((game) => (
-              <div key={game.id} className={styles.gameItem}>
+              <div key={game.id} className={styles.gameItem} onClick={() => handleEnterGame(game)}>
                 <LazyImg
                   src={game._img || ''}
                   alt={game.gameName || game.game_name || 'Game'}

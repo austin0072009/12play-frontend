@@ -8,6 +8,7 @@ import MainLayout from "../layout/MainLayout";
 import Promotions from "../pages/Promotions";
 import Profile from "../pages/Profile";
 import BankAdd from "../pages/BankAdd";
+import GameFrame from "../pages/GameFrame";
 
 export default function AppRouter() {
   return (
@@ -17,6 +18,7 @@ export default function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/bank/add" element={<BankAdd />} />
+        <Route path="/game" element={<GameFrame />} />
 
         {/* Layout routes */}
         <Route element={<MainLayout />}>
