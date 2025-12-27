@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddBank } from "../services/api";
 import { useUserStore } from "../store/user";
+import Dialog from "../components/Dialog";
+import kbzPayImg from "../assets/kbzpay.jpg?url";
+import wavePayImg from "../assets/wavepay.jpg?url";
 import type { BankItem } from "../services/types";
-import styles from "./Wallet.module.css";
+import styles from "./BankAdd.module.css";
 
 export default function BankAdd() {
     const navigate = useNavigate();
@@ -14,14 +17,17 @@ export default function BankAdd() {
     const [qrFile, setQrFile] = useState<File | null>(null);
     const [qrPreview, setQrPreview] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
-    const [msg, setMsg] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [showDialog, setShowDialog] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const userInfo = useUserStore((state) => state.userInfo);
     const existingBank = userInfo?.banklist?.bank_username;
 
     const bankList: BankItem[] = [
-        { name: "KBZ Pay", img: "assets/images/kbzpay.jpg", code: "KBZPAY" },
-        { name: "Wave Pay", img: "assets/images/wavepay.jpg", code: "WAVEPAY" },
+        { name: "KBZ Pay", img: kbzPayImg, code: "KBZPAY" },
+        { name: "Wave Pay", img: wavePayImg, code: "WAVEPAY" },
     ];
 
     useEffect(() => {
@@ -38,167 +44,308 @@ export default function BankAdd() {
         }
     }, [qrFile]);
 
-    const handleSubmit = async () => {
-        setMsg("");
-        if (!selectedBank || !bankUsername || !bankCard || !qrFile) {
-            setMsg("Please fill all fields");
-            return;
+    const validateForm = (): boolean => {
+        if (!selectedBank) {
+            setErrorMessage("Please select a bank");
+            return false;
+        }
+        if (!bankUsername.trim()) {
+            setErrorMessage("Please enter account name");
+            return false;
+        }
+        if (!bankCard.trim()) {
+            setErrorMessage("Please enter account number");
+            return false;
+        }
+        if (!bankCardConfirm.trim()) {
+            setErrorMessage("Please confirm account number");
+            return false;
         }
         if (bankCard !== bankCardConfirm) {
-            setMsg("Account numbers do not match");
+            setErrorMessage("Account numbers do not match");
+            return false;
+        }
+        if (!qrFile) {
+            setErrorMessage("Please upload QR code");
+            return false;
+        }
+        return true;
+    };
+
+    const handleSubmit = async () => {
+        setErrorMessage("");
+        setSuccessMessage("");
+
+        if (!validateForm()) {
+            setShowDialog(true);
+            setIsSuccess(false);
             return;
         }
 
         setSubmitting(true);
         try {
+            console.log("=== SUBMITTING BANK ADD ===", {
+                bank_name: selectedBank,
+                bank_username: bankUsername,
+                bank_card: bankCard,
+            });
+
             const res = await AddBank({
                 type: 0,
                 bank_name: selectedBank,
                 bank_branch_name: selectedBank,
                 bank_username: bankUsername,
                 bank_card: bankCard,
-                qr_code: qrFile
+                qr_code: qrFile,
             });
 
-            if (res.status.errorCode === 0) {
-                setMsg("Bank Added Successfully");
+            console.log("=== BANK ADD RESPONSE ===", res);
+
+            if (res && res.status && Number(res.status.errorCode) === 0) {
+                setSuccessMessage("Bank account added successfully!");
+                setIsSuccess(true);
+                setShowDialog(true);
+                // Reset form
+                setSelectedBank(null);
+                setQrFile(null);
+                // Navigate after showing success
                 setTimeout(() => {
+                    setShowDialog(false);
                     navigate(-1);
-                }, 1500);
+                }, 2000);
             } else {
-                setMsg("Error: " + (res.status.mess || res.status.msg));
+                const errMsg = res?.status?.mess || res?.status?.msg || "Failed to add bank account";
+                setErrorMessage(errMsg);
+                setIsSuccess(false);
+                setShowDialog(true);
             }
-        } catch (e) {
-            setMsg("Network Error");
+        } catch (error: any) {
+            console.error("=== BANK ADD ERROR ===", error);
+            const errMsg =
+                error?.response?.data?.status?.mess ||
+                error?.response?.data?.status?.msg ||
+                error?.message ||
+                "Network error. Please try again.";
+            setErrorMessage(errMsg);
+            setIsSuccess(false);
+            setShowDialog(true);
         } finally {
             setSubmitting(false);
         }
     };
 
+    const handleDialogClose = () => {
+        setShowDialog(false);
+        if (isSuccess) {
+            navigate(-1);
+        }
+    };
+
     return (
-        <div style={{ background: '#111', minHeight: '100vh', color: '#fff', paddingBottom: '2rem' }}>
-            {/* Header - Reusing styles loosely or inline to match RedCow dark theme */}
-            <div style={{ padding: '1rem', display: 'flex', alignItems: 'center', background: '#222', borderBottom: '1px solid #333' }}>
-                <span onClick={() => navigate(-1)} style={{ fontSize: '1.5rem', marginRight: '1rem', cursor: 'pointer' }}>&lt;</span>
-                <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Bind Bank Account</span>
+        <div className={styles.container}>
+            {/* Header */}
+            <div className={styles.header}>
+                <button
+                    className={styles.backButton}
+                    onClick={() => navigate(-1)}
+                    title="Go back"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        width="24px"
+                        height="24px"
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 19l-7-7 7-7"
+                        ></path>
+                    </svg>
+                </button>
+                <h1 className={styles.title}>Add Bank Account</h1>
+                <div></div>
             </div>
 
-            <div style={{ padding: '2rem' }}>
-                {/* Form Group */}
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: '#aaa', fontSize: '0.9rem' }}>Account Name</label>
-                    <input
-                        type="text"
-                        value={bankUsername}
-                        onChange={e => setBankUsername(e.target.value)}
-                        disabled={!!existingBank}
-                        className={styles.inputEl}
-                        placeholder="Enter Real Name"
-                        style={{ width: '100%', padding: '12px', background: '#333', border: 'none', borderRadius: '6px', color: '#fff' }}
-                    />
-                </div>
-
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: '#aaa', fontSize: '0.9rem' }}>Account Number</label>
-                    <input
-                        type="number"
-                        value={bankCard}
-                        onChange={e => setBankCard(e.target.value)}
-                        placeholder="Enter Account Number"
-                        style={{ width: '100%', padding: '12px', background: '#333', border: 'none', borderRadius: '6px', color: '#fff' }}
-                    />
-                </div>
-
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: '#aaa', fontSize: '0.9rem' }}>Confirm Account Number</label>
-                    <input
-                        type="number"
-                        value={bankCardConfirm}
-                        onChange={e => setBankCardConfirm(e.target.value)}
-                        placeholder="Confirm Account Number"
-                        style={{ width: '100%', padding: '12px', background: '#333', border: 'none', borderRadius: '6px', color: '#fff' }}
-                    />
-                </div>
-
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: '#aaa', fontSize: '0.9rem' }}>Select Bank</label>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        {bankList.map(bank => (
+            <div className={styles.content}>
+                {/* Select Bank */}
+                <div className={styles.formSection}>
+                    <label className={styles.sectionTitle}>Select Bank</label>
+                    <div className={styles.bankGrid}>
+                        {bankList.map((bank) => (
                             <div
                                 key={bank.code}
+                                className={`${styles.bankOption} ${
+                                    selectedBank === bank.code ? styles.selected : ""
+                                }`}
                                 onClick={() => setSelectedBank(bank.code)}
-                                style={{
-                                    border: selectedBank === bank.code ? '2px solid #CCA353' : '1px solid #444',
-                                    borderRadius: '8px',
-                                    padding: '1rem',
-                                    textAlign: 'center',
-                                    cursor: 'pointer',
-                                    background: selectedBank === bank.code ? '#2a2a2a' : '#222',
-                                    transition: 'all 0.2s'
-                                }}
                             >
-                                {/* Adjust path since we are in src/pages */}
-                                <img src={"../" + bank.img} style={{ width: '50px', height: '50px', objectFit: 'contain', marginBottom: '0.5rem' }} alt={bank.name} />
-                                <div style={{ fontSize: '0.9rem' }}>{bank.name}</div>
+                                <img src={bank.img} alt={bank.name} className={styles.bankLogo} />
+                                <span className={styles.bankName}>{bank.name}</span>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: '#aaa', fontSize: '0.9rem' }}>Upload QR Code</label>
-                    <div style={{ border: '2px dashed #444', borderRadius: '8px', padding: '1rem', textAlign: 'center', cursor: 'pointer', position: 'relative' }} onClick={() => document.getElementById('qr-upload')?.click()}>
+                {/* Account Name */}
+                <div className={styles.formSection}>
+                    <label className={styles.label}>Account Name</label>
+                    <input
+                        type="text"
+                        value={bankUsername}
+                        onChange={(e) => setBankUsername(e.target.value)}
+                        disabled={!!existingBank}
+                        placeholder="Enter your full name"
+                        className={styles.input}
+                    />
+                    {existingBank && (
+                        <p className={styles.helpText}>Account name is locked (already set)</p>
+                    )}
+                </div>
+
+                {/* Account Number */}
+                <div className={styles.formSection}>
+                    <label className={styles.label}>Account Number</label>
+                    <input
+                        type="text"
+                        value={bankCard}
+                        onChange={(e) => setBankCard(e.target.value)}
+                        placeholder="Enter your account number"
+                        className={styles.input}
+                    />
+                </div>
+
+                {/* Confirm Account Number */}
+                <div className={styles.formSection}>
+                    <label className={styles.label}>Confirm Account Number</label>
+                    <input
+                        type="text"
+                        value={bankCardConfirm}
+                        onChange={(e) => setBankCardConfirm(e.target.value)}
+                        placeholder="Re-enter your account number"
+                        className={styles.input}
+                    />
+                </div>
+
+                {/* QR Code Upload */}
+                <div className={styles.formSection}>
+                    <label className={styles.label}>Upload QR Code</label>
+                    <div
+                        className={styles.qrUploadArea}
+                        onClick={() => document.getElementById("qr-upload")?.click()}
+                    >
                         {qrPreview ? (
-                            <img src={qrPreview} style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px' }} alt="Preview" />
+                            <div className={styles.qrPreview}>
+                                <img src={qrPreview} alt="QR Code Preview" />
+                                <p className={styles.qrLabel}>Click to change QR code</p>
+                            </div>
                         ) : (
-                            <div style={{ padding: '2rem', color: '#666' }}>
-                                Click to upload QR Code
+                            <div className={styles.qrPlaceholder}>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    width="48px"
+                                    height="48px"
+                                    className={styles.uploadIcon}
+                                >
+                                    <path
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M12 5v14m7-7H5"
+                                    ></path>
+                                </svg>
+                                <p className={styles.uploadText}>Click to upload QR code</p>
+                                <p className={styles.uploadSubtext}>or drag and drop</p>
                             </div>
                         )}
                         <input
                             id="qr-upload"
                             type="file"
                             accept="image/*"
-                            style={{ display: 'none' }}
-                            onChange={e => {
+                            style={{ display: "none" }}
+                            onChange={(e) => {
                                 const f = e.target.files?.[0];
                                 if (f) setQrFile(f);
                             }}
                         />
                     </div>
                 </div>
+            </div>
 
-                {msg && (
-                    <div style={{
-                        marginBottom: '1.5rem',
-                        textAlign: 'center',
-                        color: msg.includes('Success') ? '#4ade80' : '#ef4444',
-                        padding: '0.5rem',
-                        background: 'rgba(255,255,255,0.05)',
-                        borderRadius: '4px'
-                    }}>{msg}</div>
-                )}
-
+            {/* Submit Button */}
+            <div className={styles.actionContainer}>
                 <button
+                    className={styles.submitButton}
                     onClick={handleSubmit}
                     disabled={submitting}
-                    style={{
-                        width: '100%',
-                        padding: '1rem',
-                        background: '#CCA353',
-                        color: '#000',
-                        borderRadius: '8px',
-                        border: 'none',
-                        fontWeight: 'bold',
-                        fontSize: '1.2rem',
-                        cursor: submitting ? 'not-allowed' : 'pointer',
-                        opacity: submitting ? 0.7 : 1,
-                        boxShadow: '0 4px 10px rgba(204, 163, 83, 0.2)'
-                    }}
                 >
-                    {submitting ? 'Submitting...' : 'Submit'}
+                    {submitting ? (
+                        <>
+                            <span className={styles.spinner}></span>
+                            Submitting...
+                        </>
+                    ) : (
+                        "Submit"
+                    )}
                 </button>
             </div>
+
+            {/* Dialog for errors/success */}
+            <Dialog
+                open={showDialog}
+                onClose={handleDialogClose}
+                title={isSuccess ? "Success" : "Error"}
+            >
+                <div className={styles.dialogContent}>
+                    {isSuccess ? (
+                        <div className={styles.successContent}>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                width="48px"
+                                height="48px"
+                                className={styles.successIcon}
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M20 6L9 17l-5-5"
+                                ></path>
+                            </svg>
+                            <p>{successMessage}</p>
+                        </div>
+                    ) : (
+                        <div className={styles.errorContent}>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                width="48px"
+                                height="48px"
+                                className={styles.errorIcon}
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M12 9v6m0 3v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                ></path>
+                            </svg>
+                            <p>{errorMessage}</p>
+                        </div>
+                    )}
+                </div>
+            </Dialog>
         </div>
     );
 }

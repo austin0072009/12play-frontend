@@ -2,6 +2,7 @@ import { useState, type SetStateAction } from "react";
 import styles from "./Profile.module.css";
 import { useNavigate } from "react-router-dom";
 import ProfilePage from "../components/ProfilePage";
+import Banking from "../components/Banking";
 export default function Profile() {
   const [activeTab, setActiveTab] = useState("profile");
 
@@ -100,6 +101,7 @@ export default function Profile() {
       </div>
 
       {activeTab === "profile" && <ProfilePage />}
+      {activeTab === "banking" && <Banking />}
     </div>
   );
 }

@@ -19,12 +19,12 @@ export default function ProfilePage() {
   // Memoized user data with safe defaults
   const username = useMemo(() => {
     if (!userInfo) return "—";
-    return (userInfo as any)?.username || (userInfo as any)?.user_name || "—";
+    return (userInfo as any)?.username || (userInfo as any)?.name || "—";
   }, [userInfo]);
 
   const fullName = useMemo(() => {
     if (!userInfo) return "—";
-    return (userInfo as any)?.fullname || (userInfo as any)?.full_name || (userInfo as any)?.name || "—";
+    return (userInfo as any)?.fullname || (userInfo as any)?.full_name || (userInfo as any)?.real_name || "—";
   }, [userInfo]);
 
   const accountId = useMemo(() => {

@@ -1,0 +1,309 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #111;
+  color: #fff;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #222;
+  border-bottom: 1px solid #333;
+  gap: 1rem;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.backButton:hover {
+  background-color: #333;
+}
+
+.backButton svg {
+  width: 24px;
+  height: 24px;
+}
+
+.title {
+  flex: 1;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.formSection {
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  display: block;
+  margin-bottom: 1rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: #aaa;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #cb0000;
+  background-color: #3a3a3a;
+}
+
+.input:disabled {
+  background-color: #2a2a2a;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.helpText {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.bankGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.bankOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem;
+  background-color: #222;
+  border: 2px solid #444;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bankOption:hover {
+  border-color: #555;
+  background-color: #2a2a2a;
+}
+
+.bankOption.selected {
+  background-color: #2a2a2a;
+  border-color: #cb0000;
+}
+
+.bankLogo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.bankName {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  text-align: center;
+}
+
+.qrUploadArea {
+  border: 2px dashed #444;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qrUploadArea:hover {
+  border-color: #555;
+  background-color: #1a1a1a;
+}
+
+.qrPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.qrPreview img {
+  max-width: 100%;
+  max-height: 250px;
+  border-radius: 0.5rem;
+  border: 1px solid #444;
+}
+
+.qrLabel {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.qrPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  color: #666;
+}
+
+.uploadIcon {
+  color: #666;
+  opacity: 0.7;
+}
+
+.uploadText {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #aaa;
+}
+
+.uploadSubtext {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.actionContainer {
+  padding: 1.5rem;
+  background-color: #222;
+  border-top: 1px solid #333;
+  display: flex;
+  gap: 1rem;
+}
+
+.submitButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background-color: #cb0000;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #a00000;
+}
+
+.submitButton:disabled {
+  background-color: #8b0000;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.successContent,
+.errorContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.successContent p,
+.errorContent p {
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.successIcon {
+  color: #28a745;
+}
+
+.errorIcon {
+  color: #ff3333;
+}
+
+@media (max-width: 480px) {
+  .bankGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    padding: 0.75rem;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .actionContainer {
+    padding: 1rem;
+  }
+}
