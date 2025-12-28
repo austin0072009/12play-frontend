@@ -1,4 +1,4 @@
-name: Deploy React Frontend to BT Panel
+name: Deploy React (Vite) to BT
 
 on:
   push:
@@ -6,62 +6,62 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout code
+      - name: 📥 Checkout
         uses: actions/checkout@v3
 
-      - name: 🔧 Setup Node.js
+      - name: 🔧 Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      - name: 📦 Install deps & build
+      - name: 📦 Install & Build
         run: |
           npm install
           npm run build
 
-      - name: 🔍 Check build output
+      # ⭐ 关键：确认 dist 一定存在
+      - name: 🔍 Verify dist
         run: |
-          echo "当前目录: $(pwd)"
-          ls -lh
-          ls -lh dist || ls -lh build
+          echo "检查 dist 是否存在"
+          if [ ! -d "dist" ]; then
+            echo "❌ dist 目录不存在"
+            exit 1
+          fi
+          echo "dist 内容："
+          ls -lh dist
+          echo "dist 文件数量："
+          find dist | wc -l
 
-      # ===== 上传到服务器临时目录 =====
-      - name: 📤 Upload build files
+      - name: 📤 Upload dist
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
-          source: |
-            dist/**
-            build/**
-          target: /tmp/react-deploy/
+          source: "dist/**"
+          target: "/tmp/react-deploy/"
           strip_components: 1
 
-      # ===== SSH 部署 =====
-      - name: 🚀 Deploy to /www/wwwroot/redcowx.com
+      - name: 🚀 Deploy to BT
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
           script: |
-            echo "🚀 开始部署 React"
-
             TARGET=/www/wwwroot/redcowx.com
-            TEMP=/tmp/react-deploy
 
             echo "🧹 清空旧文件"
             rm -rf ${TARGET:?}/*
 
             echo "📦 拷贝新文件"
-            cp -r ${TEMP}/* $TARGET/
+            cp -r /tmp/react-deploy/* $TARGET/
 
             echo "🧹 清理临时目录"
-            rm -rf $TEMP
+            rm -rf /tmp/react-deploy
 
-            echo "✅ React 部署完成"
+            echo "✅ 部署完成"
