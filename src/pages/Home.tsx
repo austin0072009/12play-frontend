@@ -97,6 +97,18 @@ export default function Home() {
       }));
   }, [app?.data]);
 
+  // Use special games (special_games) - already transformed by normalizeInitData
+  const specialGames = useMemo(() => {
+    const specGames: any[] = app?.data?.special_games || [];
+    return specGames
+      .filter((g) => g && g.m_img) // Only filter by image
+      .map((g) => ({
+        ...g,
+        title: g.game_name || 'Game',
+        img: g.m_img, // Use m_img which already includes domain prefix from transform.ts
+      }));
+  }, [app?.data]);
+
   useEffect(function () {
     fetchInitMeta()
       .then(function (res) {
@@ -131,7 +143,7 @@ export default function Home() {
       const gameId = g.id || g.game_id;
       const platType = g.plat_type || g.productCode;
       const gameCode = g.game_code || g.code;
-      
+
       if (!gameId || !platType) {
         throw new Error('Missing required game parameters: id or plat_type');
       }
@@ -172,6 +184,17 @@ export default function Home() {
         }}
       />
 
+      {/* Special Games Section */}
+      {specialGames.length > 0 && (
+        <HorizontalGameList
+          title="权威认证"
+          icon="special"
+          games={specialGames}
+          onGameClick={handleEnterGame}
+          domain={data?.domain || ''}
+        />
+      )}
+
       {/* Recommended Games Section */}
       {recommendedGames.length > 0 && (
         <HorizontalGameList
@@ -193,6 +216,7 @@ export default function Home() {
           domain={data?.domain || ''}
         />
       )}
+
 
       {/* Feature Cards Section */}
       <FeatureCards />

@@ -50,11 +50,7 @@ export default function ProfilePage() {
     // Mark as loaded once we have token
     setIsLoading(false);
 
-    // Check if phone verification is needed
-    const needsVerification = !(userInfo as any)?.phone_verified;
-    if (needsVerification && userInfo && Object.keys(userInfo).length > 0) {
-      setAlertOpen(true);
-    }
+
   }, [token, userInfo, navigate]);
 
   const handleLogout = () => {

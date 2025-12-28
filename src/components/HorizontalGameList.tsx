@@ -15,7 +15,7 @@ interface Game {
 
 interface HorizontalGameListProps {
   title: string;
-  icon?: 'hot' | 'recommend';
+  icon?: 'hot' | 'recommend' | 'special';
   games: Game[];
   onGameClick?: (game: Game) => void;
   domain?: string;
@@ -79,6 +79,20 @@ export default function HorizontalGameList({
                   <path fill="#fff" d="M0 0h24v24H0z"></path>
                 </clipPath>
               </defs>
+            </svg>
+          ) : icon === 'special' ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              width="24px"
+              height="24px"
+              className={styles.icon}
+            >
+              <path
+                fill="currentColor"
+                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+              />
             </svg>
           ) : (
             <svg

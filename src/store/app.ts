@@ -14,6 +14,7 @@ type AppData = {
     cate?: any[];
     tj_games?: any[]; // Recommended games
     hot_games?: any[]; // Popular games
+    special_games?: any[]; // Special games (权威认证)
 };
 
 interface AppState {

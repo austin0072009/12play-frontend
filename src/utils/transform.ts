@@ -78,6 +78,7 @@ export function normalizeInitData(raw: any) {
     const hotGames = Array.isArray(raw && raw.tj_games) ? raw.tj_games : [];
     const games = Array.isArray(raw && raw.games) ? raw.games : [];
     const hotGames2 = Array.isArray(raw && raw.hot_games) ? raw.hot_games : [];
+    const specialGames = Array.isArray(raw && raw.special_games) ? raw.special_games : [];
 
     const mapGame = function (el: RawGame, isHot: boolean) {
         // For m_img, prefer m_img but fallback to img if m_img is not available
@@ -171,6 +172,9 @@ export function normalizeInitData(raw: any) {
             return mapTjHotGame(g);
         }),
         hot_games: hotGames2.map(function (g: any) {
+            return mapTjHotGame(g);
+        }),
+        special_games: specialGames.map(function (g: any) {
             return mapTjHotGame(g);
         }),
     };
