@@ -1,0 +1,151 @@
+.container {
+  background-color: var(--color-bg-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-white);
+}
+
+.header {
+  background-color: var(--color-bg-muted);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.backIcon {
+  width: 2.4rem;
+  height: 2.4rem;
+  color: var(--color-white);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.notice {
+  background: linear-gradient(135deg, rgba(203, 0, 0, 0.15) 0%, rgba(203, 0, 0, 0.05) 100%);
+  border: 1px solid rgba(203, 0, 0, 0.3);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.notice p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-white);
+  font-weight: 500;
+}
+
+.daysList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dayCard {
+  background-color: var(--color-bg-muted);
+  border-radius: 1.2rem;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid var(--color-primary);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dayCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(203, 0, 0, 0.2);
+}
+
+.dateSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.date {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-white);
+  margin: 0;
+  font-family: 'Courier New', monospace;
+}
+
+.dayName {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reasonSection {
+  text-align: right;
+}
+
+.reason {
+  font-size: 1rem;
+  color: #ff6b6b;
+  margin: 0;
+  font-weight: 600;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 1.5rem 0;
+  color: var(--color-text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .dayCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .reasonSection {
+    text-align: left;
+    width: 100%;
+  }
+}

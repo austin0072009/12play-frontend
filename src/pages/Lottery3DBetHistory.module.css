@@ -1,0 +1,239 @@
+.container {
+  background-color: var(--color-bg-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-white);
+}
+
+.header {
+  background-color: var(--color-bg-muted);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.backIcon {
+  width: 2.4rem;
+  height: 2.4rem;
+  color: var(--color-white);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--color-bg-muted);
+  padding: 0.5rem;
+  border-radius: 1rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  flex: 1;
+  min-width: 80px;
+  padding: 0.8rem 1rem;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  background-color: rgba(203, 0, 0, 0.1);
+}
+
+.tab.active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.betsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.betCard {
+  background-color: var(--color-bg-muted);
+  border-radius: 1.2rem;
+  overflow: hidden;
+  border-left: 4px solid var(--color-primary);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.betCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(203, 0, 0, 0.2);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: rgba(203, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(203, 0, 0, 0.2);
+}
+
+.dateTime {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.date {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.time {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-white);
+  margin: 0;
+}
+
+.status {
+  padding: 0.5rem 1rem;
+  border-radius: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.won {
+  background-color: rgba(0, 208, 132, 0.2);
+  color: #00d084;
+}
+
+.lost {
+  background-color: rgba(203, 0, 0, 0.2);
+  color: #ff6b6b;
+}
+
+.pending {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.cardBody {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.betInfo {
+  text-align: center;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.value {
+  font-size: 1.1rem;
+  color: var(--color-white);
+  font-weight: bold;
+  margin: 0;
+  font-family: 'Courier New', monospace;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.cardFooter > div {
+  flex: 1;
+}
+
+.win {
+  color: #00d084;
+  font-size: 1.1rem;
+}
+
+.noData {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-muted);
+}
+
+.noData p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .tabs {
+    gap: 0.3rem;
+  }
+
+  .tab {
+    min-width: 60px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .cardBody {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .cardFooter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

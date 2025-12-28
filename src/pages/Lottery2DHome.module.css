@@ -1,0 +1,244 @@
+.container {
+  background-color: var(--color-bg-dark);
+  display: flex;
+  flex-direction: column;
+  color: var(--color-white);
+  position: relative;
+  min-height: calc(100vh - 56px);
+}
+
+/* ===== Header ===== */
+
+.header {
+  background-color: var(--color-bg-muted);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  cursor: pointer;
+}
+
+.backIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--color-white);
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.iconBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.45rem;
+  cursor: pointer;
+}
+
+.iconBtn svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--color-white);
+}
+
+/* ===== Content ===== */
+
+.content {
+  flex: 1;
+  padding: 1rem 1rem 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Round Card ===== */
+
+.roundCard {
+  background: linear-gradient(135deg, #121212, #1e1e1e);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.roundLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.roundTime {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin: 0.2rem 0 0;
+}
+
+.roundStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "Courier New", monospace;
+}
+
+.clockIcon {
+  width: 1.2rem;
+  color: var(--color-primary);
+}
+
+.badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.open {
+  background: rgba(0, 255, 156, 0.15);
+  color: #00ff9c;
+}
+
+.closed {
+  background: rgba(255, 80, 80, 0.15);
+  color: #ff6b6b;
+}
+
+/* ===== Latest Result ===== */
+
+.lastResult {
+  background: linear-gradient(135deg, var(--color-primary), #7a0000);
+  border-radius: 14px;
+  padding: 1.2rem;
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.lastResultTitle {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.lastResultValue {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin: 0.4rem 0;
+  font-family: "Courier New", monospace;
+}
+
+.lastResultTime {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ===== Results ===== */
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.resultCard {
+  background-color: var(--color-bg-muted);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid var(--color-primary);
+}
+
+.resultTime {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.result2d {
+  font-size: 1.5rem;
+  font-family: "Courier New", monospace;
+  color: var(--color-primary);
+}
+
+/* ===== Bet Button ===== */
+
+.betBtn {
+  position: fixed;
+
+  /* 底部居中核心写法 */
+  left: 50%;
+  bottom: 6.8rem;
+  transform: translateX(-50%);
+
+  /* 尺寸：博彩黄金比例 */
+  width: 140px;
+  height: 52px;
+  border-radius: 999px;
+
+  background: linear-gradient(180deg, #ff3b3b, #cb0000);
+  color: #fff;
+  border: none;
+
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  z-index: 999;
+
+  box-shadow:
+    0 6px 20px rgba(203, 0, 0, 0.5),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.35);
+
+  transition:
+    transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease,
+    background 0.25s ease;
+}
+
+/* 悬浮 */
+.betBtn:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow:
+    0 10px 28px rgba(203, 0, 0, 0.65),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* 按下 */
+.betBtn:active {
+  transform: translateX(-50%) scale(0.95);
+  box-shadow:
+    0 4px 12px rgba(203, 0, 0, 0.4),
+    inset 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+.betBtn:disabled {
+  background: #555;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}

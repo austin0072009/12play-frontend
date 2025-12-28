@@ -1,0 +1,189 @@
+.container {
+  background: var(--color-bg-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  background: var(--color-bg-muted);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.backBtn {
+  background: none;
+  border: none;
+}
+
+.backIcon {
+  width: 2rem;
+  color: #fff;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 2rem;
+  margin: 0;
+}
+
+/* ===== Info Card ===== */
+.infoCard {
+  margin: 0.8rem 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #1a1a1a, #242424);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+.infoTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.round {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.time {
+  font-size: 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.balance {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00ff9c;
+}
+
+.selectedInfo {
+  font-size: 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.selectedCount {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/* 金额输入 */
+.amountInput {
+  background: #2a2a2a;
+  border: 1px solid rgba(203, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-size: 1rem;
+  color: #fff;
+  text-align: center;
+}
+
+/* 快速金额 */
+.quickAmounts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+
+.amountBtn {
+  padding: 0.6rem;
+  border-radius: 8px;
+  background: #2a2a2a;
+  border: none;
+  color: #ccc;
+  font-weight: bold;
+}
+
+.amountBtn.active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* BET 按钮 */
+.betTopBtn {
+  margin-top: 0.4rem;
+  padding: 0.7rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ff3b3b, #cb0000);
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.betTopBtn:disabled {
+  background: #555;
+  color: #999;
+}
+
+/* ===== Number Area ===== */
+.content {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.numberGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.6rem;
+}
+
+.numBtn {
+  position: relative;
+  height: 56px;
+  border-radius: 10px;
+  background: #2a2a2a;
+  border: none;
+  color: #fff;
+}
+
+.num {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.remain {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 1rem;
+  color: #9c9c9c;
+}
+
+.selected {
+  background: var(--color-primary);
+}
+
+.full {
+  background: #444;
+  color: #888;
+}
+
+/* ===== Pagination ===== */
+.pagination {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #333;
+  color: #fff;
+}

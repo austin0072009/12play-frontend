@@ -13,6 +13,22 @@ import GameFrame from "../pages/GameFrame";
 import ChangePassword from "../pages/ChangePassword";
 import ContactSection from "../components/ContactSection";
 
+// 2D Lottery Pages
+import Lottery2DHome from "../pages/Lottery2DHome";
+import Lottery2DBet from "../pages/Lottery2DBet";
+import Lottery2DBetConfirm from "../pages/Lottery2DBetConfirm";
+import Lottery2DBetHistory from "../pages/Lottery2DBetHistory";
+import Lottery2DClosedDays from "../pages/Lottery2DClosedDays";
+import Lottery2DRank from "../pages/Lottery2DRank";
+
+// 3D Lottery Pages
+import Lottery3DHome from "../pages/Lottery3DHome";
+import Lottery3DBet from "../pages/Lottery3DBet";
+import Lottery3DBetConfirm from "../pages/Lottery3DBetConfirm";
+import Lottery3DBetHistory from "../pages/Lottery3DBetHistory";
+import Lottery3DClosedDays from "../pages/Lottery3DClosedDays";
+import Lottery3DRank from "../pages/Lottery3DRank";
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -34,6 +50,22 @@ export default function AppRouter() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/contact" element={<ContactSection />} />
+
+          {/* 2D Lottery Routes */}
+          <Route path="/2d" element={<Lottery2DHome />} />
+          <Route path="/2d/bet" element={<Lottery2DBet />} />
+          <Route path="/2d/bet-confirm" element={<Lottery2DBetConfirm />} />
+          <Route path="/2d/history" element={<Lottery2DBetHistory />} />
+          <Route path="/2d/closed-days" element={<Lottery2DClosedDays />} />
+          <Route path="/2d/rank" element={<Lottery2DRank />} />
+
+          {/* 3D Lottery Routes */}
+          <Route path="/3d" element={<Lottery3DHome />} />
+          <Route path="/3d/bet" element={<Lottery3DBet />} />
+          <Route path="/3d/bet-confirm" element={<Lottery3DBetConfirm />} />
+          <Route path="/3d/history" element={<Lottery3DBetHistory />} />
+          <Route path="/3d/closed-days" element={<Lottery3DClosedDays />} />
+          <Route path="/3d/rank" element={<Lottery3DRank />} />
         </Route>
       </Routes>
     </BrowserRouter>
