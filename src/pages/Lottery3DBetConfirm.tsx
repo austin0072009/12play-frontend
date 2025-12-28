@@ -1,25 +1,70 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Lottery3DBetConfirm.module.css";
-import { useState } from "react";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
+
+type BetItem = {
+  num: string;
+  amount: number;
+};
 
 export default function Lottery3DBetConfirm() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const state = location.state || {};
+  const { state } = useLocation() as any;
+
+  const [items, setItems] = useState<BetItem[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleConfirm = async () => {
+  /* 初始化：从上页展开号码 */
+  useEffect(() => {
+    if (!state?.numbers || !state?.amount) return;
+    setItems(
+      state.numbers.map((n: string) => ({
+        num: n,
+        amount: state.amount,
+      }))
+    );
+  }, [state]);
+
+  /* 合计金额 */
+  const totalAmount = useMemo(
+    () => items.reduce((sum, i) => sum + i.amount, 0),
+    [items]
+  );
+
+  /* 修改单号金额 */
+  const updateAmount = (num: string, amount: number) => {
+    setItems((prev) =>
+      prev.map((i) => (i.num === num ? { ...i, amount } : i))
+    );
+  };
+
+  /* 删除单个号码 */
+  const removeItem = (num: string) => {
+    setItems((prev) => prev.filter((i) => i.num !== num));
+  };
+
+  /* 确认下注 */
+  const handleConfirm = () => {
+    if (items.length === 0 || totalAmount <= 0) return;
+
     setLoading(true);
-    // Simulate API call
     setTimeout(() => {
       setLoading(false);
-      navigate("/3d/bet-success", { state });
-    }, 1500);
+      navigate("/3d/bet-success", {
+        state: {
+          round: state.round,
+          drawTime: state.drawTime,
+          bets: items,
+          totalAmount,
+        },
+      });
+    }, 1200);
   };
 
   return (
     <div className={styles.container}>
+      {/* Header */}
       <header className={styles.header}>
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
@@ -28,54 +73,56 @@ export default function Lottery3DBetConfirm() {
       </header>
 
       <div className={styles.content}>
-        <div className={styles.confirmCard}>
-          <h2 className={styles.cardTitle}>Bet Details</h2>
-
-          <div className={styles.detailRow}>
-            <span className={styles.label}>3D Number</span>
-            <span className={styles.value}>{state.selectedNumber}</span>
+        {/* Info Card */}
+        <div className={styles.infoCard}>
+          <div>
+            <div className={styles.round}>{state.round}</div>
+            <div className={styles.time}>Draw {state.drawTime}</div>
           </div>
-
-          <div className={styles.detailRow}>
-            <span className={styles.label}>Set</span>
-            <span className={styles.value}>{state.selectedSet}</span>
-          </div>
-
-          <div className={styles.detailRow}>
-            <span className={styles.label}>Payout</span>
-            <span className={styles.value}>{state.selectedPayout}</span>
-          </div>
-
-          <div className={styles.divider}></div>
-
-          <div className={styles.detailRow}>
-            <span className={styles.label}>Bet Amount</span>
-            <span className={`${styles.value} ${styles.amount}`}>
-              MYR {state.betAmount}
-            </span>
-          </div>
-
-          <div className={styles.detailRow}>
-            <span className={styles.label}>Potential Win</span>
-            <span className={`${styles.value} ${styles.win}`}>
-              MYR{" "}
-              {(
-                parseFloat(state.betAmount) *
-                parseFloat(state.selectedPayout?.slice(0, -1) || 0)
-              ).toFixed(2)}
-            </span>
-          </div>
-
-          <div className={styles.divider}></div>
-
-          <div className={styles.notice}>
-            <p>
-              ⚠️ Please verify all details before confirming. Once submitted, the bet
-              cannot be cancelled.
-            </p>
+          <div className={styles.total}>
+            MYR {totalAmount.toLocaleString()}
           </div>
         </div>
 
+        {/* Bet List */}
+        <div className={styles.list}>
+          {items.map((item) => (
+            <div key={item.num} className={styles.row}>
+              <div className={styles.num}>{item.num}</div>
+
+              <input
+                type="number"
+                min={0}
+                value={item.amount}
+                onChange={(e) =>
+                  updateAmount(item.num, Number(e.target.value))
+                }
+                className={styles.amountInput}
+              />
+
+              <button
+                className={styles.deleteBtn}
+                onClick={() => removeItem(item.num)}
+                aria-label="Remove"
+              >
+                <TrashIcon />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {items.length === 0 && (
+          <div className={styles.empty}>
+            No numbers selected. Please go back and select numbers.
+          </div>
+        )}
+
+        {/* Notice */}
+        <div className={styles.notice}>
+          You can adjust or remove any number before confirming the bet.
+        </div>
+
+        {/* Actions */}
         <div className={styles.actions}>
           <button
             className={styles.cancelBtn}
@@ -86,8 +133,8 @@ export default function Lottery3DBetConfirm() {
           </button>
           <button
             className={styles.confirmBtn}
+            disabled={loading || items.length === 0 || totalAmount <= 0}
             onClick={handleConfirm}
-            disabled={loading}
           >
             {loading ? "Processing..." : "Confirm Bet"}
           </button>

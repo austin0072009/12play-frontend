@@ -1,31 +1,35 @@
 import styles from './FeatureCards.module.css';
+import vipIcon from '../assets/icons/feature-vip.png';
+import controllerIcon from '../assets/icons/feature-controller.png';
+import trustIcon from '../assets/icons/feature-trustplay.png';
+import supportIcon from '../assets/icons/feature-support.png';
 
 export default function FeatureCards() {
   const features = [
     {
       id: 'vip',
-      icon: '/src/assets/icons/feature-vip.png',
+      icon: vipIcon,
       title: 'VIP Program',
       subtitle: 'VIP Account Manager',
       description: 'Personal assistant and premium privileges',
     },
     {
       id: 'providers',
-      icon: '/src/assets/icons/feature-controller.png',
+      icon: controllerIcon,
       title: 'Top Providers',
       subtitle: 'Leading Service Providers',
       description: 'Games from CMD, Pragmatic Play, Playtech and more',
     },
     {
       id: 'trust',
-      icon: '/src/assets/icons/feature-trustplay.png',
+      icon: trustIcon,
       title: 'Trust Play',
       subtitle: 'Safe & Fair',
       description: 'Secure transactions • Fair games • Peace of mind',
     },
     {
       id: 'support',
-      icon: '/src/assets/icons/feature-support.png',
+      icon: supportIcon,
       title: '24/7 Support',
       subtitle: 'Round the Clock Support',
       description: 'Chat with our service team anytime via Live Chat',

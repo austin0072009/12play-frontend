@@ -1,188 +1,176 @@
 .container {
-  background-color: var(--color-bg-dark);
+  background: var(--color-bg-dark);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  color: var(--color-white);
+  color: #fff;
 }
 
+/* Header */
 .header {
-  background-color: var(--color-bg-muted);
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  background: var(--color-bg-muted);
   border-bottom: 2px solid var(--color-primary);
 }
 
 .backBtn {
   background: none;
   border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
 }
 
 .backIcon {
-  width: 2.4rem;
-  height: 2.4rem;
-  color: var(--color-white);
+  width: 2rem;
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
   flex: 1;
+  text-align: center;
+  font-size: 1.4rem;
   margin: 0;
 }
 
+/* Content */
 .content {
   flex: 1;
-  padding: 1.5rem;
+  padding: 1rem;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
 }
 
-.confirmCard {
-  background-color: var(--color-bg-muted);
-  border-radius: 1.2rem;
-  padding: 2rem;
-  border-left: 4px solid var(--color-primary);
-}
-
-.cardTitle {
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin: 0 0 1.5rem 0;
-  color: var(--color-white);
-  text-align: center;
-}
-
-.detailRow {
+/* Info Card */
+.infoCard {
+  background: linear-gradient(135deg, #1a1a1a, #242424);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  background-color: rgba(29, 29, 29, 0.5);
-  border-radius: 0.8rem;
-  margin-bottom: 0.8rem;
 }
 
-.label {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.value {
-  font-size: 1.1rem;
-  color: var(--color-white);
+.round {
+  font-size: 1.5rem;
   font-weight: bold;
-  font-family: 'Courier New', monospace;
 }
 
-.amount,
-.win {
-  font-size: 1.3rem;
+.time {
+  font-size: 1rem;
+  color: var(--color-text-muted);
 }
 
-.win {
-  color: #00d084;
+.total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00ff9c;
 }
 
-.divider {
-  height: 1px;
-  background-color: rgba(203, 0, 0, 0.2);
-  margin: 1.5rem 0;
+/* List */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
+.row {
+  background: #2a2a2a;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.num {
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+}
+
+.amountInput {
+  width: 100px;
+  background: #1a1a1a;
+  border: 1px solid rgba(203, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  color: #fff;
+  text-align: right;
+}
+
+/* Notice */
 .notice {
-  background: linear-gradient(135deg, rgba(203, 0, 0, 0.15) 0%, rgba(203, 0, 0, 0.05) 100%);
-  border: 1px solid rgba(203, 0, 0, 0.3);
-  border-radius: 0.8rem;
-  padding: 1.2rem;
   margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
 }
 
-.notice p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--color-white);
-  line-height: 1.5;
-}
-
+/* Actions */
 .actions {
   display: flex;
-  gap: 1rem;
-  padding: 1.5rem 0;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
 }
 
 .cancelBtn,
 .confirmBtn {
   flex: 1;
-  padding: 1rem;
-  border-radius: 0.8rem;
-  font-size: 1.1rem;
+  padding: 0.9rem;
+  border-radius: 10px;
   font-weight: bold;
   border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 .cancelBtn {
-  background-color: var(--color-bg-muted);
-  color: var(--color-white);
-  border: 1px solid var(--color-text-muted);
-}
-
-.cancelBtn:hover:not(:disabled) {
-  background-color: rgba(203, 0, 0, 0.1);
-  border-color: var(--color-primary);
+  background: #333;
+  color: #fff;
 }
 
 .confirmBtn {
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  background: var(--color-primary);
+  color: #fff;
 }
 
-.confirmBtn:hover:not(:disabled) {
-  background-color: #a50000;
-  transform: scale(1.02);
-}
-
-.cancelBtn:disabled,
 .confirmBtn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  background: #555;
+  color: #999;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .header {
-    padding: 1rem;
-  }
+/* 行结构增强 */
+.row {
+  background: #2a2a2a;
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+  display: grid;
+  grid-template-columns: 1fr 120px 36px;
+  align-items: center;
+  gap: 0.6rem;
+}
 
-  .title {
-    font-size: 1.5rem;
-  }
+/* 删除按钮 */
+.deleteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .confirmCard {
-    padding: 1.5rem;
-  }
+.deleteBtn svg {
+  width: 1.2rem;
+  color: #ff6b6b;
+}
 
-  .detailRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
+.deleteBtn:hover svg {
+  color: #ff2d2d;
+  transform: scale(1.1);
+}
 
-  .actions {
-    flex-direction: column;
-  }
+/* 空状态 */
+.empty {
+  margin-top: 1.2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
 }
