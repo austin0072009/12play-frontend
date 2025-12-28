@@ -44,6 +44,12 @@
   padding: 1rem;
   background: #d8d8d8;
   margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.promotionDiv:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .promoImage {
@@ -61,6 +67,7 @@
   width: 100%;
   color: var(--color-text);
 }
+
 .title {
   font-size: 1.8rem;
   font-weight: 700;
@@ -85,4 +92,25 @@
   margin-top: 1rem;
   font-size: 1.6rem;
   font-weight: 700;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.detailBtn:hover {
+  background-color: #8a0000;
+  transform: scale(1.02);
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.5rem;
+  color: #9c9c9c;
+}
+
+.noData {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.5rem;
+  color: #9c9c9c;
 }

@@ -156,12 +156,18 @@
 /* Welcome Section Styles */
 .welcomeSection {
   position: relative;
-  padding: 3rem 2rem;
+  padding: 2rem;
   margin: 0 0 2rem 0;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #0d0d0d 100%);
-  border-bottom: 3px solid #ff3333;
+  background: var(--color-bg-muted);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
   overflow: hidden;
-  border-left: 4px solid #ff3333;
+  transition: all 0.3s ease;
+}
+
+.welcomeSection:hover {
+  background: #454444;
+  border-color: rgba(255, 51, 51, 0.3);
 }
 
 .welcomeGradient {
@@ -173,43 +179,32 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 51, 51, 0.15),
+    rgba(255, 51, 51, 0.1),
     transparent
   );
-  animation: shimmer 3s infinite;
+  transition: left 0.5s ease;
 }
 
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  50% {
-    left: 100%;
-  }
-  100% {
-    left: 100%;
-  }
+.welcomeSection:hover .welcomeGradient {
+  left: 100%;
 }
 
 .welcomeTitle {
   position: relative;
   z-index: 2;
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: #ffffff;
   margin: 0 0 0.5rem 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  animation: fadeInUp 0.6s ease-out;
 }
 
 .welcomeSubtitle {
   position: relative;
   z-index: 2;
-  font-size: 1rem;
-  color: #e0e0e0;
+  font-size: 0.95rem;
+  color: #9c9c9c;
   margin: 0;
-  font-weight: 500;
-  animation: fadeInUp 0.6s ease-out 0.2s backwards;
+  font-weight: 400;
 }
 
 .languageSwitcherContainer {

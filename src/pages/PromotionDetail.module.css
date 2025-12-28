@@ -1,0 +1,265 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.backBtn:hover {
+  transform: scale(1.1);
+}
+
+.backIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #fff;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 0;
+  overflow-y: auto;
+  padding-bottom: 3rem;
+}
+
+.imageContainer {
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  background-color: var(--color-bg-muted);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.infoSection {
+  padding: 1.5rem;
+}
+
+.promotionTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+  word-break: break-word;
+}
+
+.promotionSubtitle {
+  font-size: 1.2rem;
+  color: #ff3333;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Dates */
+.datesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--color-bg-muted);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dateItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dateLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #9c9c9c;
+}
+
+.dateValue {
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Description */
+.descriptionContainer {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 1rem 0;
+}
+
+.description {
+  font-size: 1rem;
+  color: #9c9c9c;
+  line-height: 1.6;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.description p {
+  margin: 0.5rem 0;
+}
+
+/* Rich Content */
+.richContentContainer {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--color-bg-muted);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.richContent {
+  font-size: 1rem;
+  color: #9c9c9c;
+  line-height: 1.6;
+}
+
+.richContent img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.richContent h1,
+.richContent h2,
+.richContent h3,
+.richContent h4,
+.richContent h5,
+.richContent h6 {
+  color: #fff;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.richContent ul,
+.richContent ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.richContent li {
+  margin: 0.25rem 0;
+}
+
+/* Action Button */
+.actionBtn {
+  width: 100%;
+  padding: 1.2rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.actionBtn:hover {
+  background-color: #8a0000;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(255, 51, 51, 0.3);
+}
+
+.actionBtn:active {
+  transform: scale(0.98);
+}
+
+/* Loading & Error States */
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  font-size: 1.2rem;
+  color: #9c9c9c;
+}
+
+.errorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  font-size: 1.2rem;
+  color: #ff6b6b;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 0.75rem 1rem;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .imageContainer {
+    height: 220px;
+  }
+
+  .infoSection {
+    padding: 1.25rem;
+  }
+
+  .promotionTitle {
+    font-size: 1.5rem;
+  }
+
+  .promotionSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .actionBtn {
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+}

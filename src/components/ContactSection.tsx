@@ -1,55 +1,62 @@
-import { useMemo } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faViber, faTelegram } from '@fortawesome/free-brands-svg-icons';
+import { faHeadset } from '@fortawesome/free-solid-svg-icons';
 import styles from './ContactSection.module.css';
 
-interface Contact {
-  id?: string;
-  name?: string;
-  value?: string;
-  type?: string;
-  [key: string]: any;
-}
-
 interface ContactSectionProps {
-  contacts?: Contact[];
+  viberLink?: string;
+  telegramLink?: string;
+  liveChatLink?: string;
 }
 
-export default function ContactSection({ contacts = [] }: ContactSectionProps) {
-  const displayContacts = useMemo(() => {
-    return contacts.slice(0, 4); // Show first 4 contact methods
-  }, [contacts]);
-
-  if (!displayContacts.length) {
-    return (
-      <div className={styles.container}>
-        <h3 className={styles.title}>📞 Contact Us</h3>
-        <div className={styles.contactList}>
-          <div className={styles.contactItem}>
-            <span className={styles.label}>💬 Live Chat:</span>
-            <span className={styles.value}>Available 24/7</span>
-          </div>
-          <div className={styles.contactItem}>
-            <span className={styles.label}>📧 Email:</span>
-            <span className={styles.value}>support@RedCow.com</span>
-          </div>
-          <div className={styles.contactItem}>
-            <span className={styles.label}>📱 Phone:</span>
-            <span className={styles.value}>24/7 Support</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+export default function ContactSection({ 
+  viberLink = '#', 
+  telegramLink = '#', 
+  liveChatLink = '#' 
+}: ContactSectionProps) {
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>📞 Contact Us</h3>
-      <div className={styles.contactList}>
-        {displayContacts.map((contact) => (
-          <div key={contact.id || Math.random()} className={styles.contactItem}>
-            <span className={styles.label}>{contact.name || 'Contact'}:</span>
-            <span className={styles.value}>{contact.value || 'N/A'}</span>
+      <div className={styles.header}>
+        <h2 className={styles.title}>24/7 Contact Service</h2>
+        <p className={styles.subtitle}>We're here to help anytime, anywhere</p>
+      </div>
+
+      <div className={styles.contactGrid}>
+        {/* Viber Section */}
+        <a href={viberLink} className={styles.contactCard}>
+          <div className={styles.iconWrapper}>
+            <FontAwesomeIcon icon={faViber} className={styles.icon} />
           </div>
-        ))}
+          <div className={styles.cardContent}>
+            <h3 className={styles.cardTitle}>Viber</h3>
+            <p className={styles.cardStatus}>24/7 Available</p>
+            <p className={styles.cardDesc}>Quick response on Viber</p>
+          </div>
+        </a>
+
+        {/* Telegram Section */}
+        <a href={telegramLink} className={styles.contactCard}>
+          <div className={styles.iconWrapper}>
+            <FontAwesomeIcon icon={faTelegram} className={styles.icon} />
+          </div>
+          <div className={styles.cardContent}>
+            <h3 className={styles.cardTitle}>Telegram</h3>
+            <p className={styles.cardStatus}>24/7 Available</p>
+            <p className={styles.cardDesc}>Instant messaging support</p>
+          </div>
+        </a>
+
+        {/* Live Chat Section */}
+        <a href={liveChatLink} className={styles.contactCard}>
+          <div className={styles.iconWrapper}>
+            <FontAwesomeIcon icon={faHeadset} className={styles.icon} />
+          </div>
+          <div className={styles.cardContent}>
+            <h3 className={styles.cardTitle}>Live Chat</h3>
+            <p className={styles.cardStatus}>24/7 Available</p>
+            <p className={styles.cardDesc}>Chat directly with support</p>
+          </div>
+        </a>
       </div>
     </div>
   );

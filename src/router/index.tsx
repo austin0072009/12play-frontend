@@ -6,10 +6,12 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import MainLayout from "../layout/MainLayout";
 import Promotions from "../pages/Promotions";
+import PromotionDetail from "../pages/PromotionDetail";
 import Profile from "../pages/Profile";
 import BankAdd from "../pages/BankAdd";
 import GameFrame from "../pages/GameFrame";
 import ChangePassword from "../pages/ChangePassword";
+import ContactSection from "../components/ContactSection";
 
 export default function AppRouter() {
   return (
@@ -28,8 +30,10 @@ export default function AppRouter() {
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/promotion" element={<Promotions />} />
+          <Route path="/promotion/:id" element={<PromotionDetail />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/contact" element={<ContactSection />} />
         </Route>
       </Routes>
     </BrowserRouter>
