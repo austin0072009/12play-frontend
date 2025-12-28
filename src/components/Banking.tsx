@@ -87,15 +87,15 @@ export default function Banking() {
           <div className={styles.bankCard}>
             {getBankImage(bankList.bank_name) && (
               <img
-                src={getBankImage(bankList.bank_name)}
+                src={getBankImage(bankList.bank_name) || ""}
                 alt={bankList.bank_name}
                 className={styles.bankImage}
               />
             )}
             <div className={styles.bankInfo}>
-              <h3 className={styles.bankName}>{bankList.bank_name}</h3>
-              <p className={styles.bankUsername}>{bankList.bank_username}</p>
-              <p className={styles.bankCardNumber}>{bankList.bank_card}</p>
+              <h3 className={styles.bankName}>{bankList.bank_name || ""}</h3>
+              <p className={styles.bankUsername}>{bankList.bank_username || ""}</p>
+              <p className={styles.bankCardNumber}>{bankList.bank_card || ""}</p>
               <span className={styles.verifiedBadge}>VERIFIED</span>
             </div>
             <div className={styles.bankActions}>

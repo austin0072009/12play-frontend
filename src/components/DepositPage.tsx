@@ -1,12 +1,9 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styles from "../pages/Wallet.module.css";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { fetchRecharegeAmount, buildOrder } from "../services/api";
 import type { Bank } from "../services/types";
-import { useNavigate } from "react-router-dom";
 
 export default function DepositPage() {
-    const navigate = useNavigate();
 
     // Initial dummy state to match UI, will be replaced by API
     const [banks, setBanks] = useState<Bank[]>([]);
@@ -17,9 +14,7 @@ export default function DepositPage() {
     // To match original UI's "depositChannels" which seemed to be the payment TYPES (like Pay vs Bank vs Crypto) 
     // vs "banks" which were specific banks? 
     // Looking at rk logic: it gets "channels" which contain "banks" or "types". 
-    // In rk: "banks" are the main list. 
-
-    const controllerRef = useRef<AbortController | null>(null);
+    // In rk: "banks" are the main list.
 
     const selectedBank = useMemo(() => {
         return banks.find(b => b.id === selectedBankId) ?? null;

@@ -10,8 +10,6 @@ export default function ProfilePage() {
   const logout = useUserStore((s) => s.logout);
   const token = useUserStore((s) => s.token);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [open, setOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -39,9 +37,8 @@ export default function ProfilePage() {
 
   const passwordDisplay = useMemo(() => {
     if (!userInfo) return "••••••••";
-    const pwd = (userInfo as any)?.password || "••••••••";
-    return showPassword ? pwd : "••••••••";
-  }, [userInfo, showPassword]);
+    return "••••••••";
+  }, [userInfo]);
 
   // Check if user needs phone verification
   useEffect(() => {
@@ -56,7 +53,7 @@ export default function ProfilePage() {
     // Check if phone verification is needed
     const needsVerification = !(userInfo as any)?.phone_verified;
     if (needsVerification && userInfo && Object.keys(userInfo).length > 0) {
-      setOpen(true);
+      setAlertOpen(true);
     }
   }, [token, userInfo, navigate]);
 

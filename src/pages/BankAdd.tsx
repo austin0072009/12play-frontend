@@ -10,12 +10,12 @@ import styles from "./BankAdd.module.css";
 
 export default function BankAdd() {
     const navigate = useNavigate();
-    const [selectedBank, setSelectedBank] = useState<string | null>(null);
+    const [selectedBank, setSelectedBank] = useState<string | undefined>();
     const [bankUsername, setBankUsername] = useState("");
     const [bankCard, setBankCard] = useState("");
     const [bankCardConfirm, setBankCardConfirm] = useState("");
-    const [qrFile, setQrFile] = useState<File | null>(null);
-    const [qrPreview, setQrPreview] = useState<string | null>(null);
+    const [qrFile, setQrFile] = useState<File | undefined>();
+    const [qrPreview, setQrPreview] = useState<string | undefined>();
     const [submitting, setSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -40,7 +40,7 @@ export default function BankAdd() {
             setQrPreview(u);
             return () => URL.revokeObjectURL(u);
         } else {
-            setQrPreview(null);
+            setQrPreview(undefined);
         }
     }, [qrFile]);
 
@@ -92,11 +92,11 @@ export default function BankAdd() {
 
             const res = await AddBank({
                 type: 0,
-                bank_name: selectedBank,
-                bank_branch_name: selectedBank,
+                bank_name: selectedBank || "",
+                bank_branch_name: selectedBank || "",
                 bank_username: bankUsername,
                 bank_card: bankCard,
-                qr_code: qrFile,
+                qr_code: qrFile || undefined,
             });
 
             console.log("=== BANK ADD RESPONSE ===", res);
@@ -106,8 +106,8 @@ export default function BankAdd() {
                 setIsSuccess(true);
                 setShowDialog(true);
                 // Reset form
-                setSelectedBank(null);
-                setQrFile(null);
+                setSelectedBank(undefined);
+                setQrFile(undefined);
                 // Navigate after showing success
                 setTimeout(() => {
                     setShowDialog(false);

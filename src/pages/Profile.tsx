@@ -1,6 +1,5 @@
 import { useState, type SetStateAction } from "react";
 import styles from "./Profile.module.css";
-import { useNavigate } from "react-router-dom";
 import ProfilePage from "../components/ProfilePage";
 import Banking from "../components/Banking";
 export default function Profile() {
