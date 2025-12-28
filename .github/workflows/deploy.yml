@@ -1,0 +1,67 @@
+name: Deploy React Frontend to BT Panel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: 📦 Install deps & build
+        run: |
+          npm install
+          npm run build
+
+      - name: 🔍 Check build output
+        run: |
+          echo "当前目录: $(pwd)"
+          ls -lh
+          ls -lh dist || ls -lh build
+
+      # ===== 上传到服务器临时目录 =====
+      - name: 📤 Upload build files
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          source: |
+            dist/**
+            build/**
+          target: /tmp/react-deploy/
+          strip_components: 1
+
+      # ===== SSH 部署 =====
+      - name: 🚀 Deploy to /www/wwwroot/redcowx.com
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: |
+            echo "🚀 开始部署 React"
+
+            TARGET=/www/wwwroot/redcowx.com
+            TEMP=/tmp/react-deploy
+
+            echo "🧹 清空旧文件"
+            rm -rf ${TARGET:?}/*
+
+            echo "📦 拷贝新文件"
+            cp -r ${TEMP}/* $TARGET/
+
+            echo "🧹 清理临时目录"
+            rm -rf $TEMP
+
+            echo "✅ React 部署完成"
