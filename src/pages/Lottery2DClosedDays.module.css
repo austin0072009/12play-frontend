@@ -42,6 +42,7 @@
 .content {
   flex: 1;
   padding: 1.5rem;
+  padding-bottom: 4rem;
   overflow-y: auto;
 }
 
@@ -118,7 +119,8 @@
 
 .footer {
   text-align: center;
-  padding: 2rem 1.5rem 0;
+  padding: 2rem 1.5rem 2rem;
+  margin-bottom: 2rem;
   color: var(--color-text-muted);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -126,6 +128,37 @@
 .footer p {
   margin: 0.5rem 0;
   font-size: 0.9rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.error {
+  background: rgba(203, 0, 0, 0.2);
+  border: 1px solid rgba(203, 0, 0, 0.5);
+  border-radius: 0.8rem;
+  padding: 1rem;
+  text-align: center;
+  color: #ff6b6b;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(203, 0, 0, 0.3);
 }
 
 /* Responsive */

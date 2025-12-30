@@ -236,15 +236,31 @@ export default function Lottery2DHome() {
 
   // Check if today is a closed day
   const isClosedDay = () => {
-    if (!Array.isArray(closedDays)) {
+    if (!Array.isArray(closedDays) || closedDays.length === 0) {
       return false;
     }
+    
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     const todayDate = `${year}-${month}-${day}`; // YYYY-MM-DD local format
-    return closedDays.some((closedDay: any) => closedDay.date === todayDate);
+    const todayDayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    
+    // Convert Sunday (0) to 7 for API format (1=Monday, 7=Sunday)
+    const todayDayNum = todayDayOfWeek === 0 ? 7 : todayDayOfWeek;
+    
+    return closedDays.some((closedDay: any) => {
+      // Type 1: Recurring day of week
+      if (closedDay.type === 1 && closedDay.day) {
+        return closedDay.day === todayDayNum;
+      }
+      // Type 2: Specific date
+      if (closedDay.type === 2 && closedDay.date) {
+        return closedDay.date === todayDate;
+      }
+      return false;
+    });
   };
 
   // Handle BET button click with closed day check

@@ -42,7 +42,95 @@
 .content {
   flex: 1;
   padding: 1.5rem;
+  padding-bottom: 4rem;
   overflow-y: auto;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.error {
+  background: rgba(203, 0, 0, 0.2);
+  border: 1px solid rgba(203, 0, 0, 0.5);
+  border-radius: 0.8rem;
+  padding: 1rem;
+  text-align: center;
+  color: #ff6b6b;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.noData {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.timeFrameButtons {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  background-color: var(--color-bg-muted);
+  padding: 0.8rem;
+  border-radius: 1rem;
+}
+
+.timeFrameBtn {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.timeFrameBtn:hover {
+  background-color: rgba(203, 0, 0, 0.1);
+}
+
+.timeFrameBtn.active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: 0 4px 12px rgba(203, 0, 0, 0.3);
+}
+
+.sessionSection {
+  margin-bottom: 2.5rem;
+}
+
+.sessionHeader {
+  background: linear-gradient(135deg, rgba(203, 0, 0, 0.15) 0%, rgba(203, 0, 0, 0.05) 100%);
+  border: 1px solid rgba(203, 0, 0, 0.3);
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.sessionIssue {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-family: 'Courier New', monospace;
+}
+
+.noRankings {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  background-color: var(--color-bg-muted);
+  border-radius: 1rem;
 }
 
 .timeFrameButtons {

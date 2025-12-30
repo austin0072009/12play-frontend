@@ -18,16 +18,23 @@
 .backBtn {
   background: none;
   border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .backIcon {
   width: 2rem;
+  height: 2rem;
 }
 
 .title {
   flex: 1;
   text-align: center;
   font-size: 1.4rem;
+  font-weight: bold;
 }
 
 /* Content */
@@ -52,6 +59,12 @@
   border: none;
   color: #aaa;
   font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  background: #333;
 }
 
 .tab.active {
@@ -72,46 +85,76 @@
   border-radius: 14px;
   padding: 1rem;
   border-left: 4px solid var(--color-primary);
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-/* Header */
+.card:hover {
+  background: #2a2a2a;
+}
+
+/* Card Header */
 .cardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
-.round {
-  font-size: 0.85rem;
-  font-weight: bold;
+.headerInfo {
+  flex: 1;
 }
 
-.date {
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
+.headerRight {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
-/* Status */
-.status {
+.statusBadge {
   padding: 0.35rem 0.8rem;
   border-radius: 999px;
   font-size: 0.7rem;
   font-weight: bold;
+  white-space: nowrap;
 }
 
-.won {
+.statusBadge.won {
   background: rgba(0, 208, 132, 0.2);
   color: #00d084;
 }
 
-.lost {
+.statusBadge.lost {
   background: rgba(203, 0, 0, 0.25);
   color: #ff6b6b;
 }
 
-.pending {
+.statusBadge.pending {
   background: rgba(255, 193, 7, 0.25);
   color: #ffc107;
+}
+
+.expandIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.expanded .expandIcon {
+  transform: rotate(180deg);
+}
+
+.round {
+  font-size: 0.95rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.date {
+  font-size: 0.75rem;
+  color: #888;
 }
 
 /* Numbers */
@@ -135,24 +178,118 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 0.8rem;
+  gap: 1rem;
+}
+
+.footerItem {
+  flex: 1;
+  text-align: center;
 }
 
 .label {
   font-size: 0.7rem;
-  color: var(--color-text-muted);
+  color: #888;
+  margin-bottom: 0.2rem;
 }
 
 .value {
-  font-size: 0.95rem;
   font-weight: bold;
+  font-size: 0.95rem;
 }
 
-.win {
+.value.win {
   color: #00d084;
 }
 
+/* Details Section */
+.detailsSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #333;
+}
+
+.detailsTitle {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-bottom: 0.8rem;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem;
+  background: #2a2a2a;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.detailRow:last-child {
+  margin-bottom: 0;
+}
+
+.detailNumber {
+  font-family: "Courier New", monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background: #333;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.detailAmounts {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+  margin-left: 0.8rem;
+  justify-content: flex-end;
+}
+
+.detailAmounts span {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.detailAmounts span.label {
+  color: #888;
+  font-weight: normal;
+  margin: 0;
+}
+
+.detailAmounts span.value {
+  color: #fff;
+  font-weight: bold;
+  margin: 0;
+}
+
+.detailAmounts span.win {
+  color: #00d084;
+  font-weight: bold;
+}
+
+/* Loading & Error */
+.loading,
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  font-size: 1.1rem;
+  color: #aaa;
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+/* No Data */
 .noData {
   text-align: center;
   padding: 2rem;
-  color: var(--color-text-muted);
+  color: #888;
+  font-size: 0.95rem;
 }

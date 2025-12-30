@@ -1,24 +1,63 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./Lottery3DRank.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { getBetSessions, getWinRanking } from "../services/lottery";
+import { useLotteryStore } from "../store/lottery";
+
+interface RankingItem {
+  userId: number;
+  username: string;
+  winAmount: number;
+}
 
 export default function Lottery3DRank() {
   const navigate = useNavigate();
-  const [timeFrame, setTimeFrame] = useState("today");
+  const { lotteryToken } = useLotteryStore();
+  const [rankings, setRankings] = useState<RankingItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [sessionIssue, setSessionIssue] = useState<string>("");
 
-  const rankings = [
-    { rank: 1, username: "Player_123", wins: 8, amount: 5000 },
-    { rank: 2, username: "LuckyUser", wins: 6, amount: 4200 },
-    { rank: 3, username: "WinStreak", wins: 5, amount: 3800 },
-    { rank: 4, username: "BetMaster", wins: 4, amount: 2900 },
-    { rank: 5, username: "HighRoller", wins: 3, amount: 2100 },
-    { rank: 6, username: "GoldenHand", wins: 3, amount: 1950 },
-    { rank: 7, username: "LotteryKing", wins: 2, amount: 1500 },
-    { rank: 8, username: "FortuneFinder", wins: 2, amount: 1200 },
-    { rank: 9, username: "WinnerWins", wins: 1, amount: 800 },
-    { rank: 10, username: "TryAgain", wins: 1, amount: 500 },
-  ];
+  useEffect(() => {
+    const fetchRankings = async () => {
+      if (!lotteryToken) {
+        setError("Please login to view rankings");
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Fetch completed sessions (winState=3 for drawn/completed) for 3D (gameId=2)
+        const completedSessions = await getBetSessions(2, 3);
+
+        // Find latest completed session
+        const latestSession = completedSessions.length > 0 ? completedSessions[0] : null;
+
+        if (latestSession) {
+          setSessionIssue(latestSession.issue);
+          
+          try {
+            const rankingData = await getWinRanking(2, latestSession.issue);
+            setRankings(rankingData.ranking || []);
+          } catch (err) {
+            console.error("Error fetching ranking:", err);
+            setError("Failed to load rankings");
+          }
+        } else {
+          setError("No completed sessions available");
+        }
+      } catch (err: any) {
+        setError(err?.message || "Failed to load rankings");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRankings();
+  }, [lotteryToken]);
 
   return (
     <div className={styles.container}>
@@ -30,52 +69,46 @@ export default function Lottery3DRank() {
       </header>
 
       <div className={styles.content}>
-        {/* Time Frame Selection */}
-        <div className={styles.timeFrameButtons}>
-          {["today", "week", "month"].map((frame) => (
-            <button
-              key={frame}
-              className={`${styles.timeFrameBtn} ${
-                timeFrame === frame ? styles.active : ""
-              }`}
-              onClick={() => setTimeFrame(frame)}
-            >
-              {frame.charAt(0).toUpperCase() + frame.slice(1)}
-            </button>
-          ))}
-        </div>
+        {loading && <div className={styles.loading}>Loading...</div>}
+        {error && <div className={styles.error}>{error}</div>}
 
-        {/* Rankings Table */}
-        <div className={styles.rankingsList}>
-          {rankings.map((player, idx) => (
-            <div key={idx} className={styles.rankCard}>
-              <div className={styles.rankPosition}>
-                {player.rank <= 3 ? (
-                  <span className={styles.medal}>
-                    {player.rank === 1 ? "🥇" : player.rank === 2 ? "🥈" : "🥉"}
-                  </span>
-                ) : (
-                  <span className={styles.rank}>{player.rank}</span>
-                )}
+        {!loading && !error && (
+          <>
+            {sessionIssue && (
+              <div className={styles.sessionHeader}>
+                <span className={styles.sessionIssue}>Issue: {sessionIssue}</span>
               </div>
+            )}
 
-              <div className={styles.playerInfo}>
-                <p className={styles.username}>{player.username}</p>
-                <p className={styles.stats}>
-                  {player.wins} win{player.wins > 1 ? "s" : ""}
-                </p>
+            {rankings.length > 0 ? (
+              <div className={styles.rankingsList}>
+                {rankings.map((player, idx) => (
+                  <div key={player.userId} className={styles.rankCard}>
+                    <div className={styles.rankPosition}>
+                      {idx + 1 <= 3 ? (
+                        <span className={styles.medal}>
+                          {idx + 1 === 1 ? "🥇" : idx + 1 === 2 ? "🥈" : "🥉"}
+                        </span>
+                      ) : (
+                        <span className={styles.rank}>{idx + 1}</span>
+                      )}
+                    </div>
+
+                    <div className={styles.playerInfo}>
+                      <p className={styles.username}>{player.username}</p>
+                    </div>
+
+                    <div className={styles.winAmount}>
+                      <p className={styles.amount}>MMK {player.winAmount.toLocaleString()}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-
-              <div className={styles.winAmount}>
-                <p className={styles.amount}>MMK {player.amount.toLocaleString()}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className={styles.footer}>
-          <p>🏆 Top 10 Winners for {timeFrame}</p>
-        </div>
+            ) : (
+              <div className={styles.noRankings}>No winners for this session</div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

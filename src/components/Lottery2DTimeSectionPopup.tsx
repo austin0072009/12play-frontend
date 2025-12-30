@@ -133,11 +133,21 @@ export default function Lottery2DTimeSectionPopup({
     is1630Disabled = false;
   }
 
-  // Build static sections array
+  // Always show two sections with fallback data
   const staticSections = [
-    session12 ? { ...session12, label: "12:00 Section", isDisabled: is12Disabled } : null,
-    session1630 ? { ...session1630, label: "16:30 Section", isDisabled: is1630Disabled } : null,
-  ].filter(Boolean);
+    {
+      issue: session12?.issue || "N/A",
+      win_time: session12?.win_time || `${todayDate} 12:00:00`,
+      label: "12:00 Section",
+      isDisabled: is12Disabled || !session12,
+    },
+    {
+      issue: session1630?.issue || "N/A",
+      win_time: session1630?.win_time || `${todayDate} 16:30:00`,
+      label: "16:30 Section",
+      isDisabled: is1630Disabled || !session1630,
+    },
+  ];
 
   return (
     <div className={styles.container}>
@@ -155,28 +165,24 @@ export default function Lottery2DTimeSectionPopup({
         </div>
 
         <div className={styles.content}>
-          {staticSections.length > 0 ? (
-            staticSections.map((session, index) => (
-              <button
-                key={index}
-                className={`${styles.sectionBtn} ${
-                  session!.isDisabled ? styles.disabled : ""
-                }`}
-                disabled={session!.isDisabled}
-                onClick={() => handleSelectSection(session!.issue)}
-              >
-                <div className={styles.sectionInfo}>
-                  <span className={styles.sectionTime}>{session!.label}</span>
-                  <span className={styles.sectionDate}>{session!.win_time}</span>
-                </div>
-                {session!.isDisabled && (
-                  <span className={styles.expiredBadge}>Closed</span>
-                )}
-              </button>
-            ))
-          ) : (
-            <p className={styles.noSessions}>No pending sections</p>
-          )}
+          {staticSections.map((section, index) => (
+            <button
+              key={index}
+              className={`${styles.sectionBtn} ${
+                section.isDisabled ? styles.disabled : ""
+              }`}
+              disabled={section.isDisabled}
+              onClick={() => handleSelectSection(section.issue)}
+            >
+              <div className={styles.sectionInfo}>
+                <span className={styles.sectionTime}>{section.label}</span>
+                <span className={styles.sectionDate}>{section.win_time}</span>
+              </div>
+              {section.isDisabled && (
+                <span className={styles.expiredBadge}>Closed</span>
+              )}
+            </button>
+          ))}
         </div>
       </div>
     </div>

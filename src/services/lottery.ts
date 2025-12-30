@@ -129,17 +129,17 @@ export async function placeBet(payload: LotteryBetReq): Promise<LotteryBetResp> 
 /**
  * Get win ranking for a session
  */
-export async function getWinRanking(issueId: string): Promise<LotteryRankResp['data']> {
+export async function getWinRanking(gameId: number, issue: string): Promise<LotteryRankResp['data']> {
   const res = await lotteryRequest.post<LotteryRankResp>(
     '/api/v3/rank',
-    { issueId } as LotteryRankReq
+    { gameId, issue } as LotteryRankReq
   );
 
   if (!res.data || res.data.code !== 200) {
     throw new Error(res.data?.message || 'Failed to get win ranking');
   }
 
-  return res.data;
+  return res.data.data;
 }
 
 /**
@@ -249,5 +249,5 @@ export async function getClosedDays(gameId: number): Promise<LotteryClosedDayRes
     throw new Error(res.data?.message || 'Failed to get closed days');
   }
 
-  return res.data;
+  return res.data.data;
 }

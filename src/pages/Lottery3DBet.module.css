@@ -76,6 +76,37 @@
   font-weight: bold;
 }
 
+/* ===== Bet Limits Info ===== */
+.betLimits {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem;
+  background: rgba(203, 0, 0, 0.1);
+  border: 1px solid rgba(203, 0, 0, 0.3);
+  border-radius: 10px;
+  gap: 0.5rem;
+}
+
+.limitItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.limitLabel {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.limitValue {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+}
+
 /* 金额输入 */
 .amountInput {
   background: #2a2a2a;
@@ -85,27 +116,6 @@
   font-size: 1rem;
   color: #fff;
   text-align: center;
-}
-
-/* 快速金额 */
-.quickAmounts {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.6rem;
-}
-
-.amountBtn {
-  padding: 0.6rem;
-  border-radius: 8px;
-  background: #2a2a2a;
-  border: none;
-  color: #ccc;
-  font-weight: bold;
-}
-
-.amountBtn.active {
-  background: var(--color-primary);
-  color: #fff;
 }
 
 /* BET 按钮 */
@@ -126,6 +136,71 @@
   color: #999;
 }
 
+/* ===== Filter Section ===== */
+.filterSection {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filterLabel {
+  font-size: 0.85rem;
+  color: #aaa;
+  font-weight: 600;
+}
+
+.rangeSelect,
+.searchInput {
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  color: #fff;
+  font-size: 0.85rem;
+  min-width: 120px;
+}
+
+.searchInput {
+  min-width: 150px;
+}
+
+.rangeSelect option {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.resultsCount {
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: #888;
+}
+
 /* ===== Number Area ===== */
 .content {
   flex: 1;
@@ -141,24 +216,45 @@
 
 .numBtn {
   position: relative;
-  height: 56px;
+  height: 70px;
   border-radius: 10px;
   background: #2a2a2a;
   border: none;
   color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
 }
 
 .num {
   font-size: 1.5rem;
   font-weight: bold;
+  margin-bottom: 2px;
 }
 
-.remain {
-  position: absolute;
-  bottom: 4px;
-  right: 6px;
-  font-size: 1rem;
-  color: #9c9c9c;
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4444, #cc0000);
+  transition: width 0.3s ease;
+  border-radius: 3px;
+}
+
+.availability {
+  font-size: 0.75rem;
+  color: #00ff9c;
+  font-weight: 600;
 }
 
 .selected {
@@ -168,6 +264,13 @@
 .full {
   background: #444;
   color: #888;
+}
+
+.noResults {
+  text-align: center;
+  padding: 2rem;
+  color: #888;
+  font-size: 0.95rem;
 }
 
 /* ===== Pagination ===== */
@@ -186,4 +289,14 @@
   border: none;
   background: #333;
   color: #fff;
+}
+
+/* ===== Loading ===== */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  font-size: 1.1rem;
+  color: #aaa;
 }

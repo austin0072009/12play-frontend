@@ -164,3 +164,96 @@
   background: #555;
   color: #999;
 }
+
+/* Success Modal */
+.successModal {
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+
+.successIcon {
+  width: 5rem;
+  height: 5rem;
+  color: var(--color-primary);
+  margin: 0 auto 1.5rem;
+  animation: scaleIn 0.4s ease-out;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.successTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.successInfo {
+  background: linear-gradient(135deg, #1a1a1a, #242424);
+  border-radius: 14px;
+  padding: 1.2rem;
+  margin-bottom: 1.8rem;
+  border: 1px solid rgba(203, 0, 0, 0.2);
+}
+
+.successRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 0;
+  font-size: 0.95rem;
+}
+
+.successRow:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+
+.successRow span:first-child {
+  color: #888;
+  font-weight: 600;
+}
+
+.successRow span:last-child {
+  color: #fff;
+  font-weight: 600;
+}
+
+.successAmount {
+  color: var(--color-primary) !important;
+  font-weight: bold !important;
+  font-size: 1.2rem !important;
+  text-shadow: 0 0 10px rgba(203, 0, 0, 0.3);
+}
+
+.successBtn {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #ff3b3b, #cb0000);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.successBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(203, 0, 0, 0.4);
+}

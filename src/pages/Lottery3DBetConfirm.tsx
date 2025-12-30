@@ -1,7 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Lottery3DBetConfirm.module.css";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { ChevronLeftIcon, TrashIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
+import { placeBet } from "../services/lottery";
+import { useLotteryStore } from "../store/lottery";
+import Dialog from "../components/Dialog";
 
 type BetItem = {
   num: string;
@@ -11,8 +14,10 @@ type BetItem = {
 export default function Lottery3DBetConfirm() {
   const navigate = useNavigate();
   const { state } = useLocation() as any;
+  const { userInfo } = useLotteryStore();
 
   const [items, setItems] = useState<BetItem[]>([]);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   /* 初始化：从上页展开号码 */
@@ -45,21 +50,41 @@ export default function Lottery3DBetConfirm() {
   };
 
   /* 确认下注 */
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (items.length === 0 || totalAmount <= 0) return;
+    if (!state?.issue) {
+      alert("Missing issue information. Please try again.");
+      return;
+    }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/3d/bet-success", {
-        state: {
-          round: state.round,
-          drawTime: state.drawTime,
-          bets: items,
-          totalAmount,
-        },
+    try {
+      // Prepare bet data according to API structure
+      const betInfo = items.map((item) => ({
+        number: item.num,
+        amount: item.amount,
+      }));
+
+      const response = await placeBet({
+        gameId: 2, // 2 for 3D
+        issue: state.issue,
+        betInfo,
       });
-    }, 1200);
+
+      // Success - show success modal
+      setLoading(false);
+      setShowSuccess(true);
+    } catch (error: any) {
+      setLoading(false);
+      alert(error.message || "Failed to place bet. Please try again.");
+      console.error("Place bet error:", error);
+    }
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+    // Navigate back to 3D home after closing success modal
+    navigate("/3d");
   };
 
   return (
@@ -140,6 +165,37 @@ export default function Lottery3DBetConfirm() {
           </button>
         </div>
       </div>
+
+      {/* Success Modal */}
+      <Dialog open={showSuccess} onClose={handleSuccessClose}>
+        <div className={styles.successModal}>
+          <CheckCircleIcon className={styles.successIcon} />
+          <h2 className={styles.successTitle}>Bet Placed Successfully!</h2>
+          <div className={styles.successInfo}>
+            <div className={styles.successRow}>
+              <span>Round:</span>
+              <span>{state?.round}</span>
+            </div>
+            <div className={styles.successRow}>
+              <span>Draw Time:</span>
+              <span>{state?.drawTime}</span>
+            </div>
+            <div className={styles.successRow}>
+              <span>Numbers:</span>
+              <span>{items.length}</span>
+            </div>
+            <div className={styles.successRow}>
+              <span>Total Amount:</span>
+              <span className={styles.successAmount}>
+                MMK {totalAmount.toLocaleString()}
+              </span>
+            </div>
+          </div>
+          <button className={styles.successBtn} onClick={handleSuccessClose}>
+            OK
+          </button>
+        </div>
+      </Dialog>
     </div>
   );
 }

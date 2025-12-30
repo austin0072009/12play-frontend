@@ -460,7 +460,8 @@ export type LotteryBetResp = {
 
 /** Win Ranking for a Session */
 export type LotteryRankReq = {
-  issueId: string;
+  gameId: number; // 1 for 2D, 2 for 3D
+  issue: string;
 };
 
 export type LotteryRankRespItem = {

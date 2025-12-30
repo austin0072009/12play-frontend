@@ -38,25 +38,6 @@
   margin: 0;
 }
 
-.headerActions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.iconBtn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 0.45rem;
-  cursor: pointer;
-}
-
-.iconBtn svg {
-  width: 1.4rem;
-  height: 1.4rem;
-  color: var(--color-white);
-}
-
 /* ===== Content ===== */
 
 .content {
@@ -65,6 +46,43 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+}
+
+/* ===== Quick Actions ===== */
+
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.actionItem {
+  background: var(--color-bg-muted);
+  border-radius: 14px;
+  padding: 0.8rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+
+.actionItem svg {
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+.actionItem span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.actionItem:hover {
+  background: rgba(203, 0, 0, 0.15);
 }
 
 /* ===== Round Card ===== */
@@ -155,6 +173,13 @@
   gap: 0.8rem;
 }
 
+.resultsTitle {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.8rem;
+  margin: 0;
+}
+
 .resultCard {
   background-color: var(--color-bg-muted);
   border-radius: 10px;
@@ -166,7 +191,7 @@
 }
 
 .resultTime {
-  font-size: 0.9rem;
+  font-size: 1.5rem;
   color: var(--color-text-muted);
 }
 
@@ -174,6 +199,84 @@
   font-size: 1.5rem;
   font-family: "Courier New", monospace;
   color: var(--color-primary);
+}
+
+/* ===== Yesterday Results ===== */
+
+.yesterday {
+  margin-top: 1.6rem;
+  padding: 1.2rem;
+  background: linear-gradient(135deg, #1a1a1a, #242424);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.yesterdayTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(203, 0, 0, 0.3);
+}
+
+.yesterdayList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.yesterdayItem {
+  background: linear-gradient(135deg, #2a2a2a, #1f1f1f);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.yesterdayItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(203, 0, 0, 0.2);
+  border-color: rgba(203, 0, 0, 0.3);
+}
+
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.yesterdayTime {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "Courier New", monospace;
+}
+
+.resultBadge {
+  background: rgba(203, 0, 0, 0.2);
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(203, 0, 0, 0.3);
+}
+
+.yesterdayNum {
+  font-size: 2.5rem;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+  color: var(--color-primary);
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(203, 0, 0, 0.5);
+  letter-spacing: 2px;
 }
 
 /* ===== Bet Button ===== */
