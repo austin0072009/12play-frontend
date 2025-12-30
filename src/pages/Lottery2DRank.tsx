@@ -67,7 +67,7 @@ export default function Lottery2DRank() {
               </div>
 
               <div className={styles.winAmount}>
-                <p className={styles.amount}>MYR {player.amount.toLocaleString()}</p>
+                <p className={styles.amount}>MMK {player.amount.toLocaleString()}</p>
               </div>
             </div>
           ))}

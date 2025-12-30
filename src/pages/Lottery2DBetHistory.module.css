@@ -155,3 +155,66 @@
   padding: 2rem;
   color: var(--color-text-muted);
 }
+
+/* Expand Icon */
+.expandIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-primary);
+}
+
+/* Details Section */
+.detailsSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #333;
+}
+
+.detailsHeader {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-bottom: 0.8rem;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem;
+  background: #2a2a2a;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.detailNumber {
+  font-family: "Courier New", monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background: #333;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+}
+
+.detailAmounts {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.detailLabel {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.15rem;
+}
+
+.detailValue {
+  font-size: 0.85rem;
+  font-weight: bold;
+}

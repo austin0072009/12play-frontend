@@ -80,7 +80,7 @@ export default function Lottery3DBet() {
             <div className={styles.time}>Draw {roundInfo.drawTime}</div>
           </div>
           <div className={styles.balance}>
-            MYR {roundInfo.balance.toLocaleString()}
+            MMK {roundInfo.balance.toLocaleString()}
           </div>
         </div>
 

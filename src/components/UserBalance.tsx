@@ -10,12 +10,11 @@ export default function UserBalance({ headerStyle = false }: UserBalanceProps) {
   const userInfo = useUserStore((s) => s.userInfo);
   const token = useUserStore((s) => s.token);
 
-
   if (!token) {
     return null;
   }
 
-  const balance = userInfo?.balance || userInfo?.wallet || userInfo?.money || userInfo?.account_balance || userInfo?.balace || 0;
+  const balance = userInfo?.balance || 0;
 
   const handleWalletClick = () => {
     navigate("/wallet");

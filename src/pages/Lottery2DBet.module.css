@@ -50,6 +50,13 @@
   align-items: center;
 }
 
+.issue {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
 .round {
   font-size: 1.5rem;
   font-weight: bold;
@@ -74,6 +81,36 @@
 .selectedCount {
   color: var(--color-primary);
   font-weight: bold;
+}
+
+/* ===== Bet Limits Info ===== */
+.betLimits {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem;
+  background: rgba(203, 0, 0, 0.1);
+  border: 1px solid rgba(203, 0, 0, 0.3);
+  border-radius: 10px;
+  gap: 0.5rem;
+}
+
+.limitItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.limitLabel {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.25rem;
+}
+
+.limitValue {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-primary);
 }
 
 /* 金额输入 */
@@ -141,23 +178,49 @@
 
 .numBtn {
   position: relative;
-  height: 56px;
+  height: 70px;
   border-radius: 10px;
   background: #2a2a2a;
   border: none;
   color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
 }
 
 .num {
   font-size: 1.5rem;
   font-weight: bold;
+  margin-bottom: 2px;
 }
 
-.remain {
-  position: absolute;
-  bottom: 4px;
-  right: 6px;
-  font-size: 1rem;
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4444, #cc0000);
+  transition: width 0.3s ease;
+  border-radius: 3px;
+}
+
+.availability {
+  font-size: 0.75rem;
+  color: #00ff9c;
+  font-weight: 600;
+}
+
+.betPlaced {
+  font-size: 0.75rem;
   color: #9c9c9c;
 }
 
@@ -171,12 +234,47 @@
 }
 
 /* ===== Pagination ===== */
+.betBtn {
+  width: 100%;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ff3b3b, #cb0000);
+  border: none;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(203, 0, 0, 0.4);
+  transition: all 0.2s ease;
+}
+
+.betBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(203, 0, 0, 0.5);
+}
+
+.betBtn:disabled {
+  background: #555;
+  color: #999;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 .pagination {
   margin: 1rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
 }
 
 .pagination button {

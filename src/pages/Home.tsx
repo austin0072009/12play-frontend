@@ -12,7 +12,7 @@ import { fetchInitMeta, fetchInitData } from "../services/api";
 import { useAppStore } from "../store/app";
 import { useUserStore } from "../store/user";
 import { normalizeInitData } from "../utils/transform";
-import { startGame } from "../services/games";
+import { startGame, startLotteryGame } from "../services/games";
 
 import SlotIcon from '../assets/icons/slot.svg?react';
 import FishIcon from '../assets/icons/fish.svg?react';
@@ -148,21 +148,48 @@ export default function Home() {
         throw new Error('Missing required game parameters: id or plat_type');
       }
 
-      const url = await startGame({
-        id: gameId,
-        plat_type: platType,
-        game_code: gameCode,
-        game_type: 0,
-        devices: 0,
-        tgp: '',
-      });
-      if (url) {
-        // Check is_outopen field: 1 = direct assignment, 2 = iframe
-        if (g.is_outopen === 1) {
-          window.location.assign(url);
+      // Check if this is a lottery game (L2D or L3D)
+      const isLotteryGame = platType && (
+        platType.toUpperCase() === 'L2D' || 
+        platType.toUpperCase() === 'L3D'
+      );
+
+      if (isLotteryGame) {
+        // Handle lottery games
+        await startLotteryGame({
+          id: gameId,
+          plat_type: platType,
+          game_code: gameCode,
+          game_type: 0,
+          devices: 0,
+          tgp: '',
+        });
+        
+        // Navigate to lottery pages
+        if (platType.toUpperCase() === 'L2D') {
+          navigate('/2d');
         } else {
-          // Default to iframe for is_outopen === 2 or undefined
-          navigate('/game', { state: { gameUrl: url } });
+          navigate('/3d');
+        }
+      } else {
+        // Handle regular games
+        const url = await startGame({
+          id: gameId,
+          plat_type: platType,
+          game_code: gameCode,
+          game_type: 0,
+          devices: 0,
+          tgp: '',
+        });
+        if (url) {
+          console.log('Game URL:', url);
+          // Check is_outopen field: 1 = direct assignment, 2 = iframe
+          if (g.is_outopen === 1) {
+            window.location.assign(url);
+          } else {
+            // Default to iframe for is_outopen === 2 or undefined
+            navigate('/game', { state: { gameUrl: url } });
+          }
         }
       }
     } catch (err) {

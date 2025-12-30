@@ -1,7 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Lottery2DBetConfirm.module.css";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { ChevronLeftIcon, TrashIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
+import { placeBet } from "../services/lottery";
+import { useLotteryStore } from "../store/lottery";
+import Dialog from "../components/Dialog";
 
 type BetItem = {
   num: string;
@@ -11,8 +14,10 @@ type BetItem = {
 export default function Lottery2DBetConfirm() {
   const navigate = useNavigate();
   const { state } = useLocation() as any;
+  const { userInfo } = useLotteryStore();
 
   const [items, setItems] = useState<BetItem[]>([]);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   /* 初始化：从上页展开号码 */
@@ -45,21 +50,41 @@ export default function Lottery2DBetConfirm() {
   };
 
   /* 确认下注 */
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (items.length === 0 || totalAmount <= 0) return;
+    if (!state?.issue) {
+      alert("Missing issue information. Please try again.");
+      return;
+    }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/2d/bet-success", {
-        state: {
-          round: state.round,
-          drawTime: state.drawTime,
-          bets: items,
-          totalAmount,
-        },
+    try {
+      // Prepare bet data according to API structure
+      const betInfo = items.map((item) => ({
+        number: item.num,
+        amount: item.amount,
+      }));
+
+      const response = await placeBet({
+        gameId: 1, // 1 for 2D
+        issue: state.issue,
+        betInfo,
       });
-    }, 1200);
+
+      // Success - show success modal
+      setLoading(false);
+      setShowSuccess(true);
+    } catch (error: any) {
+      setLoading(false);
+      alert(error.message || "Failed to place bet. Please try again.");
+      console.error("Place bet error:", error);
+    }
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+    // Navigate back to 2D home after closing success modal
+    navigate("/2d");
   };
 
   return (
@@ -80,7 +105,7 @@ export default function Lottery2DBetConfirm() {
             <div className={styles.time}>Draw {state.drawTime}</div>
           </div>
           <div className={styles.total}>
-            MYR {totalAmount.toLocaleString()}
+            MMK {totalAmount.toLocaleString()}
           </div>
         </div>
 
@@ -140,6 +165,52 @@ export default function Lottery2DBetConfirm() {
           </button>
         </div>
       </div>
+
+      {/* Success Dialog */}
+      <Dialog
+        open={showSuccess}
+        onClose={handleSuccessClose}
+        title={
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00ff9c' }}>
+            <CheckCircleIcon style={{ width: '2rem', height: '2rem' }} />
+            <span>Bet Successful!</span>
+          </div>
+        }
+        footer={
+          <button
+            onClick={handleSuccessClose}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              background: 'linear-gradient(180deg, #00ff9c, #00cc7a)',
+              color: '#000',
+              border: 'none',
+              borderRadius: '0.5rem',
+              fontSize: '1rem',
+              fontWeight: '700',
+              cursor: 'pointer',
+            }}
+          >
+            OK
+          </button>
+        }
+      >
+        <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+          <p style={{ fontSize: '1.125rem', marginBottom: '1rem' }}>
+            Your bet has been placed successfully!
+          </p>
+          <div style={{ background: 'rgba(0, 255, 156, 0.1)', padding: '1rem', borderRadius: '0.5rem' }}>
+            <p style={{ color: '#999', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Draw Time</p>
+            <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{state.round} {state.drawTime}</p>
+            <p style={{ color: '#999', fontSize: '0.875rem', marginTop: '1rem', marginBottom: '0.5rem' }}>Total Amount</p>
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#00ff9c' }}>
+              MMK {totalAmount.toLocaleString()}
+            </p>
+            <p style={{ color: '#999', fontSize: '0.875rem', marginTop: '1rem', marginBottom: '0.5rem' }}>Numbers Selected</p>
+            <p style={{ fontSize: '1rem' }}>{items.map(i => i.num).join(', ')}</p>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 }

@@ -80,7 +80,7 @@ export default function Lottery3DBetConfirm() {
             <div className={styles.time}>Draw {state.drawTime}</div>
           </div>
           <div className={styles.total}>
-            MYR {totalAmount.toLocaleString()}
+            MMK {totalAmount.toLocaleString()}
           </div>
         </div>
 

@@ -1,69 +1,114 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./Lottery2DBetHistory.module.css";
-import { useState } from "react";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { getBetRecords } from "../services/lottery";
+
+type BetDetail = {
+  id: number;
+  num: string;
+  amount: number;
+  winAmount: number;
+};
 
 type BetOrder = {
-  id: number;
+  round: string;
   date: string;
   time: string;
-  round: string;
   status: "won" | "lost" | "pending";
-  numbers: { num: string; amount: number }[];
+  details: BetDetail[];
   totalAmount: number;
-  winAmount: number;
+  totalWinAmount: number;
 };
 
 export default function Lottery2DBetHistory() {
   const navigate = useNavigate();
   const [filterTab, setFilterTab] = useState("all");
+  const [orders, setOrders] = useState<BetOrder[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [expandedIssues, setExpandedIssues] = useState<Set<string>>(new Set());
 
-  /* mock：真实结构的下注历史 */
-  const orders: BetOrder[] = [
-    {
-      id: 1,
-      date: "2025-12-28",
-      time: "14:30",
-      round: "2025-01-28 14:30",
-      status: "won",
-      numbers: [
-        { num: "12", amount: 50 },
-        { num: "45", amount: 50 },
-      ],
-      totalAmount: 100,
-      winAmount: 150,
-    },
-    {
-      id: 2,
-      date: "2025-12-28",
-      time: "09:00",
-      round: "2025-01-28 09:00",
-      status: "lost",
-      numbers: [
-        { num: "78", amount: 100 },
-        { num: "92", amount: 100 },
-      ],
-      totalAmount: 200,
-      winAmount: 0,
-    },
-    {
-      id: 3,
-      date: "2025-12-27",
-      time: "16:45",
-      round: "2025-01-27 16:45",
-      status: "pending",
-      numbers: [{ num: "33", amount: 300 }],
-      totalAmount: 300,
-      winAmount: 0,
-    },
-  ];
+  useEffect(() => {
+    const fetchHistory = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const records = await getBetRecords(1, "", 1, 10); // 1 = 2D game, empty issue means all
 
-  const filtered = orders.filter((o) => {
-    if (filterTab === "won") return o.status === "won";
-    if (filterTab === "lost") return o.status === "lost";
-    if (filterTab === "pending") return o.status === "pending";
-    return true;
-  });
+        // Group records by issue
+        const groupedMap = new Map<string, BetOrder>();
+        
+        records.forEach((r) => {
+          const issue = r.issue;
+          const amount = parseFloat(r.bet_amount || "0") || 0;
+          const winAmount = parseFloat(r.award || "0") || 0;
+          const created = r.created_at || "";
+          const [date, time] = created.split(" ");
+          
+          const detail: BetDetail = {
+            id: r.id,
+            num: r.bet_number,
+            amount,
+            winAmount,
+          };
+
+          if (groupedMap.has(issue)) {
+            const existing = groupedMap.get(issue)!;
+            existing.details.push(detail);
+            existing.totalAmount += amount;
+            existing.totalWinAmount += winAmount;
+            // Update status: if any bet won, mark as won; if all lost, mark as lost
+            if (r.is_win === 1) {
+              existing.status = "won";
+            } else if (r.is_win === 0 && existing.status === "pending") {
+              existing.status = "lost";
+            }
+          } else {
+            const status: BetOrder["status"] = r.is_win === 1 ? "won" : r.is_win === 0 ? "lost" : "pending";
+            groupedMap.set(issue, {
+              round: issue,
+              date: date || "",
+              time: time || "",
+              status,
+              details: [detail],
+              totalAmount: amount,
+              totalWinAmount: winAmount,
+            });
+          }
+        });
+
+        setOrders(Array.from(groupedMap.values()));
+      } catch (err: any) {
+        setError(err?.message || "Failed to load bet history");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHistory();
+  }, []);
+
+  const filtered = useMemo(() => {
+    return orders.filter((o) => {
+      if (filterTab === "won") return o.status === "won";
+      if (filterTab === "lost") return o.status === "lost";
+      if (filterTab === "pending") return o.status === "pending";
+      return true;
+    });
+  }, [orders, filterTab]);
+
+  const toggleExpand = (issue: string) => {
+    setExpandedIssues((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(issue)) {
+        newSet.delete(issue);
+      } else {
+        newSet.add(issue);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -91,54 +136,97 @@ export default function Lottery2DBetHistory() {
           ))}
         </div>
 
+        {/* Loading / Error */}
+        {loading && <div className={styles.noData}>Loading...</div>}
+        {error && <div className={styles.noData}>{error}</div>}
+
         {/* Orders */}
         <div className={styles.list}>
-          {filtered.map((order) => (
-            <div key={order.id} className={styles.card}>
-              <div className={styles.cardHeader}>
-                <div>
-                  <div className={styles.round}>{order.round}</div>
-                  <div className={styles.date}>
-                    {order.date} {order.time}
+          {!loading && !error && filtered.map((order) => {
+            const isExpanded = expandedIssues.has(order.round);
+            return (
+              <div 
+                key={order.round} 
+                className={styles.card}
+                onClick={() => toggleExpand(order.round)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className={styles.cardHeader}>
+                  <div>
+                    <div className={styles.round}>{order.round}</div>
+                    <div className={styles.date}>
+                      {order.date} {order.time}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span className={`${styles.status} ${styles[order.status]}`}>
+                      {order.status.toUpperCase()}
+                    </span>
+                    {isExpanded ? (
+                      <ChevronUpIcon className={styles.expandIcon} />
+                    ) : (
+                      <ChevronDownIcon className={styles.expandIcon} />
+                    )}
                   </div>
                 </div>
-                <span className={`${styles.status} ${styles[order.status]}`}>
-                  {order.status.toUpperCase()}
-                </span>
-              </div>
 
-              {/* Numbers */}
-              <div className={styles.numbers}>
-                {order.numbers.map((n) => (
-                  <span key={n.num} className={styles.numTag}>
-                    {n.num}
-                  </span>
-                ))}
-              </div>
+                {/* Numbers - Show all numbers in collapsed view */}
+                <div className={styles.numbers}>
+                  {order.details.map((detail, idx) => (
+                    <span key={`${detail.id}-${idx}`} className={styles.numTag}>
+                      {detail.num}
+                    </span>
+                  ))}
+                </div>
 
-              {/* Footer */}
-              <div className={styles.footer}>
-                <div>
-                  <div className={styles.label}>Bet</div>
-                  <div className={styles.value}>
-                    MYR {order.totalAmount}
+                {/* Summary Footer */}
+                <div className={styles.footer}>
+                  <div>
+                    <div className={styles.label}>Total Bet</div>
+                    <div className={styles.value}>
+                      MMK {order.totalAmount.toFixed(2)}
+                    </div>
+                  </div>
+                  <div>
+                    <div className={styles.label}>Total Win</div>
+                    <div
+                      className={`${styles.value} ${
+                        order.status === "won" ? styles.win : ""
+                      }`}
+                    >
+                      MMK {order.totalWinAmount.toFixed(2)}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <div className={styles.label}>Win</div>
-                  <div
-                    className={`${styles.value} ${
-                      order.status === "won" ? styles.win : ""
-                    }`}
-                  >
-                    MYR {order.winAmount}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
 
-          {filtered.length === 0 && (
+                {/* Expanded Details */}
+                {isExpanded && (
+                  <div className={styles.detailsSection}>
+                    <div className={styles.detailsHeader}>Bet Details</div>
+                    {order.details.map((detail, idx) => (
+                      <div key={`${detail.id}-detail-${idx}`} className={styles.detailRow}>
+                        <div className={styles.detailNumber}>{detail.num}</div>
+                        <div className={styles.detailAmounts}>
+                          <div className={styles.detailItem}>
+                            <span className={styles.detailLabel}>Bet:</span>
+                            <span className={styles.detailValue}>MMK {detail.amount.toFixed(2)}</span>
+                          </div>
+                          <div className={styles.detailItem}>
+                            <span className={styles.detailLabel}>Win:</span>
+                            <span className={`${styles.detailValue} ${
+                              detail.winAmount > 0 ? styles.win : ""
+                            }`}>MMK {detail.winAmount.toFixed(2)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {!loading && !error && filtered.length === 0 && (
             <div className={styles.noData}>No bets found</div>
           )}
         </div>

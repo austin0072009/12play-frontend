@@ -1,6 +1,8 @@
 // src/services/games.ts
 import request from "../utils/request";
 import { useUserStore } from "../store/user";
+import { useLotteryStore } from "../store/lottery";
+import { setLotteryToken } from "../utils/lotteryRequest";
 import type {
   KyGetGamesReq,
   KyGameItem,
@@ -71,6 +73,7 @@ export async function startGame(
 
   const res = await request.post<KyLoginResp>("/nweb/Ky_login", body);
 
+  console.log("KY 登录响应：", res);
   if (!res || typeof res !== "object") {
     throw new Error("响应为空或格式不正确");
   }
@@ -95,4 +98,73 @@ export async function startGame(
   }
 
   return gameUrl;
+}
+
+/**
+ * Handle lottery game login (L2D/L3D)
+ * 
+ * Ky_login directly returns the lottery token and API domain
+ * No token exchange needed
+ */
+export async function startLotteryGame(
+  payload: Omit<KyLoginReq, "token">
+): Promise<{ token: string; apiDomain: string }> {
+  const tokenFromStore = useUserStore.getState().token || "";
+  if (!tokenFromStore) {
+    throw new Error("未登录或 token 缺失");
+  }
+
+  // Call Ky_login to get lottery token and API domain
+  const body: KyLoginReq = {
+    token: tokenFromStore,
+    plat_type: payload.plat_type,
+    game_type: payload.game_type,
+    devices: payload.devices,
+    id: payload.id,
+    game_code: payload.game_code,
+    tgp: payload.tgp,
+  };
+
+  const kyRes = await request.post<KyLoginResp>("/nweb/Ky_login", body);
+  console.log("KY 彩票登录响应：", kyRes);
+
+  if (!kyRes || typeof kyRes !== "object") {
+    throw new Error("响应为空或格式不正确");
+  }
+
+  const status = (kyRes as any).status;
+  if (!status || typeof status.errorCode !== "number") {
+    throw new Error("缺少 status.errorCode");
+  }
+  if (status.errorCode !== 0) {
+    const message =
+      (status as any).mess && typeof (status as any).mess === "string"
+        ? (status as any).mess
+        : status.msg && typeof status.msg === "string"
+        ? status.msg
+        : "接口返回错误";
+    throw new Error(message);
+  }
+
+  // Response data contains lottery token and API domain
+  const responseData = (kyRes as any).data;
+  if (!responseData || !responseData.token || !responseData.api_domain) {
+    throw new Error("缺少 lottery token 或 api_domain");
+  }
+
+  const lotteryToken = responseData.token;
+  const apiDomain = responseData.api_domain;
+
+  // Store credentials in lottery store
+  const gameType = (payload.plat_type as any)?.toUpperCase() || 'L2D';
+  useLotteryStore.getState().setLotteryCredentials(
+    lotteryToken,
+    apiDomain,
+    gameType as any
+  );
+
+  // Set token in request interceptor
+  setLotteryToken(lotteryToken);
+
+  return { token: lotteryToken, apiDomain };
 }

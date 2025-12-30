@@ -121,7 +121,7 @@ export default function Lottery3DBetHistory() {
                 <div>
                   <div className={styles.label}>Bet</div>
                   <div className={styles.value}>
-                    MYR {order.totalAmount}
+                    MMK {order.totalAmount}
                   </div>
                 </div>
                 <div>
@@ -131,7 +131,7 @@ export default function Lottery3DBetHistory() {
                       order.status === "won" ? styles.win : ""
                     }`}
                   >
-                    MYR {order.winAmount}
+                    MMK {order.winAmount}
                   </div>
                 </div>
               </div>
