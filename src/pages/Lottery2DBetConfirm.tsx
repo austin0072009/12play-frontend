@@ -3,7 +3,6 @@ import styles from "./Lottery2DBetConfirm.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, TrashIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
 import { placeBet } from "../services/lottery";
-import { useLotteryStore } from "../store/lottery";
 import Dialog from "../components/Dialog";
 
 type BetItem = {
@@ -14,7 +13,6 @@ type BetItem = {
 export default function Lottery2DBetConfirm() {
   const navigate = useNavigate();
   const { state } = useLocation() as any;
-  const { userInfo } = useLotteryStore();
 
   const [items, setItems] = useState<BetItem[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -65,7 +63,7 @@ export default function Lottery2DBetConfirm() {
         amount: item.amount,
       }));
 
-      const response = await placeBet({
+      await placeBet({
         gameId: 1, // 1 for 2D
         issue: state.issue,
         betInfo,

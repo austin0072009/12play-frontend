@@ -44,7 +44,6 @@ export default function Lottery2DClosedDays() {
 
   // Separate closed days by type
   const specificDates = closedDays.filter(day => day.type === 2 && day.date);
-  const recurringDays = closedDays.filter(day => day.type === 1 && day.day);
 
   return (
     <div className={styles.container}>

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import * as lotteryAPI from '../services/lottery';
 import type { BetSession } from '../services/types';
 
@@ -10,12 +10,12 @@ export function useBetSessions() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (gameId: number, winState: number) => {
     try {
       setLoading(true);
       setError('');
-      const data = await lotteryAPI.getBetSessions();
-      setSessions(data.sessions || []);
+      const data = await lotteryAPI.getBetSessions(gameId, winState);
+      setSessions(data || []);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load sessions';
       setError(message);
@@ -49,9 +49,9 @@ export function use2DLiveResult() {
       setLoading(true);
       setError('');
       const data = await lotteryAPI.get2DLiveResult();
-      if (data.numbers && data.numbers.length > 0) {
-        setResult(data.numbers.join(''));
-        setLastUpdated(data.updatedAt);
+      if (data.win_num) {
+        setResult(data.win_num);
+        setLastUpdated('');
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load result';
@@ -79,9 +79,9 @@ export function useLotteryUserInfo() {
       setLoading(true);
       setError('');
       const data = await lotteryAPI.getLotteryUserInfo();
-      setBalance(data.balance);
-      setUsername(data.username);
-      setUserId(data.userId);
+      setBalance(parseFloat(data.balance));
+      setUsername(data.userName);
+      setUserId(0);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load user info';
       setError(message);
@@ -109,10 +109,9 @@ export function usePlaceBet() {
         setSuccess(false);
         
         const result = await lotteryAPI.placeBet({
-          issueId,
-          number,
-          amount,
           gameId,
+          issue: issueId,
+          betInfo: [{ number, amount }],
         });
         
         setSuccess(true);
@@ -145,8 +144,8 @@ export function useSessionNumbers(issueId: string | null) {
     try {
       setLoading(true);
       setError('');
-      const data = await lotteryAPI.getSessionNumbers(issueId);
-      setNumbers(data.availableNumbers || []);
+      const data = await lotteryAPI.getSessionNumbers(issueId, 1);
+      setNumbers(data.map(n => n.num) || []);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load numbers';
       setError(message);
@@ -199,7 +198,7 @@ export function useWinRanking(issueId: string | null) {
     try {
       setLoading(true);
       setError('');
-      const data = await lotteryAPI.getWinRanking(issueId);
+      const data = await lotteryAPI.getWinRanking(1, issueId);
       setRanking(data.ranking || []);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load ranking';

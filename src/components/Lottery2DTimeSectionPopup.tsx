@@ -17,20 +17,6 @@ interface Lottery2DTimeSectionPopupProps {
 }
 
 /**
- * Check if a session has expired
- */
-function isExpired(winTime: string): boolean {
-  if (!winTime) return false;
-  try {
-    const winDate = new Date(winTime.replace(".0", ""));
-    const now = new Date();
-    return now > winDate;
-  } catch {
-    return false;
-  }
-}
-
-/**
  * Get today's date in YYYY-MM-DD format
  */
 function getTodayDate(): string {

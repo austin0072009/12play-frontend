@@ -18,7 +18,7 @@ const PAGE_SIZE = 25;
 
 export default function Lottery2DBet() {
   const navigate = useNavigate();
-  const { lotteryToken, pendingSessions, userInfo } = useLotteryStore();
+  const { pendingSessions, userInfo } = useLotteryStore();
   
   // Get selected issue from localStorage
   const selectedIssue = localStorage.getItem("selectedBetIssue");

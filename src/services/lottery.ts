@@ -36,7 +36,7 @@ export async function getGameList(): Promise<LotteryGameListResp['data']> {
     throw new Error(res.data?.message || 'Failed to get game list');
   }
 
-  return res.data;
+  return res.data.data;
 }
 
 /**
@@ -75,7 +75,7 @@ export async function getGameResource(gameId: number): Promise<LotteryGameResour
     throw new Error(res.data?.message || 'Failed to get game resource');
   }
 
-  return res.data;
+  return res.data.data;
 }
 
 /**
@@ -159,7 +159,7 @@ export async function getBetStatistics(
     throw new Error(res.data?.message || 'Failed to get bet statistics');
   }
 
-  return res.data;
+  return res.data.data;
 }
 
 /**
@@ -196,7 +196,7 @@ export async function getDailyBetTotal(date: string): Promise<LotteryRecordTotal
     throw new Error(res.data?.message || 'Failed to get daily bet total');
   }
 
-  return res.data;
+  return res.data.data;
 }
 
 /**
@@ -216,7 +216,7 @@ export async function getBetDetails(
     throw new Error(res.data?.message || 'Failed to get bet details');
   }
 
-  return res.data;
+  return res.data.data;
 }
 
 /**
@@ -232,7 +232,7 @@ export async function getIssueTotal(date: string): Promise<LotteryIssueTotalResp
     throw new Error(res.data?.message || 'Failed to get issue total');
   }
 
-  return res.data;
+  return res.data.data;
 }
 
 /**

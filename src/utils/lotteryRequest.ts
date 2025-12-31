@@ -1,4 +1,4 @@
-import axios, { AxiosHeaders, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios';
+import axios, { AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
 
 // Get lottery API base URL from env or fallback
 const LOTTERY_BASE_URL = (import.meta as any).env?.VITE_LOTTERY_API_BASE_URL || 'https://game.sea2d3d.com';

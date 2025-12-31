@@ -18,15 +18,6 @@ import {
 } from "../services/lottery";
 import Lottery2DTimeSectionPopup from "../components/Lottery2DTimeSectionPopup";
 
-interface BetSessionData {
-  issue: string;
-  win_time: string;
-  set: string;
-  value: string;
-  win_num: string;
-  winState?: number;
-}
-
 /**
  * Format time from "YYYY-MM-DD HH:MM:SS.mmm" to "HH:MM"
  */
@@ -47,7 +38,6 @@ export default function Lottery2DHome() {
   const {
     lotteryToken,
     lotteryDomain,
-    userInfo,
     pendingSessions,
     completedSessions,
     closedDays,
@@ -55,7 +45,6 @@ export default function Lottery2DHome() {
     setPendingSessions,
     setCompletedSessions,
     setClosedDays,
-    setError,
   } = useLotteryStore();
 
   // Fetch user info from lottery backend
