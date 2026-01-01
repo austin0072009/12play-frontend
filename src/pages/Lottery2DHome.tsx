@@ -17,6 +17,7 @@ import {
   getClosedDays,
 } from "../services/lottery";
 import Lottery2DTimeSectionPopup from "../components/Lottery2DTimeSectionPopup";
+import { showAlert } from "../store/alert";
 
 /**
  * Format time from "YYYY-MM-DD HH:MM:SS.mmm" to "HH:MM"
@@ -255,7 +256,7 @@ export default function Lottery2DHome() {
   // Handle BET button click with closed day check
   const handleBetClick = () => {
     if (isClosedDay()) {
-      alert("Betting is closed today. Please try again tomorrow.");
+      showAlert("Betting is closed today. Please try again tomorrow.");
       return;
     }
     // Show time section selection modal instead of navigating directly

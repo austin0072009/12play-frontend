@@ -1,4 +1,5 @@
 import axios, { AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
+import { showAlert } from '../store/alert';
 
 // Get lottery API base URL from env or fallback
 const LOTTERY_BASE_URL = (import.meta as any).env?.VITE_LOTTERY_API_BASE_URL || 'https://game.sea2d3d.com';
@@ -54,22 +55,54 @@ lotteryRequest.interceptors.request.use(
   }
 );
 
-// Response interceptor: Handle errors
-// lotteryRequest.interceptors.response.use(
-//   function (response: AxiosResponse) {
-//     return response.data;
-//   },
-//   function (error: any) {
-//     // Parse error response
-//     const errorMsg = error.response?.data?.message || error.message || 'Request failed';
-//     const errorCode = error.response?.status || error.code;
-    
-//     const err = new Error(errorMsg) as any;
-//     err.code = errorCode;
-//     err.response = error.response?.data;
-    
-//     return Promise.reject(err);
-//   }
-// );
+// Response interceptor: Handle errors including token expiration
+lotteryRequest.interceptors.response.use(
+  function (response) {
+    const payload = response.data;
+
+    // Check for authentication errors (401 Unauthorized or specific error codes)
+    if (payload && typeof payload.code !== 'undefined') {
+      const code = Number(payload.code);
+
+      // Handle unauthorized/token expired errors
+      // Common HTTP status codes: 401 (Unauthorized), 403 (Forbidden)
+      // Or check for specific error codes from lottery API
+      if (code === 401 || code === 403 || response.status === 401) {
+        const errorMsg = payload.message || 'Session expired. Please login again.';
+
+        // Clear lottery token
+        clearLotteryToken();
+
+        // Show alert and redirect after closing
+        showAlert(errorMsg, () => {
+          window.location.href = '/login';
+        });
+
+        return Promise.reject(new Error(errorMsg));
+      }
+    }
+
+    return payload;
+  },
+  function (error: any) {
+    // Handle HTTP-level errors (network errors, 401, 403, etc.)
+    const status = error.response?.status;
+
+    if (status === 401 || status === 403) {
+      const errorMsg = error.response?.data?.message || 'Session expired. Please login again.';
+
+      clearLotteryToken();
+
+      // Show alert and redirect after closing
+      showAlert(errorMsg, () => {
+        window.location.href = '/login';
+      });
+
+      return Promise.reject(new Error(errorMsg));
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 export default lotteryRequest;

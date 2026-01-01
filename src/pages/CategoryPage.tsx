@@ -9,6 +9,7 @@ import styles from './CategoryPage.module.css';
 import { useAppStore } from '../store/app';
 import { useUserStore } from '../store/user';
 import { startGame } from '../services/games';
+import { showAlert } from '../store/alert';
 import SlotIcon from '../assets/icons/slot.svg?react';
 import FishIcon from '../assets/icons/fish.svg?react';
 import LiveIcon from '../assets/icons/live.svg?react';
@@ -104,7 +105,7 @@ export default function CategoryPage() {
         }
       }
     } catch (err) {
-      alert(err);
+      showAlert(String(err));
     }
   };
 

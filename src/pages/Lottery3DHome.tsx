@@ -13,6 +13,7 @@ import {
   getLotteryUserInfo,
   getBetSessions,
 } from "../services/lottery";
+import { showAlert } from "../store/alert";
 
 /**
  * Format time from "YYYY-MM-DD HH:MM:SS.mmm" to "HH:MM"
@@ -171,7 +172,7 @@ export default function Lottery3DHome() {
       localStorage.setItem("selectedBetIssue", nextDraw.issue);
       navigate("/3d/bet");
     } else {
-      alert("No active betting session available.");
+      showAlert("No active betting session available.");
     }
   };
 

@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import styles from "../pages/Wallet.module.css";
-import { fetchRecharegeAmount, buildOrder } from "../services/api";
+import { fetchRecharegeAmount, buildOrder, initiatePayment } from "../services/api";
 import type { Bank } from "../services/types";
+import { showAlert } from "../store/alert";
 
 export default function DepositPage() {
 
@@ -10,6 +11,7 @@ export default function DepositPage() {
     const [selectedBankId, setSelectedBankId] = useState<number>(0);
     const [selectedAmount, setSelectedAmount] = useState<string>("");
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string>("");
 
     // To match original UI's "depositChannels" which seemed to be the payment TYPES (like Pay vs Bank vs Crypto) 
     // vs "banks" which were specific banks? 
@@ -68,7 +70,8 @@ export default function DepositPage() {
                         image: img,
                         type: item.type,
                         rechargeAmounts: amounts,
-                        minimumAmount: min
+                        minimumAmount: min,
+                        rechargeId: item.id // Store the actual recharge config ID for payment
                     };
                 });
                 setBanks(mapped);
@@ -82,25 +85,57 @@ export default function DepositPage() {
 
     const handleSubmit = async () => {
         if (loading) return;
+        if (!selectedBank) {
+            setError("Please select a payment channel");
+            return;
+        }
+
+        const amount = Number(selectedAmount);
+        if (isNaN(amount) || amount < selectedBank.minimumAmount) {
+            setError(`Minimum deposit amount is ${selectedBank.minimumAmount}`);
+            return;
+        }
+
         setLoading(true);
+        setError("");
 
         try {
-            const res = await buildOrder({
-                amount: Number(selectedAmount),
+            // Step 1: Create the order
+            const orderRes = await buildOrder({
+                amount: amount,
                 payer_name: "",
-                recharge_id: 99, // Should ideally come from selectedBank? rk logic hardcoded 99 or passed selectedBank? 
-                // rk logic: recharge_id: 99. recharge_type: selectedBank.type.
-                recharge_type: Number(selectedBank?.type) || 0,
+                recharge_id: (selectedBank as any).rechargeId || 99,
+                recharge_type: Number(selectedBank.type) || 0,
             });
 
-            if (res?.status?.errorCode === 0) {
-                alert("Order Created! ID: " + res.data.tid);
-                // Maybe navigate to history?
+            if (orderRes?.status?.errorCode === 0 && orderRes.data) {
+                const { tid, order_type } = orderRes.data;
+
+                // Step 2: Check if this is a third-party payment requiring redirect
+                if (order_type === 1) {
+                    // Third-party payment (like BCATPAY) - need to get payment URL
+                    const paymentRes = await initiatePayment({
+                        order_id: tid,
+                        recharge_id: (selectedBank as any).rechargeId || 99,
+                    });
+
+                    if (paymentRes?.status?.errorCode === 0 && paymentRes.data?.pay_url) {
+                        // Redirect to BCATPAY payment page
+                        window.location.href = paymentRes.data.pay_url;
+                    } else {
+                        setError(paymentRes?.status?.msg || "Failed to initiate payment");
+                    }
+                } else {
+                    // Self-service payment (order_type === 0)
+                    showAlert("Order Created! ID: " + tid);
+                    // Could navigate to a self-service payment page here
+                }
             } else {
-                alert("Order failed: " + res?.status?.msg);
+                setError(orderRes?.status?.msg || "Failed to create order");
             }
-        } catch (e) {
-            console.error(e);
+        } catch (e: any) {
+            console.error("Deposit error:", e);
+            setError(e?.message || "An error occurred. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -171,6 +206,20 @@ export default function DepositPage() {
             </div>
 
             <div style={{ padding: "2rem", marginTop: "1rem" }}>
+                {/* Error Message Display */}
+                {error && (
+                    <div style={{
+                        backgroundColor: '#ff4444',
+                        color: 'white',
+                        padding: '12px 16px',
+                        borderRadius: '8px',
+                        marginBottom: '1rem',
+                        fontSize: '1.2rem'
+                    }}>
+                        {error}
+                    </div>
+                )}
+
                 {/* Quick Amount Buttons */}
                 {rechargeAmounts.length > 0 && (
                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '1rem' }}>

@@ -13,6 +13,7 @@ import { useAppStore } from "../store/app";
 import { useUserStore } from "../store/user";
 import { normalizeInitData } from "../utils/transform";
 import { startGame, startLotteryGame } from "../services/games";
+import { showAlert } from "../store/alert";
 
 import SlotIcon from '../assets/icons/slot.svg?react';
 import FishIcon from '../assets/icons/fish.svg?react';
@@ -135,7 +136,7 @@ export default function Home() {
     }
 
     if (g.maintain) {
-      alert("Game is under maintenance");
+      showAlert("Game is under maintenance");
       return;
     }
 
@@ -194,7 +195,7 @@ export default function Home() {
       }
     } catch (err) {
       console.error('Game launch error:', err);
-      alert(err);
+      showAlert(String(err));
     }
   };
 

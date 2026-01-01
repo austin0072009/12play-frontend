@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, TrashIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
 import { placeBet } from "../services/lottery";
 import Dialog from "../components/Dialog";
+import { showAlert } from "../store/alert";
 
 type BetItem = {
   num: string;
@@ -51,7 +52,7 @@ export default function Lottery2DBetConfirm() {
   const handleConfirm = async () => {
     if (items.length === 0 || totalAmount <= 0) return;
     if (!state?.issue) {
-      alert("Missing issue information. Please try again.");
+      showAlert("Missing issue information. Please try again.");
       return;
     }
 
@@ -74,7 +75,7 @@ export default function Lottery2DBetConfirm() {
       setShowSuccess(true);
     } catch (error: any) {
       setLoading(false);
-      alert(error.message || "Failed to place bet. Please try again.");
+      showAlert(error.message || "Failed to place bet. Please try again.");
       console.error("Place bet error:", error);
     }
   };

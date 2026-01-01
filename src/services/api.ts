@@ -11,6 +11,9 @@ import type {
     AddBankResp,
     GetRechargeAmountsResp,
     OrderBuildReq,
+    OrderBuildResp,
+    BwPayReq,
+    BwPayResp,
     GetActionLogReq,
 } from "./types";
 
@@ -111,8 +114,14 @@ export async function fetchRecharegeAmount(recharge_type: string) {
 
 export async function buildOrder(payload: Omit<OrderBuildReq, "token">) {
     const token = useUserStore.getState().token || "";
-    const res = await postData<any>("/nweb/orderbuild", { ...payload, token });
-    return res as any;
+    const res = await postData<OrderBuildResp>("/nweb/orderbuild", { ...payload, token });
+    return res as OrderBuildResp;
+}
+
+export async function initiatePayment(payload: Omit<BwPayReq, "token">) {
+    const token = useUserStore.getState().token || "";
+    const res = await postData<BwPayResp>("/nweb/bwpay", { ...payload, token });
+    return res as BwPayResp;
 }
 
 export async function fetchOrderStatus(orderId: number) {

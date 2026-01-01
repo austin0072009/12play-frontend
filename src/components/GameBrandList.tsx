@@ -5,6 +5,7 @@ import { useUserStore } from '../store/user';
 import { fetchGamesByBrand, startGame } from '../services/games';
 import LazyImg from './LazyImg';
 import styles from './GameBrandList.module.css';
+import { showAlert } from '../store/alert';
 
 interface GameBrandListProps {
   gameType?: string; // 'slot', 'fish', etc.
@@ -143,7 +144,7 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
       }
     } catch (err) {
       console.error('Game launch error:', err);
-      alert(err);
+      showAlert(String(err));
     }
   };
 

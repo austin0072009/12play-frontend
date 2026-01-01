@@ -3,6 +3,7 @@ import axios, { AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
 import CryptoJS from 'crypto-js';
 import i18n from '../i18n';
 import { useUserStore } from '../store/user';
+import { showAlert } from '../store/alert';
 
 // ------- 1) 还原 bt0a / at0b -------
 function makeAt0bFromSeed(seed: string): number {
@@ -108,7 +109,30 @@ service.interceptors.response.use(function (response) {
 
   // 其它接口：如果是老结构 {status:{errorCode}, data:"<加密串>"} 且成功，则解密 data
   if (payload && payload.status && typeof payload.status.errorCode !== 'undefined') {
-    var ok = Number(payload.status.errorCode) === 0;
+    var errorCode = Number(payload.status.errorCode);
+
+    // Check for token expiration (errorCode 400)
+    if (errorCode === 400) {
+      // Extract error message
+      var errorMsg = payload.status.mess || payload.status.msg || 'Session expired. Please login again.';
+
+      // Clear user token and info from store
+      try {
+        useUserStore.getState().logout();
+      } catch (err) {
+        console.error('Error during logout:', err);
+      }
+
+      // Show alert to user and redirect after closing
+      showAlert(errorMsg, () => {
+        window.location.href = '/login';
+      });
+
+      // Reject the promise to prevent further processing
+      return Promise.reject(new Error(errorMsg));
+    }
+
+    var ok = errorCode === 0;
     if (ok && typeof payload.data === 'string') {
       try { payload.data = aesDecryptToJson(payload.data); } catch {}
     }

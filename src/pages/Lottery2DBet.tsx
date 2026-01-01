@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from "react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useLotteryStore } from "../store/lottery";
 import { getSessionNumbers } from "../services/lottery";
+import { showAlert } from "../store/alert";
 
 type NumInfo = {
   num: string;
@@ -139,7 +140,7 @@ export default function Lottery2DBet() {
     });
 
     if (overLimitNumbers.length > 0) {
-      alert(
+      showAlert(
         `Bet amount exceeds maximum limit for the following numbers:\n\n${overLimitNumbers.join('\n')}\n\nPlease reduce your bet amount.`
       );
       return;

@@ -273,6 +273,7 @@ export type Bank = {
   type: string; // 也可用 number
   rechargeAmounts: string[];
   minimumAmount: number; // ✅ 统一命名 + number
+  rechargeId?: number; // Recharge config ID for payment
 };
 
 export type GetRechargeAmountsResp = {
@@ -286,6 +287,36 @@ export type OrderBuildReq = {
   payer_name: string;
   recharge_id: number;
   recharge_type: number;
+};
+
+export type OrderBuildResp = {
+  status: ApiStatus;
+  data: {
+    tid: number; // Order ID
+    order_type: number; // 0=self-service, 1=third-party (needs redirect)
+  };
+  url?: string;
+};
+
+// Payment redirect request (for third-party payments like BCATPAY)
+export type BwPayReq = {
+  order_id: number; // The tid from orderbuild
+  recharge_id: number; // The recharge config ID
+};
+
+export type BwPayResp = {
+  status: ApiStatus;
+  data: {
+    is_out: number; // 1=redirect externally
+    pay_url: string; // URL to redirect user to for payment
+    status: number; // 1=success
+    msg: string;
+    order_no: string; // Order number (bill_no)
+    platform_order_no?: string; // Platform order number
+    account_number?: string; // Optional account info
+    account_name?: string; // Optional account info
+  };
+  url?: string;
 };
 
 export type SubmitTime = {

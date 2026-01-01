@@ -8,6 +8,7 @@ import { loginApi } from '../services/auth';
 import { fetchBalance } from '../services/api';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
+import { showAlert } from '../store/alert';
 
 export default function Login() {
   const { t } = useTranslation();
@@ -186,7 +187,7 @@ export default function Login() {
       </form>
 
       <div className={styles.form_actions}>
-        <span className={styles.link} onClick={() => alert("Forgot password?")}>
+        <span className={styles.link} onClick={() => showAlert("Forgot password?")}>
           {t("login.forgot") || "Forgot Password?"}
         </span>
         <span className={styles.link} onClick={() => navigate("/register")}>
