@@ -18,6 +18,7 @@ import {
 } from "../services/lottery";
 import Lottery2DTimeSectionPopup from "../components/Lottery2DTimeSectionPopup";
 import { showAlert } from "../store/alert";
+import { useTranslation } from "react-i18next";
 
 /**
  * Format time from "YYYY-MM-DD HH:MM:SS.mmm" to "HH:MM"
@@ -31,6 +32,7 @@ function formatTime(timeStr: string): string {
 
 export default function Lottery2DHome() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [liveNum, setLiveNum] = useState<string>("N/A");
   const [liveSet, setLiveSet] = useState<string>("N/A");
   const [liveValue, setLiveValue] = useState<string>("N/A");
@@ -130,7 +132,7 @@ export default function Lottery2DHome() {
   useEffect(() => {
     if (!lotteryToken || !lotteryDomain) {
       console.warn("No lottery credentials found. User needs to access lottery through Home page.");
-      showAlert("Please access the lottery game from the Home page first.", () => {
+      showAlert(t("lottery2d.needAccess"), () => {
         navigate("/home");
       });
     }
@@ -281,13 +283,13 @@ export default function Lottery2DHome() {
   // Handle BET button click with closed day check
   const handleBetClick = () => {
     if (isClosedDay()) {
-      showAlert("🚫 Betting Closed\n\nThe lottery is closed today. Please check the closed days calendar and try again on an open day.");
+      showAlert(t("lottery2d.closedAlert"));
       return;
     }
 
     // Guard: no active/pending sessions
     if (!pendingSessions || pendingSessions.length === 0 || !nextDraw) {
-      showAlert("No active betting session available.");
+      showAlert(t("lottery2d.noSession"));
       return;
     }
 
@@ -309,7 +311,7 @@ export default function Lottery2DHome() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>2D Lottery</h1>
+        <h1 className={styles.title}>{t("lottery2d.title")}</h1>
       </header>
 
       <div className={styles.content}>
@@ -320,7 +322,7 @@ export default function Lottery2DHome() {
             onClick={() => navigate("/2d/rank")}
           >
             <TrophyIcon />
-            <span>Rank</span>
+            <span>{t("lottery2d.rank")}</span>
           </button>
 
           <button
@@ -328,7 +330,7 @@ export default function Lottery2DHome() {
             onClick={() => navigate("/2d/closed-days")}
           >
             <CalendarDaysIcon />
-            <span>Closed</span>
+            <span>{t("lottery2d.closedDays")}</span>
           </button>
 
           <button
@@ -336,14 +338,14 @@ export default function Lottery2DHome() {
             onClick={() => navigate("/2d/history")}
           >
             <ClipboardDocumentListIcon />
-            <span>History</span>
+            <span>{t("lottery2d.history")}</span>
           </button>
         </div>
 
         {/* Current Round */}
         <div className={styles.roundCard}>
           <div>
-            <p className={styles.roundLabel}>Next Draw</p>
+            <p className={styles.roundLabel}>{t("lottery2d.nextDraw")}</p>
             <p className={styles.roundTime}>{drawTime}</p>
           </div>
 
@@ -351,7 +353,7 @@ export default function Lottery2DHome() {
             <ClockIcon className={styles.clockIcon} />
             <span>{countdown}</span>
             <span className={`${styles.badge} ${countdown === "00:00:00" ? styles.closed : styles.open}`}>
-              {countdown === "00:00:00" ? "CLOSED" : "OPEN"}
+              {countdown === "00:00:00" ? t("lottery2d.closedBadge") : t("lottery2d.openBadge")}
             </span>
           </div>
         </div>
@@ -360,17 +362,17 @@ export default function Lottery2DHome() {
         <div className={styles.lastResult}>
           <div className={styles.liveIndicator}>
             <span className={styles.liveDot}></span>
-            <span className={styles.liveText}>LIVE</span>
+            <span className={styles.liveText}>{t("lottery2d.liveTitle")}</span>
           </div>
           <p className={styles.lastResultValue}>{liveNum}</p>
           <div className={styles.liveMetadata}>
             <div className={styles.metadataItem}>
-              <span className={styles.metadataLabel}>SET</span>
+              <span className={styles.metadataLabel}>{t("lottery2d.set")}</span>
               <span className={styles.metadataValue}>{liveSet}</span>
             </div>
             <div className={styles.metadataDivider}></div>
             <div className={styles.metadataItem}>
-              <span className={styles.metadataLabel}>VALUE</span>
+              <span className={styles.metadataLabel}>{t("lottery2d.value")}</span>
               <span className={styles.metadataValue}>{liveValue}</span>
             </div>
           </div>
@@ -379,7 +381,7 @@ export default function Lottery2DHome() {
 
         {/* Yesterday Results */}
         <div className={styles.yesterday}>
-          <p className={styles.yesterdayTitle}>Latest Results</p>
+          <p className={styles.yesterdayTitle}>{t("lottery2d.latestResults")}</p>
 
           <div className={styles.yesterdayList}>
             {yesterdayResults.map((result, idx) => (
@@ -393,11 +395,11 @@ export default function Lottery2DHome() {
                 <div className={styles.yesterdayNum}>{result.win_num}</div>
                 <div className={styles.resultMetadata}>
                   <div className={styles.resultMetaItem}>
-                    <span className={styles.resultMetaLabel}>SET</span>
+                    <span className={styles.resultMetaLabel}>{t("lottery2d.set")}</span>
                     <span className={styles.resultMetaValue}>{result.set}</span>
                   </div>
                   <div className={styles.resultMetaItem}>
-                    <span className={styles.resultMetaLabel}>VAL</span>
+                    <span className={styles.resultMetaLabel}>{t("lottery2d.value")}</span>
                     <span className={styles.resultMetaValue}>{result.value}</span>
                   </div>
                 </div>
@@ -414,7 +416,7 @@ export default function Lottery2DHome() {
         onClick={handleBetClick}
         title={!lotteryToken ? "Please access lottery from Home page first" : "Place your bet"}
       >
-        {!lotteryToken ? "LOADING..." : "BET"}
+        {!lotteryToken ? t("common.loading") : t("lottery2d.betButton")}
       </button>
 
       {/* Time Section Selection Modal */}

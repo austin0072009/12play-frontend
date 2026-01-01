@@ -1,10 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./BottomNav.module.css";
+import { useTranslation } from "react-i18next";
 
 export default function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const { t } = useTranslation();
 
   return (
     <footer className={styles.footer}>
@@ -29,7 +31,7 @@ export default function BottomNav() {
             </clipPath>
           </defs>
         </svg>
-        <span className={styles.navLabel}>Home</span>
+        <span className={styles.navLabel}>{t("nav.home")}</span>
       </button>
       <button
         className={`${styles.navItem} ${
@@ -59,7 +61,7 @@ export default function BottomNav() {
             </clipPath>
           </defs>
         </svg>
-        <span className={styles.navLabel}>Wallet</span>
+        <span className={styles.navLabel}>{t("nav.wallet")}</span>
       </button>
       <button
         className={`${styles.navItem} ${
@@ -95,7 +97,7 @@ export default function BottomNav() {
             </clipPath>
           </defs>
         </svg>
-        <span className={styles.navLabel}>Promotions</span>
+        <span className={styles.navLabel}>{t("nav.promotions")}</span>
       </button>
       <button
         className={`${styles.navItem} ${
@@ -123,7 +125,7 @@ export default function BottomNav() {
             </clipPath>
           </defs>
         </svg>
-        <span className={styles.navLabel}>Live Chat</span>
+        <span className={styles.navLabel}>{t("nav.livechat")}</span>
       </button>
       {/* <button
         className={`${styles.navItem} ${

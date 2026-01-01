@@ -1,5 +1,6 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import styles from "./Lottery2DTimeSectionPopup.module.css";
+import { useTranslation } from "react-i18next";
 
 interface BetSession {
   issue: string;
@@ -63,6 +64,7 @@ export default function Lottery2DTimeSectionPopup({
   onClose,
   onSelectSection,
 }: Lottery2DTimeSectionPopupProps) {
+  const { t } = useTranslation();
   const handleSelectSection = (issue: string) => {
     onSelectSection(issue);
     onClose();
@@ -124,13 +126,13 @@ export default function Lottery2DTimeSectionPopup({
     {
       issue: session12?.issue || "N/A",
       win_time: session12?.win_time || `${todayDate} 12:00:00`,
-      label: "12:00 Section",
+      label: t("lottery2d.section12"),
       isDisabled: is12Disabled || !session12,
     },
     {
       issue: session1630?.issue || "N/A",
       win_time: session1630?.win_time || `${todayDate} 16:30:00`,
-      label: "16:30 Section",
+      label: t("lottery2d.section1630"),
       isDisabled: is1630Disabled || !session1630,
     },
   ];
@@ -144,7 +146,7 @@ export default function Lottery2DTimeSectionPopup({
       <div className={styles.popup}>
         <div className={styles.header}>
           <div className={styles.leftSpace} />
-          <h1 className={styles.title}>Select Section</h1>
+          <h1 className={styles.title}>{t("lottery2d.selectSection")}</h1>
           <button className={styles.closeBtn} onClick={onClose}>
             <XMarkIcon />
           </button>
@@ -165,7 +167,7 @@ export default function Lottery2DTimeSectionPopup({
                 <span className={styles.sectionDate}>{section.win_time}</span>
               </div>
               {section.isDisabled && (
-                <span className={styles.expiredBadge}>Closed</span>
+                <span className={styles.expiredBadge}>{t("lottery2d.sectionClosed")}</span>
               )}
             </button>
           ))}

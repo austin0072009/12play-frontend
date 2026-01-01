@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/user";
 import UserBalance from "./UserBalance";
 import logoImg from '../assets/rclogowhite.png';
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
   const { open } = useSidebarStore();
   const navigate = useNavigate();
   const token = useUserStore(s => s.token);
+  const { t } = useTranslation();
 
   return (
     <header className={styles.header}>
@@ -41,7 +43,8 @@ export default function Header() {
             </defs>
           </svg>
         </button>
-        <img src={logoImg} alt="Logo" className={styles.logoImage} />
+         <img src={logoImg} alt={t("header.logoAlt")}
+       className={styles.logoImage} />
         
       </div>
       <div className={styles.rightHeader}>
@@ -54,7 +57,7 @@ export default function Header() {
               }}
               className={styles.loginButton}
             >
-              Login
+              {t("header.login")}
             </button>
             <button
               onClick={() => {
@@ -62,7 +65,7 @@ export default function Header() {
               }}
               className={styles.registerButton}
             >
-              Join Now
+              {t("header.join")}
             </button>
           </>
         )}

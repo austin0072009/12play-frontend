@@ -43,13 +43,13 @@ export default function Register() {
 
   async function handleSubmit(e?: React.FormEvent) {
     if (e) e.preventDefault();
-    setAlertMessage("");
+    setAlertMessage(null);
 
-    if (!username) { setAlertMessage("Username is required"); return; }
-    // if (!realName) { setAlertMessage("Real Name is required"); return; }
-    if (!password) { setAlertMessage("Password is required"); return; }
-    if (!isValidPassword(password)) { setAlertMessage("Password must be at least 6 characters"); return; }
-    if (password !== confirmPwd) { setAlertMessage("Passwords do not match"); return; }
+    if (!username) { setAlertMessage(t("register.requiredUsername")); return; }
+    // if (!realName) { setAlertMessage(t("register.requiredRealName")); return; }
+    if (!password) { setAlertMessage(t("register.requiredPassword")); return; }
+    if (!isValidPassword(password)) { setAlertMessage(t("register.passwordRule")); return; }
+    if (password !== confirmPwd) { setAlertMessage(t("register.passwordMismatch")); return; }
 
     setSubmitting(true);
     try {
@@ -67,10 +67,10 @@ export default function Register() {
         setConfirmInfo({ username: username, password });
         setModalOpen(true);
       } else {
-        setAlertMessage(String(res?.status?.mess || res?.status?.msg || "Register failed"));
+        setAlertMessage(String(res?.status?.mess || res?.status?.msg || t("register.failed")));
       }
     } catch {
-      setAlertMessage("Network error during register.");
+      setAlertMessage(t("register.networkError"));
     } finally {
       setSubmitting(false);
     }
@@ -92,9 +92,9 @@ export default function Register() {
           return;
         }
       }
-      setAlertMessage("Auto login failed, please login manually.");
+      setAlertMessage(t("register.autoLoginFailed"));
     } catch {
-      setAlertMessage("Auto login failed, please login manually.");
+      setAlertMessage(t("register.autoLoginFailed"));
     }
   }
 
@@ -108,7 +108,7 @@ export default function Register() {
       <Dialog
         open={!!alertMessage}
         onClose={() => setAlertMessage(null)}
-        title="Alert"
+        title={t("common.alert") || "Alert"}
       >
         {alertMessage}
       </Dialog>
@@ -200,7 +200,7 @@ export default function Register() {
 
         <div className={styles.form_submit}>
           <button className={styles.form_submit_btn} type="submit" disabled={submitting}>
-            {submitting ? "Processing..." : t("register.submit") || "Register Now"}
+            {submitting ? t("register.processing") : t("register.submit") || "Register Now"}
           </button>
         </div>
       </form>
@@ -225,8 +225,8 @@ export default function Register() {
                 </svg>
               </div>
               <p style={{ marginBottom: 10, fontWeight: 'bold' }}>{t("register.success")}</p>
-              <p style={{ fontSize: 13, color: '#ccc' }}>Username: {confirmInfo.username}</p>
-              <p style={{ fontSize: 13, color: '#ccc' }}>Password: {confirmInfo.password}</p>
+              <p style={{ fontSize: 13, color: '#ccc' }}>{(t("common.username") || "Username") + ": "}{confirmInfo.username}</p>
+              <p style={{ fontSize: 13, color: '#ccc' }}>{(t("common.password") || "Password") + ": "}{confirmInfo.password}</p>
             </div>
             <button className={styles.action_btn} onClick={handleConfirmAndAutoLogin}>
               {t("register.startPlaying")}

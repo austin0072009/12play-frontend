@@ -42,7 +42,7 @@ export default function Login() {
   async function handleSubmit(e?: React.FormEvent) {
     if (e) e.preventDefault();
     if (!username || !password) {
-      setErr("Please enter your account and password.");
+      setErr(t("login.missingFields"));
       return;
     }
     setSubmitting(true);
@@ -74,7 +74,7 @@ export default function Login() {
         console.log("=== LOGIN TOKEN ===", token);
 
         if (!token) {
-          setErr("Missing token in response.");
+          setErr(t("login.missingToken"));
           return;
         }
 
@@ -108,11 +108,11 @@ export default function Login() {
         navigate(to, { replace: true });
       } else {
         const message =
-          (res && res.status && (res.status.mess || res.status.msg)) || "Login failed";
+          (res && res.status && (res.status.mess || res.status.msg)) || t("login.failed");
         setErr(String(message));
       }
     } catch {
-      setErr("Network error, please try again.");
+      setErr(t("login.networkError"));
     } finally {
       setSubmitting(false);
     }
@@ -181,13 +181,13 @@ export default function Login() {
             type="submit"
             disabled={submitting}
           >
-            {submitting ? "Logging in..." : t("login.submit") || "Login"}
+            {submitting ? t("login.submitting") : t("login.submit") || "Login"}
           </button>
         </div>
       </form>
 
       <div className={styles.form_actions}>
-        <span className={styles.link} onClick={() => showAlert("Forgot password?")}>
+        <span className={styles.link} onClick={() => showAlert(t("login.forgotPrompt"))}>
           {t("login.forgot") || "Forgot Password?"}
         </span>
         <span className={styles.link} onClick={() => navigate("/register")}>
