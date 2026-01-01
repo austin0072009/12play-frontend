@@ -4,6 +4,8 @@ import { fetchBankList, fetchBalance, withdrawal, transferOut } from "../service
 import type { BankInfo } from "../services/types";
 import { useNavigate } from "react-router-dom";
 import Dialog from "./Dialog";
+import kbzpayImg from "../assets/kbzpay.jpg";
+import wavepayImg from "../assets/wavepay.jpg";
 
 export default function WithdrawalPage() {
     const navigate = useNavigate();
@@ -14,6 +16,15 @@ export default function WithdrawalPage() {
     const [submitting, setSubmitting] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
+    // Helper function to get bank image based on bank name
+    const getBankImage = (bankName: string | undefined): string | null => {
+        if (!bankName) return null;
+        const name = bankName.toUpperCase();
+        if (name.includes("KBZ")) return kbzpayImg;
+        if (name.includes("WAVE")) return wavepayImg;
+        return null;
+    };
+
     useEffect(() => {
         // Basic init
         fetchBalance().then((res) => {
@@ -22,6 +33,7 @@ export default function WithdrawalPage() {
 
         // Fetch bank binding
         fetchBankList().then((data) => {
+            console.log("Bank List:", data);
             if (data?.data) {
                 setBankList(data.data);
             }
@@ -56,7 +68,7 @@ export default function WithdrawalPage() {
     return (
         <div>
             {/* Sub Tabs */}
-            <div className={styles.subTabContainer}>
+            {/* <div className={styles.subTabContainer}>
                 <div
                     className={`${styles.subTabItem} ${activeTab === 'bank' ? styles.active : ''}`}
                     onClick={() => setActiveTab('bank')}
@@ -84,7 +96,7 @@ export default function WithdrawalPage() {
                     </svg>
                     <span>Crypto</span>
                 </div>
-            </div>
+            </div> */}
 
             {activeTab === 'bank' && (
                 <div style={{ padding: "2rem", marginTop: "1rem" }}>
@@ -113,10 +125,14 @@ export default function WithdrawalPage() {
                         <h3 style={{ marginBottom: '1rem', fontSize: '1rem', color: '#aaa' }}>Bank Account</h3>
                         {hasBank ? (
                             <div style={{ padding: '1rem', background: '#333', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                {/* Show bank image if KBZ/Wave or generic */}
-                                {/* Simple heuristic for image */}
-                                {(bankList?.bank_name?.includes('KBZ')) && <img src="assets/images/kbzpay.jpg" style={{ width: '40px', borderRadius: '4px' }} alt="KPay" />}
-                                {(bankList?.bank_name?.includes('WAVE')) && <img src="assets/images/wavepay.jpg" style={{ width: '40px', borderRadius: '4px' }} alt="Wave" />}
+                                {/* Show bank image based on bank_name */}
+                                {getBankImage(bankList?.bank_name) && (
+                                    <img
+                                        src={getBankImage(bankList?.bank_name)!}
+                                        style={{ width: '60px', height: '60px', objectFit: 'contain', borderRadius: '4px' }}
+                                        alt={bankList?.bank_name}
+                                    />
+                                )}
 
                                 <div>
                                     <div style={{ fontWeight: 'bold' }}>{bankList?.bank_username}</div>

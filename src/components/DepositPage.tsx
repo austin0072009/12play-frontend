@@ -142,7 +142,7 @@ export default function DepositPage() {
     return (
         <div>
             {/* Sub Tabs - Keeping Original UI Structure */}
-            <div className={styles.subTabContainer}>
+            {/* <div className={styles.subTabContainer}>
                 <div className={`${styles.subTabItem} ${styles.active}`}>
                     <svg className={styles.subTabItemIcon} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24px" height="24px">
                         <g clipPath="url(#FastDeposit_svg__a)">
@@ -153,10 +153,8 @@ export default function DepositPage() {
                     </svg>
                     <span>Fast Deposit</span>
                 </div>
-                {/* Placeholder Tabs */}
                 <div className={styles.subTabItem} style={{ opacity: 0.5 }}>
                     <svg className={styles.subTabItemIcon} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24px" height="24px">
-                        {/* Simplified icon path to save space, keeping structure */}
                         <path stroke="currentColor" strokeWidth="2" d="M9 3.5a9 9 0 0111.3 12c-.4.8-1.4 2.5-1.8 2.5m-3 2.3a9 9 0 01-11-13.3"></path>
                     </svg>
                     <span>Bank Transfer</span>
@@ -167,7 +165,7 @@ export default function DepositPage() {
                     </svg>
                     <span>Crypto</span>
                 </div>
-            </div>
+            </div> */}
 
             <div className={styles.channelDiv}>
                 <h1>Deposit Channel <span>*</span></h1>
