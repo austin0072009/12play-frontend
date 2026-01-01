@@ -3,6 +3,8 @@ import styles from "../pages/Wallet.module.css";
 import { fetchRecharegeAmount, buildOrder, initiatePayment } from "../services/api";
 import type { Bank } from "../services/types";
 import { showAlert } from "../store/alert";
+import kbzpayImg from "../assets/kbzpay.jpg";
+import wavepayImg from "../assets/wavepay.jpg";
 
 export default function DepositPage() {
 
@@ -39,39 +41,35 @@ export default function DepositPage() {
         return m ? Number(m[1]) : fallback;
     }
 
+    // Helper function to map title to image
+    function getImageByTitle(title: string): string {
+        const titleLower = title.toLowerCase();
+        if (titleLower.includes("kbz")) return kbzpayImg;
+        if (titleLower.includes("wave")) return wavepayImg;
+        return "https://dummyimage.com/150/fff/000"; // fallback
+    }
+
     useEffect(() => {
         // Basic setup similar to rk
         fetchRecharegeAmount("1").then((res) => {
             if (res?.status?.errorCode === 0 && Array.isArray(res.data)) {
                 // Map to our Bank type
-                // Original UI expected fields: id, name, image.
                 const mapped = res.data.map((item: any, idx: number) => {
-                    // For now, map based on item structure or inject hardcoded images if needed
-                    // Assuming item has: code/type. 
-                    // If the API returns raw list, we might need to map images manually like in rk's hardcoded list.
-                    // Let's preserve the rk hardcoded list logic merged with API data.
-
-                    // Fallback images
-                    let img = "https://dummyimage.com/150/fff/000";
-                    let name = item.name || "Channel " + idx;
-
-                    // Heuristic matching
-                    if (name.toLowerCase().includes("pay") || item.type == 7) img = "assets/images/kbzpay.jpg";
-                    if (name.toLowerCase().includes("wave") || item.type == 8) img = "assets/images/wavepay.jpg";
-                    if (item.rate_img) img = item.rate_img; // if backend provides
+                    const title = item.title || "Channel " + idx;
+                    const img = getImageByTitle(title);
 
                     const d = item.charge?.[0];
                     const amounts = parseAmounts(d?.price_str);
                     const min = parseMinimum(d?.remark, 1000);
 
                     return {
-                        id: item.id || idx,
-                        name: name,
+                        id: item.tid || idx,
+                        name: title,
                         image: img,
-                        type: item.type,
+                        type: item.recharge_type,
                         rechargeAmounts: amounts,
                         minimumAmount: min,
-                        rechargeId: item.id // Store the actual recharge config ID for payment
+                        rechargeId: item.tid // Store the actual recharge config ID for payment
                     };
                 });
                 setBanks(mapped);
