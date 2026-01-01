@@ -32,11 +32,11 @@ import type {
 export async function getGameList(): Promise<LotteryGameListResp['data']> {
   const res = await lotteryRequest.post<LotteryGameListResp>('/api/v3/game/list', {});
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get game list');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get game list');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -45,8 +45,11 @@ export async function getGameList(): Promise<LotteryGameListResp['data']> {
 export async function get2DLiveResult(): Promise<Lottery2DLiveResp> {
   const res = await lotteryRequest.get<Lottery2DLiveResp>('/api/v1/2d/result');
 
+  if (!res) {
+    throw new Error('Failed to get 2D live result');
+  }
 
-  return res.data;
+  return res;
 }
 
 /**
@@ -55,11 +58,11 @@ export async function get2DLiveResult(): Promise<Lottery2DLiveResp> {
 export async function getLotteryUserInfo(): Promise<LotteryUserInfoResp['data']> {
   const res = await lotteryRequest.post<LotteryUserInfoResp>('/api/v3/user/info', {});
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get user info');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get user info');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -71,11 +74,11 @@ export async function getGameResource(gameId: number): Promise<LotteryGameResour
     { gameId } as LotteryGameResourceReq
   );
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get game resource');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get game resource');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -90,11 +93,11 @@ export async function getBetSessions(gameId: number, winState: number): Promise<
   );
 
   console.log('Bet sessions response:', res);
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get bet sessions');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get bet sessions');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -106,11 +109,11 @@ export async function getSessionNumbers(issue: string, gameId: number): Promise<
     { issue, gameId } as LotterySessionNumberReq
   );
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get session numbers');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get session numbers');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -119,11 +122,11 @@ export async function getSessionNumbers(issue: string, gameId: number): Promise<
 export async function placeBet(payload: LotteryBetReq): Promise<LotteryBetResp> {
   const res = await lotteryRequest.post<LotteryBetResp>('/api/v3/bet', payload);
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to place bet');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to place bet');
   }
 
-  return res.data;
+  return res;
 }
 
 /**
@@ -135,11 +138,11 @@ export async function getWinRanking(gameId: number, issue: string): Promise<Lott
     { gameId, issue } as LotteryRankReq
   );
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get win ranking');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get win ranking');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -155,11 +158,11 @@ export async function getBetStatistics(
     { issueId, page, pageSize } as LotteryBetListReq
   );
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get bet statistics');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get bet statistics');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -176,11 +179,11 @@ export async function getBetRecords(
     { gameId, issue: issue ?? '', page, pageSize } as LotteryBetRecordReq
   );
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get bet records');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get bet records');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -192,11 +195,11 @@ export async function getDailyBetTotal(date: string): Promise<LotteryRecordTotal
     { date } as LotteryRecordTotalReq
   );
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get daily bet total');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get daily bet total');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -212,11 +215,11 @@ export async function getBetDetails(
     { date, page, pageSize } as LotteryBetDetailsReq
   );
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get bet details');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get bet details');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -228,11 +231,11 @@ export async function getIssueTotal(date: string): Promise<LotteryIssueTotalResp
     { date } as LotteryIssueTotalReq
   );
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get issue total');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get issue total');
   }
 
-  return res.data.data;
+  return res.data;
 }
 
 /**
@@ -245,9 +248,9 @@ export async function getClosedDays(gameId: number): Promise<LotteryClosedDayRes
     { gameId } as LotteryClosedDayReq
   );
 
-  if (!res.data || res.data.code !== 200) {
-    throw new Error(res.data?.message || 'Failed to get closed days');
+  if (!res || res.code !== 200) {
+    throw new Error(res?.message || 'Failed to get closed days');
   }
 
-  return res.data.data;
+  return res.data;
 }

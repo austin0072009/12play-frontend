@@ -66,7 +66,7 @@ export default function WithdrawalPage() {
     const hasBank = !!(bankList && bankList.bank_card);
 
     return (
-        <div>
+        <div style={{ minHeight: '100%', paddingBottom: '5rem' }}>
             {/* Sub Tabs */}
             {/* <div className={styles.subTabContainer}>
                 <div
@@ -99,65 +99,68 @@ export default function WithdrawalPage() {
             </div> */}
 
             {activeTab === 'bank' && (
-                <div style={{ padding: "2rem", marginTop: "1rem" }}>
+                <div style={{ padding: "2rem", marginTop: "1rem", paddingBottom: "5rem" }}>
                     {/* Balance Info */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                        <span>Main Wallet</span>
-                        <span style={{ fontWeight: 'bold' }}>{balance}</span>
+                    <div className={styles.balanceRow}>
+                        <span className={styles.balanceLabel}>Main Wallet</span>
+                        <span className={styles.balanceAmount}>{Number(balance).toLocaleString()}</span>
                     </div>
 
-                    <div style={{ marginBottom: '2rem' }}>
+                    <div className={styles.infoCard}>
+                        <label style={{
+                            display: 'block',
+                            marginBottom: '1rem',
+                            fontSize: '1.6rem',
+                            fontWeight: '600',
+                            color: 'var(--color-white)'
+                        }}>
+                            Withdrawal Amount
+                        </label>
                         <input
                             type="number"
                             value={selectedAmount}
                             onChange={(e) => setSelectedAmount(e.target.value)}
-                            placeholder="Withdrawal Amount"
+                            placeholder="Enter amount to withdraw"
                             className={styles.inputEl}
                         />
                         {bankList && (
-                            <p style={{ fontSize: '0.9rem', color: '#888', marginTop: '0.5rem' }}>
-                                Limit: {bankList.limit_start} | Turnover: {bankList.turnover}
+                            <p className={styles.helperText}>
+                                Limit: <span className={styles.primary}>{Number(bankList.limit_start).toLocaleString()}</span> |
+                                Turnover: <span className={styles.primary}>{Number(bankList.turnover).toLocaleString()}</span>
                             </p>
                         )}
                     </div>
 
                     <div style={{ marginBottom: '2rem' }}>
-                        <h3 style={{ marginBottom: '1rem', fontSize: '1rem', color: '#aaa' }}>Bank Account</h3>
+                        <h3 style={{
+                            marginBottom: '1.5rem',
+                            fontSize: '1.8rem',
+                            fontWeight: '600',
+                            color: 'var(--color-white)'
+                        }}>Bank Account</h3>
                         {hasBank ? (
-                            <div style={{ padding: '1rem', background: '#333', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                {/* Show bank image based on bank_name */}
+                            <div className={styles.bankCard}>
                                 {getBankImage(bankList?.bank_name) && (
                                     <img
                                         src={getBankImage(bankList?.bank_name)!}
-                                        style={{ width: '60px', height: '60px', objectFit: 'contain', borderRadius: '4px' }}
+                                        className={styles.bankCardImage}
                                         alt={bankList?.bank_name}
                                     />
                                 )}
 
-                                <div>
-                                    <div style={{ fontWeight: 'bold' }}>{bankList?.bank_username}</div>
-                                    <div style={{ color: '#aaa', fontSize: '0.9rem' }}>{bankList?.bank_card}</div>
-                                    <div style={{ color: '#666', fontSize: '0.8rem' }}>{bankList?.bank_name}</div>
+                                <div className={styles.bankCardInfo}>
+                                    <div className={styles.bankCardName}>{bankList?.bank_username}</div>
+                                    <div className={styles.bankCardNumber}>{bankList?.bank_card}</div>
+                                    <div className={styles.bankCardType}>{bankList?.bank_name}</div>
                                 </div>
                             </div>
                         ) : (
                             <div
                                 onClick={() => navigate("/bank/add")}
-                                style={{
-                                    padding: '1rem',
-                                    background: 'rgba(255,255,255,0.05)',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '1rem',
-                                    cursor: 'pointer',
-                                    border: '1px dashed #666',
-                                    height: '80px'
-                                }}
+                                className={styles.addBankCard}
                             >
-                                <span style={{ fontSize: '1.5rem', color: '#CCA353' }}>+</span>
-                                <span style={{ color: '#CCA353' }}>Bind Bank Account</span>
+                                <span className={styles.addIcon}>+</span>
+                                <span>Bind Bank Account</span>
                             </div>
                         )}
                     </div>
@@ -165,17 +168,8 @@ export default function WithdrawalPage() {
                     <button
                         onClick={submitWithdrawal}
                         disabled={submitting || !hasBank}
-                        style={{
-                            width: '100%',
-                            padding: '1.2rem',
-                            background: hasBank ? '#CCA353' : '#555',
-                            color: hasBank ? '#000' : '#888',
-                            fontWeight: 'bold',
-                            border: 'none',
-                            borderRadius: '8px',
-                            cursor: (submitting || !hasBank) ? 'not-allowed' : 'pointer',
-                            fontSize: '1.4rem'
-                        }}
+                        className={styles.primaryButton}
+                        style={{ marginBottom: '3rem' }}
                     >
                         {submitting ? 'Processing...' : 'Withdraw'}
                     </button>

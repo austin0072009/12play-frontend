@@ -140,7 +140,7 @@ export default function DepositPage() {
     };
 
     return (
-        <div>
+        <div style={{ minHeight: '100%', paddingBottom: '5rem' }}>
             {/* Sub Tabs - Keeping Original UI Structure */}
             {/* <div className={styles.subTabContainer}>
                 <div className={`${styles.subTabItem} ${styles.active}`}>
@@ -175,17 +175,15 @@ export default function DepositPage() {
                     {banks.map((channel) => (
                         <div
                             key={channel.id}
-                            className={styles.channelItem} /* Assuming this class existed, or inline style */
+                            className={styles.channelItem}
                             style={{
-                                border: selectedBankId === channel.id ? '2px solid #CCA353' : '2px solid transparent',
+                                border: selectedBankId === channel.id ? '2px solid #cb0000' : '2px solid transparent',
                                 opacity: selectedBankId === channel.id ? 1 : 0.6,
                                 cursor: 'pointer',
                                 transition: 'all 0.3s'
                             }}
                             onClick={() => {
                                 setSelectedBankId(channel.id);
-                                // Reset amount to new min?
-                                // setSelectedAmount(String(channel.minimumAmount));
                             }}
                         >
                             <img src={channel.image} alt={channel.name} className={styles.bankImage} />
@@ -201,77 +199,67 @@ export default function DepositPage() {
                 </div>
             </div>
 
-            <div style={{ padding: "2rem", marginTop: "1rem" }}>
+            <div style={{ padding: "2rem", marginTop: "1rem", paddingBottom: "5rem" }}>
                 {/* Error Message Display */}
                 {error && (
-                    <div style={{
-                        backgroundColor: '#ff4444',
-                        color: 'white',
-                        padding: '12px 16px',
-                        borderRadius: '8px',
-                        marginBottom: '1rem',
-                        fontSize: '1.2rem'
-                    }}>
+                    <div className={styles.errorMessage}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
                         {error}
                     </div>
                 )}
 
                 {/* Quick Amount Buttons */}
                 {rechargeAmounts.length > 0 && (
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
                         {rechargeAmounts.map(amt => (
                             <button
                                 key={amt}
                                 onClick={() => setSelectedAmount(amt)}
-                                className={styles.amountQuick} /* Assuming class exists or inline */
-                                style={{
-                                    background: selectedAmount === amt ? '#CCA353' : '#333',
-                                    color: selectedAmount === amt ? '#000' : '#fff',
-                                    border: 'none',
-                                    padding: '8px 16px',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}
+                                className={`${styles.amountQuick} ${selectedAmount === amt ? styles.active : ''}`}
                             >
-                                {amt}
+                                {Number(amt).toLocaleString()}
                             </button>
                         ))}
                     </div>
                 )}
 
-                <input
-                    type="number"
-                    placeholder="Deposit Amount"
-                    className={styles.inputEl}
-                    value={selectedAmount}
-                    onChange={(e) => setSelectedAmount(e.target.value)}
-                    onBlur={() => {
-                        if (selectedBank) {
-                            const val = Number(selectedAmount);
-                            if (val < selectedBank.minimumAmount) setSelectedAmount(String(selectedBank.minimumAmount));
-                        }
-                    }}
-                />
-                <p style={{ fontSize: "1.2rem", marginTop: "1rem", color: '#aaa' }}>
-                    Minimum {selectedBank?.minimumAmount || 0}
-                </p>
+                <div className={styles.infoCard}>
+                    <label style={{
+                        display: 'block',
+                        marginBottom: '1rem',
+                        fontSize: '1.6rem',
+                        fontWeight: '600',
+                        color: 'var(--color-white)'
+                    }}>
+                        Deposit Amount
+                    </label>
+                    <input
+                        type="number"
+                        placeholder="Enter amount"
+                        className={styles.inputEl}
+                        value={selectedAmount}
+                        onChange={(e) => setSelectedAmount(e.target.value)}
+                        onBlur={() => {
+                            if (selectedBank) {
+                                const val = Number(selectedAmount);
+                                if (val < selectedBank.minimumAmount) setSelectedAmount(String(selectedBank.minimumAmount));
+                            }
+                        }}
+                    />
+                    <p className={styles.helperText}>
+                        Minimum amount: <span className={styles.primary}>{selectedBank?.minimumAmount?.toLocaleString() || 0}</span>
+                    </p>
+                </div>
 
                 <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    style={{
-                        width: '100%',
-                        marginTop: '1.5rem',
-                        padding: '1.2rem',
-                        fontSize: '1.2rem',
-                        fontWeight: 'bold',
-                        backgroundColor: '#CCA353',
-                        color: 'black',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        opacity: loading ? 0.7 : 1
-                    }}
+                    className={styles.primaryButton}
+                    style={{ marginBottom: '3rem' }}
                 >
                     {loading ? 'Processing...' : 'Deposit Now'}
                 </button>

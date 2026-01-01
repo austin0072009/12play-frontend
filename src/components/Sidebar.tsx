@@ -73,6 +73,14 @@ const DownloadIcon = () => (
   </svg>
 );
 
+const LogoutIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.navItemRightIcon}>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+    <polyline points="16 17 21 12 16 7"></polyline>
+    <line x1="21" x2="9" y1="12" y2="12"></line>
+  </svg>
+);
+
 const NAV_ITEMS = [
   // {
   //   id: "12goal",
@@ -98,6 +106,7 @@ const NAV_ITEMS = [
 export default function Sidebar() {
 
   const token = useUserStore((s) => s.token);
+  const logout = useUserStore((s) => s.logout);
   const { isOpen, close } = useSidebarStore();
   const navigate = useNavigate();
 
@@ -106,6 +115,12 @@ export default function Sidebar() {
       navigate(route);
       close();
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    close();
+    navigate("/login");
   };
 
   return (
@@ -128,36 +143,50 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {!token && (
+        {!token ? (
           <div className={styles.headerAction}>
             <button className={styles.joinNowBtn} onClick={() => {
               navigate("/register");
+              close();
             }}>Join Now</button>
             <div className={styles.alreadyHave}>
-              You already have an account? <a href="#/login">Login</a>
+              Already have an account? <a href="#/login" onClick={close}>Login</a>
             </div>
           </div>
-        ) || (
+        ) : (
+          <>
             <div className={styles.welcomeSection}>
               <div className={styles.welcomeGradient}></div>
               <h2 className={styles.welcomeTitle}>Welcome Back! 🎮</h2>
               <p className={styles.welcomeSubtitle}>Ready to play and win?</p>
             </div>
-          )}
 
+            {/* User Profile Section */}
+            <div className={styles.userProfile} onClick={() => {
+              navigate("/profile");
+              close();
+            }}>
+              <div className={styles.userAvatar}>
+                {useUserStore.getState().userInfo?.username?.charAt(0).toUpperCase() || 'U'}
+              </div>
+              <div className={styles.userInfo}>
+                <h3 className={styles.userName}>
+                  {useUserStore.getState().userInfo?.username || 'User'}
+                </h3>
+                <p className={styles.userBalance}>
+                  Balance:
+                  <span className={styles.userBalanceAmount}>
+                    {Number(useUserStore.getState().userInfo?.balance || 0).toLocaleString()}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.divider}></div>
+          </>
+        )}
 
         <nav className={styles.navContainer}>
-          {/* <div>
-            <video
-              style={{ width: "100%" }}
-              autoPlay
-              loop
-              playsInline
-              preload="auto"
-              src="https://www.RedCowaffth.com/images/free12/free30-m.mp4"
-            ></video>
-          </div> */}
-
           {NAV_ITEMS.map((item) => (
             <div
               key={item.id}
@@ -170,16 +199,40 @@ export default function Sidebar() {
                   {item.icon}
                   <span className={styles.navLabel}>{item.label}</span>
                 </div>
+                <div className={styles.navItemRight}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
               </div>
             </div>
           ))}
 
+          {token && (
+            <div
+              className={styles.navItem}
+              onClick={handleLogout}
+              style={{ cursor: "pointer" }}
+            >
+              <div className={styles.navItemContainer}>
+                <div className={styles.navItemLeft}>
+                  <LogoutIcon />
+                  <span className={styles.navLabel}>Logout</span>
+                </div>
+                <div className={styles.navItemRight}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          )}
 
+          <div className={styles.languageSwitcherContainer}>
+            <LanguageSwitcher />
+          </div>
         </nav>
-        {/* Language Switcher Section */}
-        <div className={styles.languageSwitcherContainer}>
-          <LanguageSwitcher />
-        </div>
+
       </aside>
     </div>
   );

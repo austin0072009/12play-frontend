@@ -1,0 +1,57 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1999;
+}
+
+.wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 2000;
+}
+
+.panel {
+  width: min(480px, 100%);
+  background: #ffffff;
+  color: #1f2937;
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.message {
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  appearance: none;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(185, 28, 28, 0.35);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.button:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.35);
+}

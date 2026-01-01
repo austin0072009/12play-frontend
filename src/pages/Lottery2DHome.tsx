@@ -55,16 +55,18 @@ export default function Lottery2DHome() {
     }
 
     try {
-      setLotteryToken(lotteryToken);
       const data = await getLotteryUserInfo();
-      setUserInfo({
-        userName: data.userName,
-        balance: parseFloat(data.balance),
-        freeze: parseFloat(data.freeze),
-        back_url: data.back_url,
-      });
+      if (data) {
+        setUserInfo({
+          userName: data.userName || '',
+          balance: parseFloat(data.balance) || 0,
+          freeze: parseFloat(data.freeze) || 0,
+          back_url: data.back_url || '',
+        });
+      }
     } catch (err) {
       console.error("Error fetching user info:", err);
+      // Keep existing user info or set defaults
     }
   };
 
@@ -76,11 +78,14 @@ export default function Lottery2DHome() {
 
     try {
       const data = await get2DLiveResult();
-      setLiveNum(data.win_num);
-      setLiveSet(data.set);
-      setLiveValue(data.value);
+      if (data && data.win_num !== undefined) {
+        setLiveNum(data.win_num || "N/A");
+        setLiveSet(data.set || "N/A");
+        setLiveValue(data.value || "N/A");
+      }
     } catch (err) {
       console.error("Error fetching 2D live result:", err);
+      // Keep displaying the last known values or "N/A"
     }
   };
 
@@ -92,9 +97,10 @@ export default function Lottery2DHome() {
 
     try {
       const data = await getClosedDays(1); // 1 = 2D game
-      setClosedDays(data as any);
+      setClosedDays(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching closed days:", err);
+      setClosedDays([]); // Set empty array on error
     }
   };
 
@@ -106,22 +112,41 @@ export default function Lottery2DHome() {
 
     try {
       // Fetch pending sessions (winState=1)
-      const pendingSessions = await getBetSessions(1, 1);
-      setPendingSessions(Array.isArray(pendingSessions) ? pendingSessions : []);
+      const pendingData = await getBetSessions(1, 1);
+      setPendingSessions(Array.isArray(pendingData) ? pendingData : []);
 
       // Fetch completed/drawn sessions (winState=3)
-      const completedSessions = await getBetSessions(1, 3);
-      
-
-
-      setCompletedSessions(completedSessions);
+      const completedData = await getBetSessions(1, 3);
+      setCompletedSessions(Array.isArray(completedData) ? completedData : []);
     } catch (err) {
       console.error("Error fetching bet sessions:", err);
+      // Set empty arrays on error to prevent undefined access
+      setPendingSessions([]);
+      setCompletedSessions([]);
     }
   };
 
+  // Check if user has lottery credentials on mount
+  useEffect(() => {
+    if (!lotteryToken || !lotteryDomain) {
+      console.warn("No lottery credentials found. User needs to access lottery through Home page.");
+      showAlert("Please access the lottery game from the Home page first.", () => {
+        navigate("/home");
+      });
+    }
+  }, []);
+
   // Initialize and set up auto-refresh
   useEffect(() => {
+    // Only proceed if we have lottery credentials
+    if (!lotteryToken || !lotteryDomain) {
+      console.warn("Lottery token or domain not available");
+      return;
+    }
+
+    // Set the token for lottery requests
+    setLotteryToken(lotteryToken);
+
     // Initial fetch
     fetchUserInfo();
     fetchBetSessions();
@@ -256,9 +281,16 @@ export default function Lottery2DHome() {
   // Handle BET button click with closed day check
   const handleBetClick = () => {
     if (isClosedDay()) {
-      showAlert("Betting is closed today. Please try again tomorrow.");
+      showAlert("🚫 Betting Closed\n\nThe lottery is closed today. Please check the closed days calendar and try again on an open day.");
       return;
     }
+
+    // Guard: no active/pending sessions
+    if (!pendingSessions || pendingSessions.length === 0 || !nextDraw) {
+      showAlert("No active betting session available.");
+      return;
+    }
+
     // Show time section selection modal instead of navigating directly
     setShowTimeSection(true);
   };
@@ -380,8 +412,9 @@ export default function Lottery2DHome() {
         className={styles.betBtn}
         disabled={!lotteryToken}
         onClick={handleBetClick}
+        title={!lotteryToken ? "Please access lottery from Home page first" : "Place your bet"}
       >
-        BET
+        {!lotteryToken ? "LOADING..." : "BET"}
       </button>
 
       {/* Time Section Selection Modal */}

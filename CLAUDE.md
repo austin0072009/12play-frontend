@@ -111,8 +111,8 @@ Separate axios instance for lottery API:
 ## Lottery Integration Flow
 
 1. **Entry**: User navigates to `/2d` or `/3d` routes
-2. **Auth**: Main backend `/nweb/Ky_login` returns lottery ticket → exchange for token at lottery backend `/api/v1/exchange/certificates`
-3. **Token Storage**: Store in `useLotteryStore` via `setLotteryCredentials()`
+2. **Auth**: Main backend `/nweb/Ky_login` returns lottery token and domain directly (no exchange needed)
+3. **Token Storage**: Store token and domain in `useLotteryStore` via `setLotteryCredentials()`
 4. **Session Init**: Load user info, pending sessions, game resources via lottery API
 5. **Betting Flow**:
    - Select session → fetch available numbers → place bets → confirm
@@ -142,7 +142,7 @@ Reference `2d3dapi.md` for complete lottery API documentation and `LOTTERY_*.md`
 
 5. **Game Brand Status**: `fetchGamesByBrand` throws if backend returns `data.maintain.status === true`.
 
-6. **Lottery Token Flow**: Always obtain lottery token via main backend first, then exchange at lottery backend. Never use main backend token for lottery API.
+6. **Lottery Token Flow**: Lottery token and domain are obtained directly from main backend `/nweb/Ky_login`. Never use main backend token for lottery API.
 
 7. **Store Migration**: If changing persistence keys or `partialize` logic, add version field and custom hydration function to prevent breaking sessions.
 
