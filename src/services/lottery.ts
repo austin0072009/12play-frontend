@@ -30,7 +30,7 @@ import type {
  * Get game list (all games available)
  */
 export async function getGameList(): Promise<LotteryGameListResp['data']> {
-  const res = await lotteryRequest.post<LotteryGameListResp>('/api/v3/game/list', {});
+  const res = (await lotteryRequest.post('/api/v3/game/list', {})) as LotteryGameListResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get game list');
@@ -43,7 +43,7 @@ export async function getGameList(): Promise<LotteryGameListResp['data']> {
  * Get 2D live result
  */
 export async function get2DLiveResult(): Promise<Lottery2DLiveResp> {
-  const res = await lotteryRequest.get<Lottery2DLiveResp>('/api/v1/2d/result');
+  const res = (await lotteryRequest.get('/api/v1/2d/result')) as Lottery2DLiveResp;
 
   if (!res) {
     throw new Error('Failed to get 2D live result');
@@ -56,7 +56,7 @@ export async function get2DLiveResult(): Promise<Lottery2DLiveResp> {
  * Get user info from lottery backend
  */
 export async function getLotteryUserInfo(): Promise<LotteryUserInfoResp['data']> {
-  const res = await lotteryRequest.post<LotteryUserInfoResp>('/api/v3/user/info', {});
+  const res = (await lotteryRequest.post('/api/v3/user/info', {})) as LotteryUserInfoResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get user info');
@@ -69,10 +69,10 @@ export async function getLotteryUserInfo(): Promise<LotteryUserInfoResp['data']>
  * Get game resource (banners and notifications)
  */
 export async function getGameResource(gameId: number): Promise<LotteryGameResourceResp['data']> {
-  const res = await lotteryRequest.post<LotteryGameResourceResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/game/resource',
     { gameId } as LotteryGameResourceReq
-  );
+  )) as LotteryGameResourceResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get game resource');
@@ -87,10 +87,10 @@ export async function getGameResource(gameId: number): Promise<LotteryGameResour
  * @param winState 1 for pending, 3 for completed/drawn
  */
 export async function getBetSessions(gameId: number, winState: number): Promise<LotteryBetSessionResp['data']> {
-  const res = await lotteryRequest.post<LotteryBetSessionResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/history/session',
     { gameId, winState }
-  );
+  )) as LotteryBetSessionResp;
 
   console.log('Bet sessions response:', res);
   if (!res || res.code !== 200) {
@@ -104,10 +104,10 @@ export async function getBetSessions(gameId: number, winState: number): Promise<
  * Get available bet numbers for a specific session
  */
 export async function getSessionNumbers(issue: string, gameId: number): Promise<LotterySessionNumberResp['data']> {
-  const res = await lotteryRequest.post<LotterySessionNumberResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/session/number',
     { issue, gameId } as LotterySessionNumberReq
-  );
+  )) as LotterySessionNumberResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get session numbers');
@@ -119,24 +119,24 @@ export async function getSessionNumbers(issue: string, gameId: number): Promise<
 /**
  * Place a bet
  */
-export async function placeBet(payload: LotteryBetReq): Promise<LotteryBetResp> {
-  const res = await lotteryRequest.post<LotteryBetResp>('/api/v3/bet', payload);
+export async function placeBet(payload: LotteryBetReq): Promise<LotteryBetResp['data']> {
+  const res = (await lotteryRequest.post('/api/v3/bet', payload)) as LotteryBetResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to place bet');
   }
 
-  return res;
+  return res.data;
 }
 
 /**
  * Get win ranking for a session
  */
 export async function getWinRanking(gameId: number, issue: string): Promise<LotteryRankResp['data']> {
-  const res = await lotteryRequest.post<LotteryRankResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/rank',
     { gameId, issue } as LotteryRankReq
-  );
+  )) as LotteryRankResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get win ranking');
@@ -153,10 +153,10 @@ export async function getBetStatistics(
   page?: number,
   pageSize?: number
 ): Promise<LotteryBetListResp['data']> {
-  const res = await lotteryRequest.post<LotteryBetListResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/bet/list',
     { issueId, page, pageSize } as LotteryBetListReq
-  );
+  )) as LotteryBetListResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get bet statistics');
@@ -174,10 +174,10 @@ export async function getBetRecords(
   page: number = 1,
   pageSize: number = 10
 ): Promise<LotteryBetRecordResp['data']> {
-  const res = await lotteryRequest.post<LotteryBetRecordResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/bet/record',
     { gameId, issue: issue ?? '', page, pageSize } as LotteryBetRecordReq
-  );
+  )) as LotteryBetRecordResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get bet records');
@@ -190,10 +190,10 @@ export async function getBetRecords(
  * Get daily bet statistics
  */
 export async function getDailyBetTotal(date: string): Promise<LotteryRecordTotalResp['data']> {
-  const res = await lotteryRequest.post<LotteryRecordTotalResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/record/total',
     { date } as LotteryRecordTotalReq
-  );
+  )) as LotteryRecordTotalResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get daily bet total');
@@ -210,10 +210,10 @@ export async function getBetDetails(
   page?: number,
   pageSize?: number
 ): Promise<LotteryBetDetailsResp['data']> {
-  const res = await lotteryRequest.post<LotteryBetDetailsResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/bet/details',
     { date, page, pageSize } as LotteryBetDetailsReq
-  );
+  )) as LotteryBetDetailsResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get bet details');
@@ -226,10 +226,10 @@ export async function getBetDetails(
  * Get specific date bet total by session
  */
 export async function getIssueTotal(date: string): Promise<LotteryIssueTotalResp['data']> {
-  const res = await lotteryRequest.post<LotteryIssueTotalResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/issue/total',
     { date } as LotteryIssueTotalReq
-  );
+  )) as LotteryIssueTotalResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get issue total');
@@ -243,10 +243,10 @@ export async function getIssueTotal(date: string): Promise<LotteryIssueTotalResp
  * @param gameId 1 for 2D, 2 for 3D
  */
 export async function getClosedDays(gameId: number): Promise<LotteryClosedDayResp['data']> {
-  const res = await lotteryRequest.post<LotteryClosedDayResp>(
+  const res = (await lotteryRequest.post(
     '/api/v3/rest/day',
     { gameId } as LotteryClosedDayReq
-  );
+  )) as LotteryClosedDayResp;
 
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get closed days');

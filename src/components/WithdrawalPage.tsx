@@ -9,7 +9,7 @@ import wavepayImg from "../assets/wavepay.jpg";
 
 export default function WithdrawalPage() {
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState("bank"); // bank | crypto
+    const [activeTab] = useState("bank"); // bank | crypto (crypto coming soon)
     const [bankList, setBankList] = useState<BankInfo | null>(null);
     const [selectedAmount, setSelectedAmount] = useState("");
     const [balance, setBalance] = useState("0.00");
