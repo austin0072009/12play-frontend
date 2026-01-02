@@ -4,6 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/user";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 // Icon Components (declared before NAV_ITEMS)
 const ReferIcon = () => (
@@ -94,13 +95,13 @@ const NAV_ITEMS = [
   //   ),
   //   route: "/home",
   // },
-  { id: "refer", label: "Refer & Earn", icon: <ReferIcon />, route: "/promotion" },
-  { id: "account", label: "Account", icon: <AccountIcon />, route: "/profile" },
-  // { id: "redemption", label: "Redemption", icon: <RedemptionIcon />, route: null },
-  { id: "inbox", label: "Feedback", icon: <InboxIcon />, route: null },
-  // { id: "vip", label: "VIP", icon: <VipIcon />, route: null },
-  // { id: "affiliate", label: "12 Affiliate", icon: <AffiliateIcon />, route: null },
-  { id: "download", label: "Download App", icon: <DownloadIcon />, route: null },
+  { id: "refer", labelKey: "sidebar.refer", icon: <ReferIcon />, route: "/promotion" },
+  { id: "account", labelKey: "sidebar.account", icon: <AccountIcon />, route: "/profile" },
+  // { id: "redemption", labelKey: "sidebar.redemption", icon: <RedemptionIcon />, route: null },
+  { id: "inbox", labelKey: "sidebar.feedback", icon: <InboxIcon />, route: null },
+  // { id: "vip", labelKey: "sidebar.vip", icon: <VipIcon />, route: null },
+  // { id: "affiliate", labelKey: "sidebar.affiliate", icon: <AffiliateIcon />, route: null },
+  { id: "download", labelKey: "sidebar.downloadApp", icon: <DownloadIcon />, route: null },
 ];
 
 export default function Sidebar() {
@@ -109,6 +110,7 @@ export default function Sidebar() {
   const logout = useUserStore((s) => s.logout);
   const { isOpen, close } = useSidebarStore();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleNavClick = (route: string | null) => {
     if (route) {
@@ -148,17 +150,17 @@ export default function Sidebar() {
             <button className={styles.joinNowBtn} onClick={() => {
               navigate("/register");
               close();
-            }}>Join Now</button>
+            }}>{t('sidebar.joinNow')}</button>
             <div className={styles.alreadyHave}>
-              Already have an account? <a href="#/login" onClick={close}>Login</a>
+              {t('sidebar.alreadyHave')} <a href="#/login" onClick={close}>{t('sidebar.login')}</a>
             </div>
           </div>
         ) : (
           <>
             <div className={styles.welcomeSection}>
               <div className={styles.welcomeGradient}></div>
-              <h2 className={styles.welcomeTitle}>Welcome Back! 🎮</h2>
-              <p className={styles.welcomeSubtitle}>Ready to play and win?</p>
+              <h2 className={styles.welcomeTitle}>{t('sidebar.welcomeBack')}</h2>
+              <p className={styles.welcomeSubtitle}>{t('sidebar.readyToPlay')}</p>
             </div>
 
             {/* User Profile Section */}
@@ -174,7 +176,7 @@ export default function Sidebar() {
                   {useUserStore.getState().userInfo?.username || 'User'}
                 </h3>
                 <p className={styles.userBalance}>
-                  Balance:
+                  {t('sidebar.balance')}
                   <span className={styles.userBalanceAmount}>
                     {Number(useUserStore.getState().userInfo?.balance || 0).toLocaleString()}
                   </span>
@@ -197,7 +199,7 @@ export default function Sidebar() {
               <div className={styles.navItemContainer}>
                 <div className={styles.navItemLeft}>
                   {item.icon}
-                  <span className={styles.navLabel}>{item.label}</span>
+                  <span className={styles.navLabel}>{t(item.labelKey)}</span>
                 </div>
                 <div className={styles.navItemRight}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'rgba(255,255,255,0.3)' }}>
@@ -217,7 +219,7 @@ export default function Sidebar() {
               <div className={styles.navItemContainer}>
                 <div className={styles.navItemLeft}>
                   <LogoutIcon />
-                  <span className={styles.navLabel}>Logout</span>
+                  <span className={styles.navLabel}>{t('sidebar.logout')}</span>
                 </div>
                 <div className={styles.navItemRight}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'rgba(255,255,255,0.3)' }}>

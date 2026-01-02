@@ -136,7 +136,7 @@ export default function Home() {
     }
 
     if (g.maintain) {
-      showAlert("Game is under maintenance");
+      showAlert(t('home.gameMaintenance'));
       return;
     }
 
@@ -215,7 +215,7 @@ export default function Home() {
       {/* Special Games Section */}
       {specialGames.length > 0 && (
         <HorizontalGameList
-          title="权威认证"
+          title={t('home.specialGames')}
           icon="special"
           games={specialGames}
           onGameClick={handleEnterGame}
@@ -226,7 +226,7 @@ export default function Home() {
       {/* Recommended Games Section */}
       {recommendedGames.length > 0 && (
         <HorizontalGameList
-          title="推荐游戏"
+          title={t('home.recommendedGames')}
           icon="recommend"
           games={recommendedGames}
           onGameClick={handleEnterGame}
@@ -237,7 +237,7 @@ export default function Home() {
       {/* Popular Games Section */}
       {popularGames.length > 0 && (
         <HorizontalGameList
-          title="热门游戏"
+          title={t('home.popularGames')}
           icon="hot"
           games={popularGames}
           onGameClick={handleEnterGame}

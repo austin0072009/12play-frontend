@@ -1,9 +1,11 @@
 import { useState, type SetStateAction } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./Wallet.module.css";
 import DepositPage from "../components/DepositPage";
 import WithdrawalPage from "../components/WithdrawalPage";
 import WalletHistoryPage from "../components/WalletHistoryPage";
 export default function Wallet() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("deposit"); // withdrawal , history
 
   const handleChangeTab = (page: SetStateAction<string>) => {
@@ -66,7 +68,7 @@ export default function Wallet() {
               </clipPath>
             </defs>
           </svg>
-          <span>Deposit</span>
+          <span>{t('wallet.deposit')}</span>
         </div>
         <div
           className={`${styles.tabItem} ${activeTab === "withdrawal" && styles.active
@@ -111,7 +113,7 @@ export default function Wallet() {
               </clipPath>
             </defs>
           </svg>
-          <span>Withdrawal</span>
+          <span>{t('wallet.withdrawal')}</span>
         </div>
         <div
           className={`${styles.tabItem} ${activeTab === "history" && styles.active
@@ -144,7 +146,7 @@ export default function Wallet() {
               </clipPath>
             </defs>
           </svg>
-          <span>History</span>
+          <span>{t('wallet.history')}</span>
         </div>
       </div>
       {activeTab === "deposit" && <DepositPage />}

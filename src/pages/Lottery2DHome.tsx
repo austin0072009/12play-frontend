@@ -367,12 +367,12 @@ export default function Lottery2DHome() {
           <p className={styles.lastResultValue}>{liveNum}</p>
           <div className={styles.liveMetadata}>
             <div className={styles.metadataItem}>
-              <span className={styles.metadataLabel}>{t("lottery2d.set")}</span>
+              <span className={styles.metadataLabel}>Set</span>
               <span className={styles.metadataValue}>{liveSet}</span>
             </div>
             <div className={styles.metadataDivider}></div>
             <div className={styles.metadataItem}>
-              <span className={styles.metadataLabel}>{t("lottery2d.value")}</span>
+              <span className={styles.metadataLabel}>Value</span>
               <span className={styles.metadataValue}>{liveValue}</span>
             </div>
           </div>

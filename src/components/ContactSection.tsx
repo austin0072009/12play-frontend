@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faViber, faTelegram } from '@fortawesome/free-brands-svg-icons';
 import { faHeadset } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 import styles from './ContactSection.module.css';
 
 interface ContactSectionProps {
@@ -14,11 +15,13 @@ export default function ContactSection({
   telegramLink = '#', 
   liveChatLink = '#' 
 }: ContactSectionProps) {
+  const { t } = useTranslation();
+  
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.title}>24/7 Contact Service</h2>
-        <p className={styles.subtitle}>We're here to help anytime, anywhere</p>
+        <h2 className={styles.title}>{t('contact.title')}</h2>
+        <p className={styles.subtitle}>{t('contact.subtitle')}</p>
       </div>
 
       <div className={styles.contactGrid}>
@@ -28,9 +31,9 @@ export default function ContactSection({
             <FontAwesomeIcon icon={faViber} className={styles.icon} />
           </div>
           <div className={styles.cardContent}>
-            <h3 className={styles.cardTitle}>Viber</h3>
-            <p className={styles.cardStatus}>24/7 Available</p>
-            <p className={styles.cardDesc}>Quick response on Viber</p>
+            <h3 className={styles.cardTitle}>{t('contact.viber')}</h3>
+            <p className={styles.cardStatus}>{t('contact.available')}</p>
+            <p className={styles.cardDesc}>{t('contact.viberDesc')}</p>
           </div>
         </a>
 
@@ -40,9 +43,9 @@ export default function ContactSection({
             <FontAwesomeIcon icon={faTelegram} className={styles.icon} />
           </div>
           <div className={styles.cardContent}>
-            <h3 className={styles.cardTitle}>Telegram</h3>
-            <p className={styles.cardStatus}>24/7 Available</p>
-            <p className={styles.cardDesc}>Instant messaging support</p>
+            <h3 className={styles.cardTitle}>{t('contact.telegram')}</h3>
+            <p className={styles.cardStatus}>{t('contact.available')}</p>
+            <p className={styles.cardDesc}>{t('contact.telegramDesc')}</p>
           </div>
         </a>
 
@@ -52,9 +55,9 @@ export default function ContactSection({
             <FontAwesomeIcon icon={faHeadset} className={styles.icon} />
           </div>
           <div className={styles.cardContent}>
-            <h3 className={styles.cardTitle}>Live Chat</h3>
-            <p className={styles.cardStatus}>24/7 Available</p>
-            <p className={styles.cardDesc}>Chat directly with support</p>
+            <h3 className={styles.cardTitle}>{t('contact.liveChat')}</h3>
+            <p className={styles.cardStatus}>{t('contact.available')}</p>
+            <p className={styles.cardDesc}>{t('contact.liveChatDesc')}</p>
           </div>
         </a>
       </div>

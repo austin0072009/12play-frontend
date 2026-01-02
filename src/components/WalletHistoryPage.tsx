@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "../pages/Wallet.module.css";
 import { fetchActionLog } from "../services/api";
 import type { ActionLogItem } from "../services/types";
 
 export default function WalletHistoryPage() {
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState<"deposit" | "withdrawal">("deposit");
     const [records, setRecords] = useState<ActionLogItem[]>([]);
     const [loading, setLoading] = useState(false);
@@ -24,10 +26,10 @@ export default function WalletHistoryPage() {
     }, [activeTab]);
 
     const STATUS_TEXT: Record<number, string> = {
-        1: "PENDING",
-        2: "APPROVED",
-        3: "FAIL",
-        5: "FAIL"
+        1: t('walletHistory.pending'),
+        2: t('walletHistory.approved'),
+        3: t('walletHistory.failed'),
+        5: t('walletHistory.failed')
     };
 
     const getStatusColor = (status: number) => {
@@ -48,7 +50,7 @@ export default function WalletHistoryPage() {
                     <svg className={styles.subTabItemIcon} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24px" height="24px">
                         <path stroke="currentColor" strokeWidth="2" d="M12 5v14M5 12h14" />
                     </svg>
-                    <span>Deposit History</span>
+                    <span>{t('walletHistory.depositHistory')}</span>
                 </div>
                 <div
                     className={`${styles.subTabItem} ${activeTab === 'withdrawal' ? styles.active : ''}`}
@@ -58,16 +60,16 @@ export default function WalletHistoryPage() {
                     <svg className={styles.subTabItemIcon} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24px" height="24px">
                         <path stroke="currentColor" strokeWidth="2" d="M5 12h14" />
                     </svg>
-                    <span>Withdrawal History</span>
+                    <span>{t('walletHistory.withdrawalHistory')}</span>
                 </div>
             </div>
 
             <div style={{ padding: "1rem" }}>
-                {loading && <div style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>Loading...</div>}
+                {loading && <div style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>{t('walletHistory.loading')}</div>}
 
                 {!loading && records.length === 0 && (
                     <div style={{ textAlign: 'center', padding: '4rem', color: '#666' }}>
-                        No records found
+                        {t('walletHistory.noRecords')}
                     </div>
                 )}
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "../pages/Wallet.module.css";
 import { fetchRecharegeAmount, buildOrder, initiatePayment } from "../services/api";
 import type { Bank } from "../services/types";
@@ -7,7 +8,7 @@ import kbzpayImg from "../assets/kbzpay.jpg";
 import wavepayImg from "../assets/wavepay.jpg";
 
 export default function DepositPage() {
-
+    const { t } = useTranslation();
     // Initial dummy state to match UI, will be replaced by API
     const [banks, setBanks] = useState<Bank[]>([]);
     const [selectedBankId, setSelectedBankId] = useState<number>(0);
@@ -84,13 +85,13 @@ export default function DepositPage() {
     const handleSubmit = async () => {
         if (loading) return;
         if (!selectedBank) {
-            setError("Please select a payment channel");
+            setError(t('deposit.selectChannel'));
             return;
         }
 
         const amount = Number(selectedAmount);
         if (isNaN(amount) || amount < selectedBank.minimumAmount) {
-            setError(`Minimum deposit amount is ${selectedBank.minimumAmount}`);
+            setError(`${t('deposit.minimumAmount')} ${selectedBank.minimumAmount}`);
             return;
         }
 
@@ -125,7 +126,7 @@ export default function DepositPage() {
                     }
                 } else {
                     // Self-service payment (order_type === 0)
-                    showAlert("Order Created! ID: " + tid);
+                    showAlert(`${t('deposit.orderCreated')} ${tid}`);
                     // Could navigate to a self-service payment page here
                 }
             } else {
@@ -168,7 +169,7 @@ export default function DepositPage() {
             </div> */}
 
             <div className={styles.channelDiv}>
-                <h1>Deposit Channel <span>*</span></h1>
+                <h1>{t('deposit.channelLabel')} <span>*</span></h1>
 
                 {/* Render Banks/Channels */}
                 <div className={styles.channelBankDiv}>
@@ -190,12 +191,12 @@ export default function DepositPage() {
                             {/* <p className={styles.bankName}>{channel.name}</p> */}
                         </div>
                     ))}
-                    {banks.length === 0 && <div style={{ padding: '10px', color: '#888' }}>Loading Channels...</div>}
+                    {banks.length === 0 && <div style={{ padding: '10px', color: '#888' }}>{t('deposit.loadingChannels')}</div>}
                 </div>
 
                 <div className={styles.channelInfoDiv}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
-                    <p>If your deposit attempt fails, please try using a different deposit channel.</p>
+                    <p>{t('deposit.failureHint')}</p>
                 </div>
             </div>
 
@@ -235,11 +236,11 @@ export default function DepositPage() {
                         fontWeight: '600',
                         color: 'var(--color-white)'
                     }}>
-                        Deposit Amount
+                        {t('deposit.amountLabel')}
                     </label>
                     <input
                         type="number"
-                        placeholder="Enter amount"
+                        placeholder={t('deposit.amountPlaceholder')}
                         className={styles.inputEl}
                         value={selectedAmount}
                         onChange={(e) => setSelectedAmount(e.target.value)}
@@ -251,7 +252,7 @@ export default function DepositPage() {
                         }}
                     />
                     <p className={styles.helperText}>
-                        Minimum amount: <span className={styles.primary}>{selectedBank?.minimumAmount?.toLocaleString() || 0}</span>
+                        {t('deposit.minimumLabel')} <span className={styles.primary}>{selectedBank?.minimumAmount?.toLocaleString() || 0}</span>
                     </p>
                 </div>
 
@@ -261,7 +262,7 @@ export default function DepositPage() {
                     className={styles.primaryButton}
                     style={{ marginBottom: '3rem' }}
                 >
-                    {loading ? 'Processing...' : 'Deposit Now'}
+                    {loading ? t('deposit.processingBtn') : t('deposit.depositBtn')}
                 </button>
             </div>
         </div>

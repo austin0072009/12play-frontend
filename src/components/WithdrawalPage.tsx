@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "../pages/Wallet.module.css";
 import { fetchBankList, fetchBalance, withdrawal, transferOut } from "../services/api";
 import type { BankInfo } from "../services/types";
@@ -8,6 +9,7 @@ import kbzpayImg from "../assets/kbzpay.jpg";
 import wavepayImg from "../assets/wavepay.jpg";
 
 export default function WithdrawalPage() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [activeTab] = useState("bank"); // bank | crypto (crypto coming soon)
     const [bankList, setBankList] = useState<BankInfo | null>(null);
@@ -50,14 +52,14 @@ export default function WithdrawalPage() {
         try {
             const res = await withdrawal(Number(selectedAmount), "1");
             if (res.status.errorCode === 0) {
-                setAlertMessage("Withdrawal Submitted Successfully");
+                setAlertMessage(t('withdrawal.success'));
                 // Refresh balance
                 fetchBalance().then(r => r.status.errorCode === 0 && setBalance(r.data));
             } else {
-                setAlertMessage("Error: " + (res.status.mess || res.status.msg));
+                setAlertMessage(`${t('withdrawal.error')} ${res.status.mess || res.status.msg}`);
             }
         } catch (e) {
-            setAlertMessage("Network Error");
+            setAlertMessage(t('withdrawal.networkError'));
         } finally {
             setSubmitting(false);
         }
@@ -102,7 +104,7 @@ export default function WithdrawalPage() {
                 <div style={{ padding: "2rem", marginTop: "1rem", paddingBottom: "5rem" }}>
                     {/* Balance Info */}
                     <div className={styles.balanceRow}>
-                        <span className={styles.balanceLabel}>Main Wallet</span>
+                        <span className={styles.balanceLabel}>{t('withdrawal.mainWallet')}</span>
                         <span className={styles.balanceAmount}>{Number(balance).toLocaleString()}</span>
                     </div>
 
@@ -114,19 +116,19 @@ export default function WithdrawalPage() {
                             fontWeight: '600',
                             color: 'var(--color-white)'
                         }}>
-                            Withdrawal Amount
+                            {t('withdrawal.amountLabel')}
                         </label>
                         <input
                             type="number"
                             value={selectedAmount}
                             onChange={(e) => setSelectedAmount(e.target.value)}
-                            placeholder="Enter amount to withdraw"
+                            placeholder={t('withdrawal.amountPlaceholder')}
                             className={styles.inputEl}
                         />
                         {bankList && (
                             <p className={styles.helperText}>
-                                Limit: <span className={styles.primary}>{Number(bankList.limit_start).toLocaleString()}</span> |
-                                Turnover: <span className={styles.primary}>{Number(bankList.turnover).toLocaleString()}</span>
+                                {t('withdrawal.limitLabel')} <span className={styles.primary}>{Number(bankList.limit_start).toLocaleString()}</span> |
+                                {t('withdrawal.turnoverLabel')} <span className={styles.primary}>{Number(bankList.turnover).toLocaleString()}</span>
                             </p>
                         )}
                     </div>
@@ -137,7 +139,7 @@ export default function WithdrawalPage() {
                             fontSize: '1.8rem',
                             fontWeight: '600',
                             color: 'var(--color-white)'
-                        }}>Bank Account</h3>
+                        }}>{t('withdrawal.bankAccountTitle')}</h3>
                         {hasBank ? (
                             <div className={styles.bankCard}>
                                 {getBankImage(bankList?.bank_name) && (
@@ -160,7 +162,7 @@ export default function WithdrawalPage() {
                                 className={styles.addBankCard}
                             >
                                 <span className={styles.addIcon}>+</span>
-                                <span>Bind Bank Account</span>
+                                <span>{t('withdrawal.bindBank')}</span>
                             </div>
                         )}
                     </div>
@@ -171,14 +173,14 @@ export default function WithdrawalPage() {
                         className={styles.primaryButton}
                         style={{ marginBottom: '3rem' }}
                     >
-                        {submitting ? 'Processing...' : 'Withdraw'}
+                        {submitting ? t('withdrawal.processingBtn') : t('withdrawal.withdrawBtn')}
                     </button>
                 </div>
             )}
 
             {activeTab === 'crypto' && (
                 <div style={{ padding: '2rem', textAlign: 'center', opacity: 0.5 }}>
-                    Coming Soon
+                    {t('withdrawal.comingSoon')}
                 </div>
             )}
 
