@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { fetchBankList, unBindCard } from "../services/api";
 import { useUserStore } from "../store/user";
@@ -8,6 +9,7 @@ import wavePayImg from "../assets/wavepay.jpg?url";
 import styles from "./Banking.module.css";
 
 export default function Banking() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [bankList, setBankList] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +48,7 @@ export default function Banking() {
       const response = await unBindCard();
       console.log("=== DELETE BANK RESPONSE ===", response);
       setDeleteConfirm(false);
-      setSuccessMessage("Bank card deleted successfully!");
+      setSuccessMessage(t('banking.deleteSuccess'));
       setSuccessDialog(true);
       // Reload bank list after deletion
       setTimeout(() => {
@@ -80,7 +82,7 @@ export default function Banking() {
     <div className={styles.container}>
       {isLoading ? (
         <div className={styles.loadingContainer}>
-          <p>Loading bank information...</p>
+          <p>{t('banking.loadingBank')}</p>
         </div>
       ) : bankList?.bank_card ? (
         <div className={styles.bankCardSection}>
@@ -96,13 +98,13 @@ export default function Banking() {
               <h3 className={styles.bankName}>{bankList.bank_name || ""}</h3>
               <p className={styles.bankUsername}>{bankList.bank_username || ""}</p>
               <p className={styles.bankCardNumber}>{bankList.bank_card || ""}</p>
-              <span className={styles.verifiedBadge}>VERIFIED</span>
+              <span className={styles.verifiedBadge}>{t('banking.verifiedBadge')}</span>
             </div>
             <div className={styles.bankActions}>
               <button
                 className={styles.deleteButton}
                 onClick={() => setDeleteConfirm(true)}
-                title="Delete Bank Card"
+                title={t('banking.deleteTooltip')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -155,8 +157,8 @@ export default function Banking() {
               </clipPath>
             </defs>
           </svg>
-          <p className={styles.emptyText}>No bank account added yet</p>
-          <p className={styles.emptySubtext}>Add a bank account to enable deposits and withdrawals</p>
+          <p className={styles.emptyText}>{t('banking.noAccountAdded')}</p>
+          <p className={styles.emptySubtext}>{t('banking.addAccountInfo')}</p>
         </div>
       )}
 
@@ -178,7 +180,7 @@ export default function Banking() {
               d="M12 5v14m7-7H5"
             ></path>
           </svg>
-          <span>{bankList?.bank_card ? "Change Bank" : "Add Bank Account"}</span>
+          <span>{bankList?.bank_card ? t('banking.changeBankButton') : t('banking.addBankButton')}</span>
         </button>
       </div>
 
@@ -186,23 +188,23 @@ export default function Banking() {
       <Dialog
         open={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}
-        title="Delete Bank Card"
+        title={t('banking.deleteConfirmTitle')}
       >
         <div className={styles.confirmContent}>
-          <p>Are you sure you want to delete this bank card?</p>
-          <p className={styles.confirmWarning}>This action cannot be undone.</p>
+          <p>{t('banking.deleteConfirmMessage')}</p>
+          <p className={styles.confirmWarning}>{t('banking.deleteWarning')}</p>
           <div className={styles.confirmButtons}>
             <button
               className={styles.cancelButton}
               onClick={() => setDeleteConfirm(false)}
             >
-              Cancel
+              {t('banking.cancelButton')}
             </button>
             <button
               className={styles.confirmButton}
               onClick={handleDeleteConfirm}
             >
-              Delete
+              {t('banking.deleteButton')}
             </button>
           </div>
         </div>
@@ -212,7 +214,7 @@ export default function Banking() {
       <Dialog
         open={successDialog}
         onClose={() => setSuccessDialog(false)}
-        title="Information"
+        title={t('banking.successTitle')}
       >
         {successMessage}
       </Dialog>

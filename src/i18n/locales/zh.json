@@ -154,5 +154,34 @@
   "walletHistory.noRecords": "没有找到记录",
   "walletHistory.pending": "待改",
   "walletHistory.approved": "已批准",
-  "walletHistory.failed": "失败"
+  "walletHistory.failed": "失败",
+
+  "profile.accountId": "账户ID",
+  "profile.username": "用户名",
+  "profile.fullName": "全名",
+  "profile.contact": "联系方式",
+  "profile.password": "密码",
+  "profile.changePassword": "编辑",
+  "profile.logout": "登出",
+  "profile.loadingProfile": "正在加载个人资料...",
+  "profile.contactSupport": "* 如有个人信息问题，请联系在线客服",
+
+  "profilePage.profile": "个人资料",
+  "profilePage.banking": "银行账户",
+
+  "banking.loadingBank": "正在加载银行信息...",
+  "banking.verifiedBadge": "已验证",
+  "banking.deleteTitle": "削除银行卡",
+  "banking.deleteTooltip": "削除银行卡",
+  "banking.noAccountAdded": "暂未添加银行账户",
+  "banking.addAccountInfo": "添加银行账户以启用存款和提现",
+  "banking.changeBankButton": "更改银行",
+  "banking.addBankButton": "添加银行账户",
+  "banking.deleteConfirmTitle": "削除银行卡",
+  "banking.deleteConfirmMessage": "您确定要削除此银行卡吗？",
+  "banking.deleteWarning": "此操作无法撤销。",
+  "banking.cancelButton": "取消",
+  "banking.deleteButton": "削除",
+  "banking.successTitle": "提示",
+  "banking.deleteSuccess": "银行卡删除成功！"
 }

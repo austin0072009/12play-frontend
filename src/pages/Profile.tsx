@@ -1,8 +1,10 @@
 import { useState, type SetStateAction } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./Profile.module.css";
 import ProfilePage from "../components/ProfilePage";
 import Banking from "../components/Banking";
 export default function Profile() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("profile");
 
   const handleChangeTab = (page: SetStateAction<string>) => {
@@ -40,7 +42,7 @@ export default function Profile() {
               </clipPath>
             </defs>
           </svg>
-          <span>Profile</span>
+          <span>{t('profilePage.profile')}</span>
         </div>
         <div
           className={`${styles.tabItem} ${
@@ -95,7 +97,7 @@ export default function Profile() {
               </clipPath>
             </defs>
           </svg>
-          <span>Banking</span>
+          <span>{t('profilePage.banking')}</span>
         </div>
       </div>
 

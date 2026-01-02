@@ -1,10 +1,12 @@
 import styles from "./ProfilePage.module.css";
 import { useState, useMemo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useUserStore } from "../store/user";
 import { useNavigate } from "react-router-dom";
 import Dialog from "./Dialog";
 
 export default function ProfilePage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const userInfo = useUserStore((s) => s.userInfo);
   const logout = useUserStore((s) => s.logout);
@@ -73,29 +75,29 @@ export default function ProfilePage() {
       {isLoading ? (
         <div className={styles.infoContainer}>
           <div style={{ padding: "2rem", textAlign: "center", color: "#999" }}>
-            Loading profile...
+            {t('profile.loadingProfile')}
           </div>
         </div>
       ) : (
         <div className={styles.infoContainer}>
           <div className={styles.infoDiv}>
-            <div className={styles.infoLabel}>Account ID</div>
+            <div className={styles.infoLabel}>{t('profile.accountId')}</div>
             <div className={styles.infoValue}>{accountId}</div>
           </div>
           <div className={styles.infoDiv}>
-            <div className={styles.infoLabel}>Username</div>
+            <div className={styles.infoLabel}>{t('profile.username')}</div>
             <div className={styles.infoValue}>{username}</div>
           </div>
           <div className={styles.infoDiv}>
-            <div className={styles.infoLabel}>Full Name</div>
+            <div className={styles.infoLabel}>{t('profile.fullName')}</div>
             <div className={styles.infoValue}>{fullName}</div>
           </div>
           <div className={styles.infoDiv}>
-            <div className={styles.infoLabel}>Contact</div>
+            <div className={styles.infoLabel}>{t('profile.contact')}</div>
             <div className={styles.infoValue}>{contactPhone}</div>
           </div>
           <div className={styles.infoDiv}>
-            <div className={styles.infoLabel}>Password</div>
+            <div className={styles.infoLabel}>{t('profile.password')}</div>
             <div className={styles.infoValue}>
               {passwordDisplay}
               <button
@@ -167,7 +169,7 @@ export default function ProfilePage() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "#cc2222")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#ff3333")}
             >
-              Logout
+              {t('profile.logout')}
             </button>
           </div>
         </div>
@@ -198,7 +200,7 @@ export default function ProfilePage() {
           </svg>
         </button>
         <p>
-          * Please contact Live Chat if you have any issue on personal details
+          {t('profile.contactSupport')}
         </p>
       </div>
 

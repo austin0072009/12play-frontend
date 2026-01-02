@@ -98,7 +98,7 @@ const NAV_ITEMS = [
   { id: "refer", labelKey: "sidebar.refer", icon: <ReferIcon />, route: "/promotion" },
   { id: "account", labelKey: "sidebar.account", icon: <AccountIcon />, route: "/profile" },
   // { id: "redemption", labelKey: "sidebar.redemption", icon: <RedemptionIcon />, route: null },
-  { id: "inbox", labelKey: "sidebar.feedback", icon: <InboxIcon />, route: null },
+  { id: "inbox", labelKey: "sidebar.feedback", icon: <InboxIcon />, route: "/feedback" },
   // { id: "vip", labelKey: "sidebar.vip", icon: <VipIcon />, route: null },
   // { id: "affiliate", labelKey: "sidebar.affiliate", icon: <AffiliateIcon />, route: null },
   { id: "download", labelKey: "sidebar.downloadApp", icon: <DownloadIcon />, route: null },

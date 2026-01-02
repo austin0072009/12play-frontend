@@ -12,6 +12,7 @@ import BankAdd from "../pages/BankAdd";
 import GameFrame from "../pages/GameFrame";
 import ChangePassword from "../pages/ChangePassword";
 import ContactSection from "../components/ContactSection";
+import Feedback from "../pages/Feedback";
 
 // 2D Lottery Pages
 import Lottery2DHome from "../pages/Lottery2DHome";
@@ -50,6 +51,7 @@ export default function AppRouter() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/contact" element={<ContactSection />} />
+          <Route path="/feedback" element={<Feedback />} />
 
           {/* 2D Lottery Routes */}
           <Route path="/2d" element={<Lottery2DHome />} />

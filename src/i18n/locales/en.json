@@ -159,5 +159,34 @@
   "walletHistory.noRecords": "No records found",
   "walletHistory.pending": "PENDING",
   "walletHistory.approved": "APPROVED",
-  "walletHistory.failed": "FAIL"
+  "walletHistory.failed": "FAIL",
+
+  "profile.accountId": "Account ID",
+  "profile.username": "Username",
+  "profile.fullName": "Full Name",
+  "profile.contact": "Contact",
+  "profile.password": "Password",
+  "profile.changePassword": "Edit",
+  "profile.logout": "Logout",
+  "profile.loadingProfile": "Loading profile...",
+  "profile.contactSupport": "* Please contact Live Chat if you have any issue on personal details",
+
+  "profilePage.profile": "Profile",
+  "profilePage.banking": "Banking",
+
+  "banking.loadingBank": "Loading bank information...",
+  "banking.verifiedBadge": "VERIFIED",
+  "banking.deleteTitle": "Delete Bank Card",
+  "banking.deleteTooltip": "Delete Bank Card",
+  "banking.noAccountAdded": "No bank account added yet",
+  "banking.addAccountInfo": "Add a bank account to enable deposits and withdrawals",
+  "banking.changeBankButton": "Change Bank",
+  "banking.addBankButton": "Add Bank Account",
+  "banking.deleteConfirmTitle": "Delete Bank Card",
+  "banking.deleteConfirmMessage": "Are you sure you want to delete this bank card?",
+  "banking.deleteWarning": "This action cannot be undone.",
+  "banking.cancelButton": "Cancel",
+  "banking.deleteButton": "Delete",
+  "banking.successTitle": "Information",
+  "banking.deleteSuccess": "Bank card deleted successfully!"
 }

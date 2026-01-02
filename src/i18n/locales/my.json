@@ -154,5 +154,34 @@
   "walletHistory.noRecords": "မှတ်တမ်း မရှိ",
   "walletHistory.pending": "စောင့်ဆိုင်းမှု",
   "walletHistory.approved": "အတည်ပြုမှု",
-  "walletHistory.failed": "ပျက်သုံးမှု"
+  "walletHistory.failed": "ပျက်သုံးမှု",
+
+  "profile.accountId": "အကောင့် ID",
+  "profile.username": "အသုံးပြုသူအမည်",
+  "profile.fullName": "အပြည့်အစုံအမည်",
+  "profile.contact": "ဆက်သွယ်ရန်",
+  "profile.password": "စကားဝှက်",
+  "profile.changePassword": "ပြင်ဆင်ရန်",
+  "profile.logout": "ထွက်ခွာရန်",
+  "profile.loadingProfile": "အကျင့်သုံးအချက်အလက်ကို ဖွင့်နေသည်...",
+  "profile.contactSupport": "* ကိုယ်ရေးအချက်အလက်အပေါ် ပြဿနာရှိပါက မကြေးမုံရံ မှ ဆက်သွယ်ပါ",
+
+  "profilePage.profile": "အကျင့်သုံးအချက်အလက်",
+  "profilePage.banking": "ဘဏ်ထုတ်ခြင်း",
+
+  "banking.loadingBank": "ဘဏ်ထုတ်မည်မှတ်တမ်းတျတက် ဖွင့်နေသည်...",
+  "banking.verifiedBadge": "ခွနက့်ား",
+  "banking.deleteTitle": "ဘဏ်ထုတ်ခြင် ထုတ်",
+  "banking.deleteTooltip": "ဘဏ်ထုတ်ခြင် ထုတ်",
+  "banking.noAccountAdded": "တဏ်သွယ် ဘဏ်ထုတ်ခြင် တျရောိပါက ပျဈုံးသုံး",
+  "banking.addAccountInfo": "ငွေသွင်းမည်တျရောိပါက တျတေါ် ငွေထုတ်မည်တျတက်မည် ပြုသူကရဲ လက် အကသါရပဓ",
+  "banking.changeBankButton": "ဘဏ်ထုတ် ပြင်ဆင်ရန်",
+  "banking.addBankButton": "ဘဏ်ထုတ်ခြင် တျရောိပါက",
+  "banking.deleteConfirmTitle": "ဘဏ်ထုတ်ခြင် ထုတ်",
+  "banking.deleteConfirmMessage": "အန်းကိုံး ဘဏ်ထုတ်ခြင် ထုတ်တျ ဓဝုံးသုံး ခွနက့်ား？",
+  "banking.deleteWarning": "တတေလက်နေသည် တျတေါ် မဌိတ် လက်သပတ် ကရဲတ်ိးတျတေါ်ပါကတ်ဂါဒဪတ်တ်ဂျသုံးတ်ိးတာပူးယုတ်တ်ဂျသံ ယဋတ်တဋိယုကါတ် လက် ယတ်သါသဒဪဒနက်မုကာလက် ရတ်ရစုံ ယဋတ်တဋိယုတတိနဴ ယကြသုံး ကရဲတ်ိးတျရတမုပါက ॰",
+  "banking.cancelButton": "ပြဿနာ ရန်း",
+  "banking.deleteButton": "ထုတ်",
+  "banking.successTitle": "ခွနက့်ား",
+  "banking.deleteSuccess": "ဘဏ်ထုတ်ခြင် ထုတ်ခွနက့်ာ လက် အတည်ပြုမှု॰"
 }
