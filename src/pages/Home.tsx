@@ -6,6 +6,7 @@ import GameCategories from "../components/GameCategories";
 import HorizontalGameList from "../components/HorizontalGameList";
 import FeatureCards from "../components/FeatureCards";
 import Footer from "../components/Footer";
+import InitNoticeLayer from "../components/InitNoticeLayer";
 import styles from "./Home.module.css";
 
 import { fetchInitMeta, fetchInitData } from "../services/api";
@@ -201,6 +202,8 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
+      <InitNoticeLayer notices={data?.notices || []} />
+      
       <Banners banners={data?.banners} />
 
       <GameCategories
