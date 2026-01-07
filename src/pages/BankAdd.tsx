@@ -196,7 +196,13 @@ export default function BankAdd() {
                     <input
                         type="text"
                         value={bankUsername}
-                        onChange={(e) => setBankUsername(e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            // Only allow letters and spaces (no numbers)
+                            if (/^[^0-9]*$/.test(value)) {
+                                setBankUsername(value);
+                            }
+                        }}
                         disabled={!!existingBank}
                         placeholder="Enter your full name"
                         className={styles.input}
@@ -212,7 +218,13 @@ export default function BankAdd() {
                     <input
                         type="text"
                         value={bankCard}
-                        onChange={(e) => setBankCard(e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            // Only allow numbers
+                            if (/^[0-9]*$/.test(value)) {
+                                setBankCard(value);
+                            }
+                        }}
                         placeholder="Enter your account number"
                         className={styles.input}
                     />
@@ -224,7 +236,13 @@ export default function BankAdd() {
                     <input
                         type="text"
                         value={bankCardConfirm}
-                        onChange={(e) => setBankCardConfirm(e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            // Only allow numbers
+                            if (/^[0-9]*$/.test(value)) {
+                                setBankCardConfirm(value);
+                            }
+                        }}
                         placeholder="Re-enter your account number"
                         className={styles.input}
                     />

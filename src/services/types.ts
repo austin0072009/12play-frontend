@@ -360,6 +360,18 @@ export type ActionLogItem = {
   fail_reason?: string;
 };
 
+// Wallet Balance Response
+export type WalletBalanceData = {
+  balance: number;
+  ml_money: number; // Turnover amount
+};
+
+export type WalletBalanceResp = {
+  status: ApiStatus;
+  data: WalletBalanceData;
+  url?: string;
+};
+
 // ================== LOTTERY 2D/3D API TYPES ==================
 
 /** Exchange ticket for lottery token */

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./Lottery2DBetHistory.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
@@ -9,20 +10,22 @@ type BetDetail = {
   num: string;
   amount: number;
   winAmount: number;
+  status: "won" | "lost" | "pending";
 };
 
 type BetOrder = {
   round: string;
   date: string;
   time: string;
-  status: "won" | "lost" | "pending";
   details: BetDetail[];
   totalAmount: number;
   totalWinAmount: number;
+  netAmount: number;
 };
 
 export default function Lottery2DBetHistory() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [filterTab, setFilterTab] = useState("all");
   const [orders, setOrders] = useState<BetOrder[]>([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +38,7 @@ export default function Lottery2DBetHistory() {
       setError(null);
       try {
         const records = await getBetRecords(1, "", 1, 10); // 1 = 2D game, empty issue means all
+        console.log("Fetched bet records:", records);
 
         // Group records by issue
         const groupedMap = new Map<string, BetOrder>();
@@ -45,12 +49,25 @@ export default function Lottery2DBetHistory() {
           const winAmount = parseFloat(r.award || "0") || 0;
           const created = r.created_at || "";
           const [date, time] = created.split(" ");
-          
+
+          // Determine status based on is_lottery and award amount
+          // is_lottery: 1 = pending, 2 = drawn/completed
+          let betStatus: "won" | "lost" | "pending";
+          if (r.is_lottery === 1) {
+            betStatus = "pending";
+          } else if (r.is_lottery === 2) {
+            // Lottery drawn - check if won based on award amount
+            betStatus = winAmount > 0 ? "won" : "lost";
+          } else {
+            betStatus = "pending"; // fallback
+          }
+
           const detail: BetDetail = {
             id: r.id,
             num: r.bet_number,
             amount,
             winAmount,
+            status: betStatus,
           };
 
           if (groupedMap.has(issue)) {
@@ -58,29 +75,25 @@ export default function Lottery2DBetHistory() {
             existing.details.push(detail);
             existing.totalAmount += amount;
             existing.totalWinAmount += winAmount;
-            // Update status: if any bet won, mark as won; if all lost, mark as lost
-            if (r.is_win === 1) {
-              existing.status = "won";
-            } else if (r.is_win === 0 && existing.status === "pending") {
-              existing.status = "lost";
-            }
+            existing.netAmount = existing.totalWinAmount - existing.totalAmount;
           } else {
-            const status: BetOrder["status"] = r.is_win === 1 ? "won" : r.is_win === 0 ? "lost" : "pending";
+            const totalAmount = amount;
+            const totalWinAmount = winAmount;
             groupedMap.set(issue, {
               round: issue,
               date: date || "",
               time: time || "",
-              status,
               details: [detail],
-              totalAmount: amount,
-              totalWinAmount: winAmount,
+              totalAmount,
+              totalWinAmount,
+              netAmount: totalWinAmount - totalAmount,
             });
           }
         });
 
         setOrders(Array.from(groupedMap.values()));
       } catch (err: any) {
-        setError(err?.message || "Failed to load bet history");
+        setError(err?.message || t("lottery2d.failedLoadHistory"));
       } finally {
         setLoading(false);
       }
@@ -91,9 +104,9 @@ export default function Lottery2DBetHistory() {
 
   const filtered = useMemo(() => {
     return orders.filter((o) => {
-      if (filterTab === "won") return o.status === "won";
-      if (filterTab === "lost") return o.status === "lost";
-      if (filterTab === "pending") return o.status === "pending";
+      if (filterTab === "won") return o.netAmount > 0;
+      if (filterTab === "lost") return o.netAmount < 0;
+      if (filterTab === "pending") return o.netAmount === 0 || o.details.some((d) => d.status === "pending");
       return true;
     });
   }, [orders, filterTab]);
@@ -117,7 +130,7 @@ export default function Lottery2DBetHistory() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>Bet History</h1>
+        <h1 className={styles.title}>{t("lottery2d.betHistory")}</h1>
       </header>
 
       <div className={styles.content}>
@@ -131,13 +144,13 @@ export default function Lottery2DBetHistory() {
               }`}
               onClick={() => setFilterTab(tab)}
             >
-              {tab.toUpperCase()}
+              {t(`lottery2d.filter_${tab}`)}
             </button>
           ))}
         </div>
 
         {/* Loading / Error */}
-        {loading && <div className={styles.noData}>Loading...</div>}
+        {loading && <div className={styles.noData}>{t("common.loading")}</div>}
         {error && <div className={styles.noData}>{error}</div>}
 
         {/* Orders */}
@@ -145,8 +158,8 @@ export default function Lottery2DBetHistory() {
           {!loading && !error && filtered.map((order) => {
             const isExpanded = expandedIssues.has(order.round);
             return (
-              <div 
-                key={order.round} 
+              <div
+                key={order.round}
                 className={styles.card}
                 onClick={() => toggleExpand(order.round)}
                 style={{ cursor: 'pointer' }}
@@ -159,8 +172,10 @@ export default function Lottery2DBetHistory() {
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span className={`${styles.status} ${styles[order.status]}`}>
-                      {order.status.toUpperCase()}
+                    <span className={`${styles.status} ${
+                      order.netAmount > 0 ? styles.won : order.netAmount < 0 ? styles.lost : styles.pending
+                    }`}>
+                      {order.netAmount > 0 ? t("lottery2d.statusWon") : order.netAmount < 0 ? t("lottery2d.statusLost") : t("lottery2d.statusPending")}
                     </span>
                     {isExpanded ? (
                       <ChevronUpIcon className={styles.expandIcon} />
@@ -182,19 +197,19 @@ export default function Lottery2DBetHistory() {
                 {/* Summary Footer */}
                 <div className={styles.footer}>
                   <div>
-                    <div className={styles.label}>Total Bet</div>
+                    <div className={styles.label}>{t("lottery2d.totalBet")}</div>
                     <div className={styles.value}>
                       MMK {order.totalAmount.toFixed(2)}
                     </div>
                   </div>
                   <div>
-                    <div className={styles.label}>Total Win</div>
+                    <div className={styles.label}>{t("lottery2d.totalWin")}</div>
                     <div
                       className={`${styles.value} ${
-                        order.status === "won" ? styles.win : ""
+                        order.netAmount > 0 ? styles.win : order.netAmount < 0 ? styles.loss : ""
                       }`}
                     >
-                      MMK {order.totalWinAmount.toFixed(2)}
+                      {order.netAmount > 0 ? "+" : ""}MMK {order.netAmount.toFixed(2)}
                     </div>
                   </div>
                 </div>
@@ -202,17 +217,22 @@ export default function Lottery2DBetHistory() {
                 {/* Expanded Details */}
                 {isExpanded && (
                   <div className={styles.detailsSection}>
-                    <div className={styles.detailsHeader}>Bet Details</div>
+                    <div className={styles.detailsHeader}>{t("lottery2d.betDetails")}</div>
                     {order.details.map((detail, idx) => (
                       <div key={`${detail.id}-detail-${idx}`} className={styles.detailRow}>
-                        <div className={styles.detailNumber}>{detail.num}</div>
+                        <div className={styles.detailNumber}>
+                          {detail.num}
+                          <span className={`${styles.status} ${styles[detail.status]}`}>
+                            {detail.status === "won" ? t("lottery2d.statusWon") : detail.status === "lost" ? t("lottery2d.statusLost") : t("lottery2d.statusPending")}
+                          </span>
+                        </div>
                         <div className={styles.detailAmounts}>
                           <div className={styles.detailItem}>
-                            <span className={styles.detailLabel}>Bet:</span>
+                            <span className={styles.detailLabel}>{t("lottery2d.bet")}:</span>
                             <span className={styles.detailValue}>MMK {detail.amount.toFixed(2)}</span>
                           </div>
                           <div className={styles.detailItem}>
-                            <span className={styles.detailLabel}>Win:</span>
+                            <span className={styles.detailLabel}>{t("lottery2d.win")}:</span>
                             <span className={`${styles.detailValue} ${
                               detail.winAmount > 0 ? styles.win : ""
                             }`}>MMK {detail.winAmount.toFixed(2)}</span>
@@ -227,7 +247,7 @@ export default function Lottery2DBetHistory() {
           })}
 
           {!loading && !error && filtered.length === 0 && (
-            <div className={styles.noData}>No bets found</div>
+            <div className={styles.noData}>{t("lottery2d.noBetsFound")}</div>
           )}
         </div>
       </div>

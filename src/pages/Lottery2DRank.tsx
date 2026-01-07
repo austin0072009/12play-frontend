@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./Lottery2DRank.module.css";
 import { useEffect, useState } from "react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
@@ -19,6 +20,7 @@ interface SessionRanking {
 
 export default function Lottery2DRank() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { lotteryToken } = useLotteryStore();
   const [sessionRankings, setSessionRankings] = useState<SessionRanking[]>([]);
   const [loading, setLoading] = useState(false);
@@ -74,7 +76,7 @@ export default function Lottery2DRank() {
         }
 
         setSessionRankings(rankingsData);
-      } catch (err: any) {
+      } catch (err: any) {t("lottery2d.failedLoadRankings")
         setError(err?.message || "Failed to load rankings");
       } finally {
         setLoading(false);
@@ -95,15 +97,15 @@ export default function Lottery2DRank() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>Leaderboard</h1>
+        <h1 className={styles.title}>{t("lottery2d.leaderboard")}</h1>
       </header>
 
       <div className={styles.content}>
-        {loading && <div className={styles.loading}>Loading...</div>}
+        {loading && <div className={styles.loading}>{t("common.loading")}</div>}
         {error && <div className={styles.error}>{error}</div>}
 
         {!loading && !error && sessionRankings.length === 0 && (
-          <div className={styles.noData}>No rankings available</div>
+          <div className={styles.noData}>{t("lottery2d.noRankingsAvailable")}</div>
         )}
 
         {!loading && !error && sessionRankings.length > 0 && (
@@ -118,7 +120,7 @@ export default function Lottery2DRank() {
                   }`}
                   onClick={() => setActiveTab(sessionRanking.sessionTime)}
                 >
-                  {sessionRanking.sessionTime} Session
+                  {sessionRanking.sessionTime} {t("lottery2d.session")}
                 </button>
               ))}
             </div>
@@ -127,7 +129,7 @@ export default function Lottery2DRank() {
             {activeSessionRanking && (
               <div className={styles.sessionSection}>
                 <div className={styles.sessionHeader}>
-                  <span className={styles.sessionIssue}>Issue: {activeSessionRanking.issue}</span>
+                  <span className={styles.sessionIssue}>{t("lottery2d.issue")}: {activeSessionRanking.issue}</span>
                 </div>
 
                 {activeSessionRanking.rankings.length > 0 ? (
@@ -155,7 +157,7 @@ export default function Lottery2DRank() {
                     ))}
                   </div>
                 ) : (
-                  <div className={styles.noRankings}>No winners for this session</div>
+                  <div className={styles.noRankings}>{t("lottery2d.noWinners")}</div>
                 )}
               </div>
             )}

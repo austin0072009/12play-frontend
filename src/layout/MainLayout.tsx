@@ -21,11 +21,12 @@ export default function MainLayout() {
       const userInfo = useUserStore.getState().userInfo;
       const balanceRes = await fetchBalance();
       console.log("Fetched balance response:", balanceRes);
-      // balanceRes structure: { status: { errorCode: 0, ... }, data: <number>, url: "" }
-      if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && typeof balanceRes.data === 'number') {
-        console.log("Fetched balance:", balanceRes.data);
-        // Data is the balance number directly, merge it with existing member data
-        setUserInfo({ ...userInfo, balance: balanceRes.data });
+      // balanceRes structure: { status: { errorCode: 0, ... }, data: { balance, ml_money }, url: "" }
+      if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && balanceRes.data) {
+        console.log("Fetched balance:", balanceRes.data.balance);
+        console.log("Fetched turnover:", balanceRes.data.ml_money);
+        // Data contains both balance and ml_money (turnover), merge with existing member data
+        setUserInfo({ ...userInfo, balance: balanceRes.data.balance, ml_money: balanceRes.data.ml_money });
       }
     } catch (error) {
       console.error("Failed to fetch balance:", error);
@@ -91,20 +92,22 @@ export default function MainLayout() {
             
             // Fetch balance first, then set all data together
             let balance = 0;
+            let ml_money = 0;
             try {
               const balanceRes = await fetchBalance(newToken);
               console.log("=== AUTO-LOGIN BALANCE RESPONSE ===", balanceRes);
-              if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && typeof balanceRes.data === 'number') {
+              if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && balanceRes.data) {
                 console.log("Balance response full:", balanceRes);
                 console.log("Balance response data:", balanceRes.data);
-                balance = balanceRes.data;
+                balance = balanceRes.data.balance;
+                ml_money = balanceRes.data.ml_money;
               }
             } catch (err) {
               console.error("Failed to fetch balance after auto-login:", err);
             }
-            
-            // Set all user info at once (member + balance)
-            const finalUserInfo = { ...member, yzflag, qk_pwd, balance };
+
+            // Set all user info at once (member + balance + ml_money)
+            const finalUserInfo = { ...member, yzflag, qk_pwd, balance, ml_money };
             console.log("=== AUTO-LOGIN FINAL USER INFO ===", finalUserInfo);
             setUserInfo(finalUserInfo);
           }
@@ -140,7 +143,7 @@ export default function MainLayout() {
 
     const intervalId = setInterval(() => {
       syncBalance();
-    }, 5000); // 5 seconds
+    }, 8000); // 5 seconds
 
     return () => clearInterval(intervalId);
   }, [token, syncBalance]);

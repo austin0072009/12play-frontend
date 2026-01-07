@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./Lottery2DClosedDays.module.css";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
@@ -8,6 +9,7 @@ import type { ClosedDay } from "../services/types";
 
 export default function Lottery2DClosedDays() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { lotteryToken } = useLotteryStore();
   const [closedDays, setClosedDays] = useState<ClosedDay[]>([]);
   const [loading, setLoading] = useState(false);
@@ -16,7 +18,7 @@ export default function Lottery2DClosedDays() {
   useEffect(() => {
     const fetchClosedDays = async () => {
       if (!lotteryToken) {
-        setError("Please login to view closed days");
+        setError(t("lottery2d.pleaseLogin"));
         return;
       }
 
@@ -27,7 +29,7 @@ export default function Lottery2DClosedDays() {
         const data = await getClosedDays(1); // 1 = 2D game
         setClosedDays(data);
       } catch (err: any) {
-        setError(err?.message || "Failed to load closed days");
+        setError(err?.message || t("lottery2d.failedLoadClosedDays"));
       } finally {
         setLoading(false);
       }
@@ -38,8 +40,16 @@ export default function Lottery2DClosedDays() {
 
   // Helper to get day name from day number (1=Monday, 7=Sunday)
   const getDayName = (day: number): string => {
-    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    return days[day - 1] || "Unknown";
+    const days = [
+      t("lottery2d.monday"),
+      t("lottery2d.tuesday"),
+      t("lottery2d.wednesday"),
+      t("lottery2d.thursday"),
+      t("lottery2d.friday"),
+      t("lottery2d.saturday"),
+      t("lottery2d.sunday"),
+    ];
+    return days[day - 1] || t("lottery2d.unknown");
   };
 
   // Separate closed days by type
@@ -51,15 +61,15 @@ export default function Lottery2DClosedDays() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>Closed Days</h1>
+        <h1 className={styles.title}>{t("lottery2d.closedDays")}</h1>
       </header>
 
       <div className={styles.content}>
         <div className={styles.notice}>
-          <p>🔴 2D Lottery will be closed on the following days:</p>
+          <p>{t("lottery2d.closedNotice")}</p>
         </div>
 
-        {loading && <div className={styles.loading}>Loading...</div>}
+        {loading && <div className={styles.loading}>{t("common.loading")}</div>}
         {error && <div className={styles.error}>{error}</div>}
 
         {!loading && !error && (
@@ -86,7 +96,7 @@ export default function Lottery2DClosedDays() {
             {/* Specific Dates */}
             {specificDates.length > 0 && (
               <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>📅 Specific Closed Dates</h2>
+                <h2 className={styles.sectionTitle}>{t("lottery2d.specificClosedDates")}</h2>
                 <div className={styles.daysList}>
                   {specificDates.map((day, idx) => (
                     <div key={idx} className={styles.dayCard}>
@@ -106,8 +116,8 @@ export default function Lottery2DClosedDays() {
         )}
 
         <div className={styles.footer}>
-          <p>Last updated: {new Date().toLocaleDateString()}</p>
-          <p>Please plan your bets accordingly</p>
+          <p>{t("lottery2d.lastUpdated")}: {new Date().toLocaleDateString()}</p>
+          <p>{t("lottery2d.planBetsAccordingly")}</p>
         </div>
       </div>
     </div>

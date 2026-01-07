@@ -3,23 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import styles from "./PromotionDetail.module.css";
 import { fetchActivityDetail } from "../services/api";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-
-interface ActivityDetail {
-  id: number;
-  title: string;
-  image?: string;
-  content?: string;
-  description?: string;
-  subtitle?: string;
-  start_time?: string;
-  end_time?: string;
-  category?: string;
-  [key: string]: any;
-}
+import { useAppStore } from "../store/app";
+import type { ActivityDetail } from "../services/types";
 
 export default function PromotionDetail() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const appStore = useAppStore();
+  const domain = appStore.data?.domain || "";
   const [activity, setActivity] = useState<ActivityDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -104,7 +95,13 @@ export default function PromotionDetail() {
         {/* Promotion Image */}
         <div className={styles.imageContainer}>
           <img
-            src={activity.image || "https://dummyimage.com/1080x400/fff/000"}
+            src={
+              activity.title_img_wap
+                ? `${domain}${activity.title_img_wap}`
+                : activity.title_img
+                ? `${domain}${activity.title_img}`
+                : "https://dummyimage.com/1080x400/fff/000"
+            }
             alt={activity.title}
             className={styles.image}
           />
@@ -119,33 +116,35 @@ export default function PromotionDetail() {
 
           {/* Dates */}
           <div className={styles.datesContainer}>
-            {activity.start_time && (
+            {activity.start_at && (
               <div className={styles.dateItem}>
                 <span className={styles.dateLabel}>Start:</span>
-                <span className={styles.dateValue}>{activity.start_time}</span>
+                <span className={styles.dateValue}>{activity.start_at}</span>
               </div>
             )}
-            {activity.end_time && (
+            {activity.end_at && (
               <div className={styles.dateItem}>
                 <span className={styles.dateLabel}>End:</span>
-                <span className={styles.dateValue}>{activity.end_time}</span>
+                <span className={styles.dateValue}>{activity.end_at}</span>
               </div>
             )}
           </div>
 
-          {/* Description */}
-          <div className={styles.descriptionContainer}>
-            <h3 className={styles.sectionTitle}>Details</h3>
-            <div className={styles.description}>
-              {activity.description || activity.content || (
-                <p>No description available</p>
-              )}
+          {/* Promotion Content (HTML) */}
+          {activity.title_content && (
+            <div className={styles.descriptionContainer}>
+              <h3 className={styles.sectionTitle}>Promotion Details</h3>
+              <div
+                className={styles.richContent}
+                dangerouslySetInnerHTML={{ __html: activity.title_content }}
+              />
             </div>
-          </div>
+          )}
 
-          {/* Rich Content (if HTML content exists) */}
+          {/* Additional Content */}
           {activity.content && (
-            <div className={styles.richContentContainer}>
+            <div className={styles.descriptionContainer}>
+              <h3 className={styles.sectionTitle}>Additional Information</h3>
               <div
                 className={styles.richContent}
                 dangerouslySetInnerHTML={{ __html: activity.content }}
@@ -153,10 +152,23 @@ export default function PromotionDetail() {
             </div>
           )}
 
+          {/* Rules */}
+          {activity.rule_content && (
+            <div className={styles.descriptionContainer}>
+              <h3 className={styles.sectionTitle}>Rules & Terms</h3>
+              <div
+                className={styles.richContent}
+                dangerouslySetInnerHTML={{ __html: activity.rule_content }}
+              />
+            </div>
+          )}
+
           {/* Action Button */}
-          <button className={styles.actionBtn}>
-            Participate Now
-          </button>
+          {activity.button && (
+            <button className={styles.actionBtn}>
+              {activity.button}
+            </button>
+          )}
         </div>
       </div>
     </div>

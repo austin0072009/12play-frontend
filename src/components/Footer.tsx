@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './Footer.module.css';
 
 // Import social icons
@@ -14,6 +15,7 @@ import threatmetrixIcon from '../assets/icons/license-threatmetrix.png';
 import goddaddyIcon from '../assets/icons/license-godaddy.png';
 
 const Footer = () => {
+  const { t } = useTranslation();
   const socialLinks = [
     { name: 'facebook', icon: facebookIcon, url: '#' },
     { name: 'x', icon: xIcon, url: '#' },
@@ -32,7 +34,7 @@ const Footer = () => {
   return (
     <footer className={styles.footer}>
       {/* Social Links Section */}
-      <div className={styles.section}>
+      <div className={styles.section}>{t('footer.followUs')}
         <h3 className={styles.sectionTitle}>跟着我们</h3>
         <div className={styles.socialGrid}>
           {socialLinks.map(link => (
@@ -56,7 +58,7 @@ const Footer = () => {
 
       {/* License Section */}
       <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>营业执照</h3>
+        <h3 className={styles.sectionTitle}>{t('footer.businessLicense')}</h3>
         <div className={styles.licenseGrid}>
           {licenseCerts.map(cert => (
             <div key={cert.name} className={styles.licenseCert}>
@@ -72,8 +74,8 @@ const Footer = () => {
 
       {/* Copyright Section */}
       <div className={styles.copyright}>
-        <p>© 2025 RedCow</p>
-        <p className={styles.ageRestriction}>18+</p>
+        <p>{t('footer.copyright')}</p>
+        <p className={styles.ageRestriction}>{t('footer.ageRestriction')}</p>
       </div>
     </footer>
   );

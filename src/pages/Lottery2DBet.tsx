@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./Lottery2DBet.module.css";
 import { useMemo, useState, useEffect } from "react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
@@ -19,6 +20,7 @@ const PAGE_SIZE = 25;
 
 export default function Lottery2DBet() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { pendingSessions, userInfo } = useLotteryStore();
   
   // Get selected issue from localStorage
@@ -141,7 +143,7 @@ export default function Lottery2DBet() {
 
     if (overLimitNumbers.length > 0) {
       showAlert(
-        `Bet amount exceeds maximum limit for the following numbers:\n\n${overLimitNumbers.join('\n')}\n\nPlease reduce your bet amount.`
+        t("lottery2d.betExceedsLimit") + ":\n\n" + overLimitNumbers.join('\n') + "\n\n" + t("lottery2d.reduceAmount")
       );
       return;
     }
@@ -164,7 +166,7 @@ export default function Lottery2DBet() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>2D</h1>
+        <h1 className={styles.title}>{t("lottery2d.betTitle")}</h1>
       </header>
 
       {/* ===== Info Card（核心信息区） ===== */}
@@ -183,8 +185,7 @@ export default function Lottery2DBet() {
 
         {/* 已选号码 */}
         <div className={styles.selectedInfo}>
-          Selected Numbers:{" "}
-          <span className={styles.selectedCount}>
+          {t("lottery2d.selectedNumbers")}: <span className={styles.selectedCount}>
             {selectedNums.length}
           </span>
         </div>
@@ -194,14 +195,15 @@ export default function Lottery2DBet() {
           <div className={styles.betLimits}>
             <div className={styles.limitItem}>
               <span className={styles.limitLabel}>Min Bet:</span>
+              <span className={styles.limitValue}>{t("lottery2d.minBet")}:</span>
               <span className={styles.limitValue}>MMK {selectedNumInfo.minBet}</span>
             </div>
             <div className={styles.limitItem}>
-              <span className={styles.limitLabel}>Max Bet:</span>
+              <span className={styles.limitLabel}>{t("lottery2d.maxBet")}:</span>
               <span className={styles.limitValue}>MMK {selectedNumInfo.maxBet}</span>
             </div>
             <div className={styles.limitItem}>
-              <span className={styles.limitLabel}>Odds:</span>
+              <span className={styles.limitLabel}>{t("lottery2d.odds")}:</span>
               <span className={styles.limitValue}>1:{selectedNumInfo.odds}</span>
             </div>
           </div>
@@ -212,14 +214,14 @@ export default function Lottery2DBet() {
           type="number"
           min={selectedNumInfo?.minBet || 0}
           max={selectedNumInfo?.maxBet || 0}
-          placeholder={selectedNumInfo ? `Min: ${selectedNumInfo.minBet} - Max: ${selectedNumInfo.maxBet}` : "Enter Amount"}
+          placeholder={selectedNumInfo ? `Min: ${selectedNumInfo.minBet} - Max: ${selectedNumInfo.maxBet}` : t("lottery2d.enterAmount")}
           value={betAmount || ""}
           onChange={(e) => setBetAmount(Number(e.target.value))}
           className={styles.amountInput}
         />
 
         {loadingNumbers ? (
-          <div className={styles.loading}>Loading numbers...</div>
+          <div className={styles.loading}>{t("lottery2d.loadingNumbers")}</div>
         ) : (
           <>
             <div className={styles.numberGrid}>
@@ -245,7 +247,7 @@ export default function Lottery2DBet() {
                       />
                     </div>
                     <span className={styles.availability}>
-                      {full ? "FULL" : `${availablePercentage}% Available`}
+                      {full ? t("lottery2d.full") : `${availablePercentage}% ${t("lottery2d.available")}`}
                     </span>
                   </button>
                 );
@@ -278,7 +280,7 @@ export default function Lottery2DBet() {
               onClick={confirmBet}
               disabled={selectedNums.length === 0 || betAmount <= 0}
             >
-              BET NOW
+              {t("lottery2d.betNow")}
             </button>
           </>
         )}

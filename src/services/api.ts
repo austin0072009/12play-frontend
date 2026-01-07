@@ -15,6 +15,7 @@ import type {
     BwPayReq,
     BwPayResp,
     GetActionLogReq,
+    WalletBalanceResp,
 } from "./types";
 
 // 基础信息（主题/Logo/url）——明文返回
@@ -150,9 +151,9 @@ export async function fetchActionLog(payload: Omit<GetActionLogReq, "token">) {
 
 export async function fetchBalance(token?: string) {
     const finalToken = token || useUserStore.getState().token || "";
-    const res = await getData<any>("/nweb/wallet_balance", { params: { token: finalToken } });
+    const res = await getData<WalletBalanceResp>("/nweb/wallet_balance", { params: { token: finalToken } });
 
-    return res as any;
+    return res as WalletBalanceResp;
 }
 
 export async function withdrawal(money: number, type: string) {

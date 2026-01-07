@@ -7,15 +7,15 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 
 // Icon Components (declared before NAV_ITEMS)
-const ReferIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24px" height="24px" className={styles.navItemRightIcon}>
-    <g clipPath="url(#Refer_svg__a)">
-      <path fill="currentColor" d="M12.037 19.908v-.815q-1.196-.064-1.904-.664c-.708-.6-.718-.972-.737-1.714h1.489q.034.483.346.757.313.268.806.327v-1.865l-.469-.118q-.918-.22-1.45-.698-.527-.483-.527-1.289 0-.615.312-1.089a2.26 2.26 0 0 1 .865-.761 3.2 3.2 0 0 1 1.27-.342v-.82h.58v.82a3.1 3.1 0 0 1 1.275.337q.546.282.85.761.302.474.312 1.08H13.57q-.073-.768-.952-.884v1.767l.347.088a4.2 4.2 0 0 1 1.128.415q.493.269.776.694.283.42.283 1.025 0 .946-.669 1.528-.668.581-1.865.645v.815zm-.869-6.177q0 .328.249.518.25.19.62.303V12.93q-.42.059-.644.278a.7.7 0 0 0-.225.522Zm2.437 3.184a.6.6 0 0 0-.26-.513q-.253-.19-.727-.322v1.714q.454-.064.718-.298a.74.74 0 0 0 .268-.581Z"></path>
-      <path fill="currentColor" d="M16.3 10.233v-1.17c-5.846-.584-7.307 2.925-7.307 3.51s-.731.585-.731 0-.936-2.597.73-5.264c1.462-2.34 5.116-3.315 7.308-3.51v-1.47c0-.585.126-.844 1.2 0s3 2.43 3.927 3.171c.73.585.87.997.073 1.5-1.074.677-2.446 1.733-3.5 2.5s-1.7 1.319-1.7.733"></path>
-      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="bevel" strokeWidth="2" d="M6.5 6.5H5a1 1 0 0 0-1 1V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9"></path>
-    </g>
-  </svg>
-);
+// const ReferIcon = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24px" height="24px" className={styles.navItemRightIcon}>
+//     <g clipPath="url(#Refer_svg__a)">
+//       <path fill="currentColor" d="M12.037 19.908v-.815q-1.196-.064-1.904-.664c-.708-.6-.718-.972-.737-1.714h1.489q.034.483.346.757.313.268.806.327v-1.865l-.469-.118q-.918-.22-1.45-.698-.527-.483-.527-1.289 0-.615.312-1.089a2.26 2.26 0 0 1 .865-.761 3.2 3.2 0 0 1 1.27-.342v-.82h.58v.82a3.1 3.1 0 0 1 1.275.337q.546.282.85.761.302.474.312 1.08H13.57q-.073-.768-.952-.884v1.767l.347.088a4.2 4.2 0 0 1 1.128.415q.493.269.776.694.283.42.283 1.025 0 .946-.669 1.528-.668.581-1.865.645v.815zm-.869-6.177q0 .328.249.518.25.19.62.303V12.93q-.42.059-.644.278a.7.7 0 0 0-.225.522Zm2.437 3.184a.6.6 0 0 0-.26-.513q-.253-.19-.727-.322v1.714q.454-.064.718-.298a.74.74 0 0 0 .268-.581Z"></path>
+//       <path fill="currentColor" d="M16.3 10.233v-1.17c-5.846-.584-7.307 2.925-7.307 3.51s-.731.585-.731 0-.936-2.597.73-5.264c1.462-2.34 5.116-3.315 7.308-3.51v-1.47c0-.585.126-.844 1.2 0s3 2.43 3.927 3.171c.73.585.87.997.073 1.5-1.074.677-2.446 1.733-3.5 2.5s-1.7 1.319-1.7.733"></path>
+//       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="bevel" strokeWidth="2" d="M6.5 6.5H5a1 1 0 0 0-1 1V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9"></path>
+//     </g>
+//   </svg>
+// );
 
 const AccountIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24px" height="24px" className={styles.navItemRightIcon}>
@@ -95,7 +95,7 @@ const NAV_ITEMS = [
   //   ),
   //   route: "/home",
   // },
-  { id: "refer", labelKey: "sidebar.refer", icon: <ReferIcon />, route: "/promotion" },
+  // { id: "refer", labelKey: "sidebar.refer", icon: <ReferIcon />, route: "/referral" },
   { id: "account", labelKey: "sidebar.account", icon: <AccountIcon />, route: "/profile" },
   // { id: "redemption", labelKey: "sidebar.redemption", icon: <RedemptionIcon />, route: null },
   { id: "inbox", labelKey: "sidebar.feedback", icon: <InboxIcon />, route: "/feedback" },

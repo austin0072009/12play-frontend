@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./Lottery2DBetConfirm.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, TrashIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
@@ -13,6 +14,7 @@ type BetItem = {
 
 export default function Lottery2DBetConfirm() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { state } = useLocation() as any;
 
   const [items, setItems] = useState<BetItem[]>([]);
@@ -52,7 +54,7 @@ export default function Lottery2DBetConfirm() {
   const handleConfirm = async () => {
     if (items.length === 0 || totalAmount <= 0) return;
     if (!state?.issue) {
-      showAlert("Missing issue information. Please try again.");
+      showAlert(t("lottery2d.missingIssue"));
       return;
     }
 
@@ -75,7 +77,7 @@ export default function Lottery2DBetConfirm() {
       setShowSuccess(true);
     } catch (error: any) {
       setLoading(false);
-      showAlert(error.message || "Failed to place bet. Please try again.");
+      showAlert(error.message || t("lottery2d.failedPlaceBet"));
       console.error("Place bet error:", error);
     }
   };
@@ -93,7 +95,7 @@ export default function Lottery2DBetConfirm() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>Confirm Bet</h1>
+        <h1 className={styles.title}>{t("lottery2d.confirmBet")}</h1>
       </header>
 
       <div className={styles.content}>
@@ -137,13 +139,13 @@ export default function Lottery2DBetConfirm() {
 
         {items.length === 0 && (
           <div className={styles.empty}>
-            No numbers selected. Please go back and select numbers.
+            {t("lottery2d.noNumbersSelected")}
           </div>
         )}
 
         {/* Notice */}
         <div className={styles.notice}>
-          You can adjust or remove any number before confirming the bet.
+          {t("lottery2d.adjustBetNotice")}
         </div>
 
         {/* Actions */}
@@ -153,14 +155,14 @@ export default function Lottery2DBetConfirm() {
             onClick={() => navigate(-1)}
             disabled={loading}
           >
-            Cancel
+            {t("lottery2d.cancel")}
           </button>
           <button
             className={styles.confirmBtn}
             disabled={loading || items.length === 0 || totalAmount <= 0}
             onClick={handleConfirm}
           >
-            {loading ? "Processing..." : "Confirm Bet"}
+            {loading ? t("lottery2d.processing") : t("lottery2d.confirmBet")}
           </button>
         </div>
       </div>
@@ -172,7 +174,7 @@ export default function Lottery2DBetConfirm() {
         title={
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00ff9c' }}>
             <CheckCircleIcon style={{ width: '2rem', height: '2rem' }} />
-            <span>Bet Successful!</span>
+            <span>{t("lottery2d.betSuccessful")}</span>
           </div>
         }
         footer={
@@ -190,22 +192,22 @@ export default function Lottery2DBetConfirm() {
               cursor: 'pointer',
             }}
           >
-            OK
+            {t("lottery2d.ok")}
           </button>
         }
       >
         <div style={{ textAlign: 'center', padding: '1rem 0' }}>
           <p style={{ fontSize: '1.125rem', marginBottom: '1rem' }}>
-            Your bet has been placed successfully!
+            {t("lottery2d.betPlacedSuccessfully")}
           </p>
           <div style={{ background: 'rgba(0, 255, 156, 0.1)', padding: '1rem', borderRadius: '0.5rem' }}>
-            <p style={{ color: '#999', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Draw Time</p>
+            <p style={{ color: '#999', fontSize: '0.875rem', marginBottom: '0.5rem' }}>{t("lottery2d.drawTime")}</p>
             <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{state.round} {state.drawTime}</p>
-            <p style={{ color: '#999', fontSize: '0.875rem', marginTop: '1rem', marginBottom: '0.5rem' }}>Total Amount</p>
+            <p style={{ color: '#999', fontSize: '0.875rem', marginTop: '1rem', marginBottom: '0.5rem' }}>{t("lottery2d.totalAmount")}</p>
             <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#00ff9c' }}>
               MMK {totalAmount.toLocaleString()}
             </p>
-            <p style={{ color: '#999', fontSize: '0.875rem', marginTop: '1rem', marginBottom: '0.5rem' }}>Numbers Selected</p>
+            <p style={{ color: '#999', fontSize: '0.875rem', marginTop: '1rem', marginBottom: '0.5rem' }}>{t("lottery2d.numbersSelected")}</p>
             <p style={{ fontSize: '1rem' }}>{items.map(i => i.num).join(', ')}</p>
           </div>
         </div>

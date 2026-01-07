@@ -15,6 +15,7 @@ export default function WithdrawalPage() {
     const [bankList, setBankList] = useState<BankInfo | null>(null);
     const [selectedAmount, setSelectedAmount] = useState("");
     const [balance, setBalance] = useState("0.00");
+    const [turnover, setTurnover] = useState("0.00");
     const [submitting, setSubmitting] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -28,9 +29,12 @@ export default function WithdrawalPage() {
     };
 
     useEffect(() => {
-        // Basic init
+        // Basic init - fetch balance and turnover
         fetchBalance().then((res) => {
-            if (res?.status?.errorCode === 0) setBalance(res.data);
+            if (res?.status?.errorCode === 0 && res.data) {
+                setBalance(String(res.data.balance));
+                setTurnover(String(res.data.ml_money));
+            }
         });
 
         // Fetch bank binding
@@ -53,8 +57,13 @@ export default function WithdrawalPage() {
             const res = await withdrawal(Number(selectedAmount), "1");
             if (res.status.errorCode === 0) {
                 setAlertMessage(t('withdrawal.success'));
-                // Refresh balance
-                fetchBalance().then(r => r.status.errorCode === 0 && setBalance(r.data));
+                // Refresh balance and turnover
+                fetchBalance().then(r => {
+                    if (r.status.errorCode === 0 && r.data) {
+                        setBalance(String(r.data.balance));
+                        setTurnover(String(r.data.ml_money));
+                    }
+                });
             } else {
                 setAlertMessage(`${t('withdrawal.error')} ${res.status.mess || res.status.msg}`);
             }
@@ -124,11 +133,17 @@ export default function WithdrawalPage() {
                             onChange={(e) => setSelectedAmount(e.target.value)}
                             placeholder={t('withdrawal.amountPlaceholder')}
                             className={styles.inputEl}
+                            style={{
+                                border: '2px solid rgba(203, 0, 0, 0.3)',
+                                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                                fontSize: '2rem',
+                                fontWeight: '600'
+                            }}
                         />
                         {bankList && (
                             <p className={styles.helperText}>
-                                {t('withdrawal.limitLabel')} <span className={styles.primary}>{Number(bankList.limit_start).toLocaleString()}</span> |
-                                {t('withdrawal.turnoverLabel')} <span className={styles.primary}>{Number(bankList.turnover).toLocaleString()}</span>
+                                {t('withdrawal.limitLabel')} <span style={{ color: 'var(--color-primary)', fontWeight: '600' }}>{Number(bankList.limit_start).toLocaleString()}</span> |
+                                Turnover: <span style={{ color: 'var(--color-primary)', fontWeight: '600' }}>{Number(turnover).toLocaleString()}</span>
                             </p>
                         )}
                     </div>

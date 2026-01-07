@@ -85,19 +85,22 @@ export default function Login() {
         localStorage.setItem("RedCow-token-expiration", String(expirationTime));
         console.log("=== TOKEN EXPIRATION SET ===", new Date(expirationTime).toISOString());
         let balance = 0;
+        let ml_money = 0;
         try {
           const balanceRes = await fetchBalance(token);
           console.log("=== BALANCE RESPONSE ===", balanceRes);
           if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && balanceRes.data) {
-            balance = balanceRes.data;
+            balance = balanceRes.data.balance;
+            ml_money = balanceRes.data.ml_money;
             console.log("=== BALANCE VALUE ===", balance);
+            console.log("=== TURNOVER VALUE ===", ml_money);
           }
         } catch (err) {
           console.error("Failed to fetch balance:", err);
         }
-        
-        // Set all user info at once (member + balance)
-        const finalUserInfo = { ...member, yzflag, qk_pwd, balance };
+
+        // Set all user info at once (member + balance + ml_money)
+        const finalUserInfo = { ...member, yzflag, qk_pwd, balance, ml_money };
         console.log("=== FINAL USER INFO TO SET ===", finalUserInfo);
         setUserInfo(finalUserInfo);
 
