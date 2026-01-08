@@ -21,6 +21,9 @@ export default function BankAdd() {
     const [successMessage, setSuccessMessage] = useState("");
     const [showDialog, setShowDialog] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    // Informational dialog about binding rules
+    const [showInfoDialog, setShowInfoDialog] = useState(false);
+    const [infoDialogShown, setInfoDialogShown] = useState(false);
 
     const userInfo = useUserStore((state) => state.userInfo);
     const existingBank = userInfo?.banklist?.bank_username;
@@ -70,6 +73,14 @@ export default function BankAdd() {
             return false;
         }
         return true;
+    };
+
+    // Show the info dialog only once when user starts entering data
+    const triggerInfoDialogOnce = () => {
+        if (!infoDialogShown) {
+            setShowInfoDialog(true);
+            setInfoDialogShown(true);
+        }
     };
 
     const handleSubmit = async () => {
@@ -196,6 +207,7 @@ export default function BankAdd() {
                     <input
                         type="text"
                         value={bankUsername}
+                        onFocus={triggerInfoDialogOnce}
                         onChange={(e) => {
                             const value = e.target.value;
                             // Only allow letters and spaces (no numbers)
@@ -218,6 +230,7 @@ export default function BankAdd() {
                     <input
                         type="text"
                         value={bankCard}
+                        onFocus={triggerInfoDialogOnce}
                         onChange={(e) => {
                             const value = e.target.value;
                             // Only allow numbers
@@ -236,6 +249,7 @@ export default function BankAdd() {
                     <input
                         type="text"
                         value={bankCardConfirm}
+                        onFocus={triggerInfoDialogOnce}
                         onChange={(e) => {
                             const value = e.target.value;
                             // Only allow numbers
@@ -362,6 +376,43 @@ export default function BankAdd() {
                             <p>{errorMessage}</p>
                         </div>
                     )}
+                </div>
+            </Dialog>
+
+            {/* Informational dialog shown when user starts entering data */}
+            <Dialog
+                open={showInfoDialog}
+                onClose={() => setShowInfoDialog(false)}
+                title="Notice"
+            >
+                <div className={styles.dialogContent}>
+                    <div className={styles.errorContent} style={{ gap: '1rem', alignItems: 'flex-start' }}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            width="36px"
+                            height="36px"
+                            className={styles.errorIcon}
+                        >
+                            <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M12 9v6m0 3v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            ></path>
+                        </svg>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '.6rem' }}>
+                            <p>
+                                Please ensure your deposit and withdrawal bank accounts are the same
+                                (<strong>one card in, one card out</strong>).
+                            </p>
+                            <p>
+                                After binding a card, you must wait <strong>14 days</strong> to unbind. There will be a cooldown period.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </Dialog>
         </div>

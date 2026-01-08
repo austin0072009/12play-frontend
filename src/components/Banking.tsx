@@ -162,27 +162,29 @@ export default function Banking() {
         </div>
       )}
 
-      {/* Add Bank Button - Always visible */}
-      <div className={styles.actionButtonContainer}>
-        <button className={styles.addBankButton} onClick={handleAddBank}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            width="20px"
-            height="20px"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 5v14m7-7H5"
-            ></path>
-          </svg>
-          <span>{bankList?.bank_card ? t('banking.changeBankButton') : t('banking.addBankButton')}</span>
-        </button>
-      </div>
+      {/* Add Bank Button - Only visible if no bank is bound */}
+      {!bankList?.bank_card && (
+        <div className={styles.actionButtonContainer}>
+          <button className={styles.addBankButton} onClick={handleAddBank}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              width="20px"
+              height="20px"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 5v14m7-7H5"
+              ></path>
+            </svg>
+            <span>{t('banking.addBankButton')}</span>
+          </button>
+        </div>
+      )}
 
       {/* Delete Confirmation Dialog */}
       <Dialog

@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faViber, faTelegram } from '@fortawesome/free-brands-svg-icons';
 import { faHeadset } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import { fetchInitData } from '../services/api';
 import styles from './ContactSection.module.css';
 
 interface ContactSectionProps {
@@ -11,11 +13,32 @@ interface ContactSectionProps {
 }
 
 export default function ContactSection({ 
-  viberLink = '#', 
-  telegramLink = '#', 
-  liveChatLink = '#' 
+  viberLink: propViberLink, 
+  telegramLink: propTelegramLink, 
+  // liveChatLink: propLiveChatLink
 }: ContactSectionProps) {
   const { t } = useTranslation();
+  const [viberLink, setViberLink] = useState(propViberLink || '#');
+  const [telegramLink, setTelegramLink] = useState(propTelegramLink || '#');
+  // const [liveChatLink, setLiveChatLink] = useState(propLiveChatLink || '#');
+
+  useEffect(() => {
+    const loadContactLinks = async () => {
+      try {
+        const data = await fetchInitData();
+        if (data?.sysconfig) {
+          setViberLink(data.sysconfig.service_link || '#');
+          setTelegramLink(data.sysconfig.service_link1 || '#');
+          // Use channel_link for live chat if available
+          // setLiveChatLink(data.sysconfig.channel_link || '#');
+        }
+      } catch (error) {
+        console.error('Failed to load contact links:', error);
+      }
+    };
+
+    loadContactLinks();
+  }, []);
   
   return (
     <div className={styles.container}>
@@ -50,7 +73,7 @@ export default function ContactSection({
         </a>
 
         {/* Live Chat Section */}
-        <a href={liveChatLink} className={styles.contactCard}>
+        {/* <a href={liveChatLink} className={styles.contactCard}>
           <div className={styles.iconWrapper}>
             <FontAwesomeIcon icon={faHeadset} className={styles.icon} />
           </div>
@@ -59,7 +82,7 @@ export default function ContactSection({
             <p className={styles.cardStatus}>{t('contact.available')}</p>
             <p className={styles.cardDesc}>{t('contact.liveChatDesc')}</p>
           </div>
-        </a>
+        </a> */}
       </div>
     </div>
   );

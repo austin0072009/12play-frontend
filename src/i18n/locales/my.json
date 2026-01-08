@@ -35,7 +35,7 @@
   "nav.wallet": "ပိုက်ဆံအိတ်",
   "nav.promotions": "ပရိုမိုးရှင်း",
   "nav.contact": "ဆက်သွယ်ရန်",
-  "nav.livechat": "တိုက်ရိုက်စာနွေးစရာ",
+  "nav.livechat": "ဆက်သွယ်ရန်",
   "common.loading": "လုပ်ဆောင်နေသည်...",
   "common.closed": "ပိတ်ထားသည်",
   "common.open": "ဖွင့်ထားသည်",
@@ -174,7 +174,7 @@
   "sidebar.balance": "ကျောင်ငွေ:",
   "sidebar.refer": "အကြামင်း & အသုံးရငွေ",
   "sidebar.account": "အကောင့်",
-  "sidebar.feedback": "အမြင်အ述",
+  "sidebar.feedback": "အကြံပေးချက်",
   "sidebar.downloadApp": "အက်ပလီကေးရှင်း ဒေါင်းလုဒ်လုပ်မည်",
   "sidebar.logout": "ထွက်မည်",
 
@@ -212,7 +212,7 @@
   "deposit.bankTransfer": "ဘဏ္ဍာ လွှဲပြောင်းမည်",
   "deposit.crypto": "ကုဒ်သုံးသပ်မှု ငွေ",
 
-  "withdrawal.mainWallet": "အဓိကအိတ်",
+  "withdrawal.mainWallet": "လက်ကျန်ငွေ",
   "withdrawal.amountLabel": "ငွေထုတ်မည့် ငွေ အရေအတွက်",
   "withdrawal.amountPlaceholder": "ငွေထုတ်မည့် ငွေ အရေအတွက် ထည့်သွင်းပါ",
   "withdrawal.limitLabel": "ကန့်သတ်ချက်:",

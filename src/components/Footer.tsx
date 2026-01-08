@@ -16,6 +16,8 @@ import goddaddyIcon from '../assets/icons/license-godaddy.png';
 
 const Footer = () => {
   const { t } = useTranslation();
+  const APP_VERSION = '1.0.0';
+  
   const socialLinks = [
     { name: 'facebook', icon: facebookIcon, url: '#' },
     { name: 'x', icon: xIcon, url: '#' },
@@ -35,7 +37,7 @@ const Footer = () => {
     <footer className={styles.footer}>
       {/* Social Links Section */}
       <div className={styles.section}>{t('footer.followUs')}
-        <h3 className={styles.sectionTitle}>跟着我们</h3>
+        <h3 className={styles.sectionTitle}>{t('footer.followUs')}</h3>
         <div className={styles.socialGrid}>
           {socialLinks.map(link => (
             <a
@@ -76,6 +78,7 @@ const Footer = () => {
       <div className={styles.copyright}>
         <p>{t('footer.copyright')}</p>
         <p className={styles.ageRestriction}>{t('footer.ageRestriction')}</p>
+        <p style={{ fontSize: '0.85rem', color: '#888', marginTop: '0.5rem' }}>v{APP_VERSION}</p>
       </div>
     </footer>
   );
