@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faViber, faTelegram } from '@fortawesome/free-brands-svg-icons';
-import { faHeadset } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { fetchInitData } from '../services/api';
