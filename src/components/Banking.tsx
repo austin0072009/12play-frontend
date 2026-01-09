@@ -45,8 +45,7 @@ export default function Banking() {
 
   const handleDeleteConfirm = async () => {
     try {
-      const response = await unBindCard();
-      //console.log("=== DELETE BANK RESPONSE ===", response);
+      await unBindCard();
       setDeleteConfirm(false);
       setSuccessMessage(t('banking.deleteSuccess'));
       setSuccessDialog(true);
