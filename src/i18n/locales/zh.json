@@ -126,6 +126,8 @@
   "lottery2d.betNow": "立即投注",
   "lottery2d.betExceedsLimit": "投注金额超过以下号码的最大限额",
   "lottery2d.reduceAmount": "请减少投注金额。",
+  "lottery2d.pleaseSelectNumbers": "请至少选择一个号码进行投注。",
+  "lottery2d.pleaseEnterAmount": "请输入投注金额。",
   "lottery2d.value": "值",
   "lottery2d.closedBadge": "关闭",
   "lottery2d.openBadge": "开启",

@@ -17,7 +17,7 @@ export default function GameFrame() {
 
   // Enable fullscreen on mount
   useEffect(() => {
-    console.log("=== GAME FRAME LOADED - FULLSCREEN MODE ENABLED ===");
+    //console.log("=== GAME FRAME LOADED - FULLSCREEN MODE ENABLED ===");
   }, []);
 
   // Get game URL from location state

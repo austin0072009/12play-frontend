@@ -95,11 +95,11 @@ export default function BankAdd() {
 
         setSubmitting(true);
         try {
-            console.log("=== SUBMITTING BANK ADD ===", {
-                bank_name: selectedBank,
-                bank_username: bankUsername,
-                bank_card: bankCard,
-            });
+            // console.log("=== SUBMITTING BANK ADD ===", {
+            //     bank_name: selectedBank,
+            //     bank_username: bankUsername,
+            //     bank_card: bankCard,
+            // });
 
             const res = await AddBank({
                 type: 0,
@@ -110,7 +110,7 @@ export default function BankAdd() {
                 qr_code: qrFile || undefined,
             });
 
-            console.log("=== BANK ADD RESPONSE ===", res);
+            //console.log("=== BANK ADD RESPONSE ===", res);
 
             if (res && res.status && Number(res.status.errorCode) === 0) {
                 setSuccessMessage("Bank account added successfully!");

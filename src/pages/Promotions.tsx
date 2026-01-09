@@ -28,7 +28,7 @@ export default function Promotions() {
         setLoading(true);
         const res = await fetchActivityData();
         if (res?.data?.list) {
-          console.log("Fetched activities:", res.data.list);
+          //console.log("Fetched activities:", res.data.list);
           setActivities(res.data.list);
         }
       } catch (error) {

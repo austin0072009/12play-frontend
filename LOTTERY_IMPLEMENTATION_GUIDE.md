@@ -396,7 +396,7 @@ return (
 // In browser console
 import { useLotteryStore } from '../store/lottery';
 const state = useLotteryStore.getState();
-console.log(state);
+//console.log(state);
 ```
 
 ### Monitor API Calls

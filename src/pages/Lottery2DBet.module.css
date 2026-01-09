@@ -262,6 +262,13 @@
   box-shadow: none;
 }
 
+.betBtnDisabled {
+  background: #555 !important;
+  color: #999 !important;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
 .pagination {
   margin: 1rem 0;
   display: flex;

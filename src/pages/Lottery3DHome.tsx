@@ -12,6 +12,11 @@ import { setLotteryToken } from "../utils/lotteryRequest";
 import { getLotteryUserInfo, getBetSessions } from "../services/lottery";
 import { showAlert } from "../store/alert";
 import { useTranslation } from "react-i18next";
+import {
+  getMyanmarTimestamp,
+  getTimeDiffFromMyanmarNow,
+  parseServerTime,
+} from "../utils/myanmarTime";
 
 function formatTime(timeStr: string): string {
   if (!timeStr) return "N/A";
@@ -69,24 +74,26 @@ export default function Lottery3DHome() {
     return () => clearInterval(sessionInterval);
   }, [lotteryToken, lotteryDomain]);
 
+  // Find the next draw using Myanmar time
   const nextDraw = (() => {
     if (!pendingSessions || pendingSessions.length === 0) return null;
-    const now = Date.now();
+    const myanmarNow = getMyanmarTimestamp();
     const upcoming = pendingSessions
       .filter((session) => {
         try {
-          const sessionTime = new Date(session.win_time.replace(".0", "")).getTime();
-          return sessionTime > now;
+          const sessionTime = parseServerTime(session.win_time);
+          return sessionTime > myanmarNow;
         } catch {
           return false;
         }
       })
-      .sort((a, b) => new Date(a.win_time.replace(".0", "")).getTime() - new Date(b.win_time.replace(".0", "")).getTime());
+      .sort((a, b) => parseServerTime(a.win_time) - parseServerTime(b.win_time));
     return upcoming.length > 0 ? upcoming[0] : null;
   })();
 
   const drawTime = nextDraw ? nextDraw.win_time.split(" ")[1]?.split(".")[0] : "N/A";
 
+  // Countdown timer using Myanmar time
   useEffect(() => {
     const updateCountdown = () => {
       if (!nextDraw || !nextDraw.win_time) {
@@ -94,8 +101,7 @@ export default function Lottery3DHome() {
         return;
       }
       try {
-        const drawDate = new Date(nextDraw.win_time.replace(".0", ""));
-        const diff = drawDate.getTime() - Date.now();
+        const diff = getTimeDiffFromMyanmarNow(nextDraw.win_time);
         if (diff <= 0) {
           setCountdown("00:00:00");
           return;
@@ -116,13 +122,23 @@ export default function Lottery3DHome() {
   const latestResults = completedSessions.slice(0, 3);
 
   const handleBetClick = () => {
-    if (nextDraw) {
-      localStorage.setItem("selectedBetIssue", nextDraw.issue);
-      navigate("/3d/bet");
-    } else {
-      showAlert(t("lottery3d.noSession"));
+    // Check if still loading
+    if (!lotteryToken) {
+      showAlert(t("common.loading"));
+      return;
     }
+    // Check if no active session
+    if (!nextDraw) {
+      showAlert(t("lottery3d.noSession"));
+      return;
+    }
+    // All checks passed, navigate to bet page
+    localStorage.setItem("selectedBetIssue", nextDraw.issue);
+    navigate("/3d/bet");
   };
+
+  // Determine if button should appear disabled
+  const isBetDisabled = !lotteryToken || !nextDraw;
 
   return (
     <div className={styles.container}>
@@ -184,8 +200,7 @@ export default function Lottery3DHome() {
       </div>
 
       <button
-        className={styles.betBtn}
-        disabled={!lotteryToken || countdown === "00:00:00"}
+        className={`${styles.betBtn} ${isBetDisabled ? styles.betBtnDisabled : ""}`}
         onClick={handleBetClick}
         title={t("common.bet")}
       >

@@ -38,7 +38,7 @@ export default function Lottery2DBetHistory() {
       setError(null);
       try {
         const records = await getBetRecords(1, "", 1, 10); // 1 = 2D game, empty issue means all
-        console.log("Fetched bet records:", records);
+        //console.log("Fetched bet records:", records);
 
         // Group records by issue
         const groupedMap = new Map<string, BetOrder>();

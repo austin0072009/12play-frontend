@@ -235,7 +235,7 @@ import { useLotteryStore } from '../store/lottery';
 
 // In browser console
 const state = useLotteryStore.getState();
-console.log(state);
+//console.log(state);
 ```
 
 ### Monitor API Calls

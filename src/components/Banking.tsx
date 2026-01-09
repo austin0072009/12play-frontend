@@ -25,7 +25,7 @@ export default function Banking() {
     try {
       setIsLoading(true);
       const response = await fetchBankList();
-      console.log("=== BANK LIST RESPONSE ===", response);
+      // //console.log("=== BANK LIST RESPONSE ===", response);
       if (response && response.data) {
         setBankList(response.data);
         const setUserInfo = useUserStore.getState().setUserInfo;
@@ -46,7 +46,7 @@ export default function Banking() {
   const handleDeleteConfirm = async () => {
     try {
       const response = await unBindCard();
-      console.log("=== DELETE BANK RESPONSE ===", response);
+      //console.log("=== DELETE BANK RESPONSE ===", response);
       setDeleteConfirm(false);
       setSuccessMessage(t('banking.deleteSuccess'));
       setSuccessDialog(true);

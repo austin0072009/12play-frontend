@@ -28,7 +28,7 @@ export async function fetchInitData() {
     const res = await getData<
         { status?: any; data?: InitDataResp } | InitDataResp
     >("/nweb/Ky_getAllGameCates");
-    console.log("fetchInitData res=", res);
+    //console.log("fetchInitData res=", res);
     return res && (res as any).data
         ? ((res as any).data as InitDataResp)
         : (res as InitDataResp);
@@ -53,7 +53,7 @@ export async function claimActivity(activity_id: number, flex_type: number) {
         activity_id,
         flex_type,
     });
-    console.log("claimActivity res=", res);
+    //console.log("claimActivity res=", res);
     return res as any;
 }
 
@@ -109,7 +109,7 @@ export async function fetchRecharegeAmount(recharge_type: string) {
         recharge_type,
         token,
     });
-    console.log("fetchRecharegeAmount res=", res);
+    //console.log("fetchRecharegeAmount res=", res);
     return res as GetRechargeAmountsResp;
 }
 
@@ -165,7 +165,7 @@ export async function withdrawal(money: number, type: string) {
         type,
         qk_pwd: "1",
     });
-    console.log("withdrawalResp=", res);
+    //console.log("withdrawalResp=", res);
 
     return res as any;
 }

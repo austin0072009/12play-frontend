@@ -39,7 +39,7 @@ export default function WithdrawalPage() {
 
         // Fetch bank binding
         fetchBankList().then((data) => {
-            console.log("Bank List:", data);
+            //console.log("Bank List:", data);
             if (data?.data) {
                 setBankList(data.data);
             }

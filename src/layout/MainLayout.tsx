@@ -20,11 +20,11 @@ export default function MainLayout() {
     try {
       const userInfo = useUserStore.getState().userInfo;
       const balanceRes = await fetchBalance();
-      console.log("Fetched balance response:", balanceRes);
+      //console.log("Fetched balance response:", balanceRes);
       // balanceRes structure: { status: { errorCode: 0, ... }, data: { balance, ml_money }, url: "" }
       if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && balanceRes.data) {
-        console.log("Fetched balance:", balanceRes.data.balance);
-        console.log("Fetched turnover:", balanceRes.data.ml_money);
+        //console.log("Fetched balance:", balanceRes.data.balance);
+        //console.log("Fetched turnover:", balanceRes.data.ml_money);
         // Data contains both balance and ml_money (turnover), merge with existing member data
         setUserInfo({ ...userInfo, balance: balanceRes.data.balance, ml_money: balanceRes.data.ml_money });
       }
@@ -38,7 +38,7 @@ export default function MainLayout() {
     // Check if token has expired
     const expirationTime = localStorage.getItem("RedCow-token-expiration");
     if (expirationTime && Date.now() > Number(expirationTime)) {
-      console.log("=== TOKEN EXPIRED ===");
+      //console.log("=== TOKEN EXPIRED ===");
       // Clear expired token and credentials
       localStorage.removeItem("RedCow-token-expiration");
       localStorage.removeItem("RedCow-username");
@@ -69,7 +69,7 @@ export default function MainLayout() {
 
       if (storedUsername && storedPasswordEncoded) {
         const storedPassword = atob(storedPasswordEncoded); // Decode from Base64
-        console.log("=== ATTEMPTING AUTO-LOGIN ===", { username: storedUsername });
+        //console.log("=== ATTEMPTING AUTO-LOGIN ===", { username: storedUsername });
         const res = await loginApi({ name: storedUsername, password: storedPassword, remember: true });
         
         if (res && res.status && Number(res.status.errorCode) === 0 && res.data) {
@@ -78,27 +78,27 @@ export default function MainLayout() {
           const yzflag = !!res.data.yzflag;
           const qk_pwd = !!res.data.qk_pwd;
 
-          console.log("=== AUTO-LOGIN MEMBER DATA ===", member);
-          console.log("=== AUTO-LOGIN TOKEN ===", newToken);
+          //console.log("=== AUTO-LOGIN MEMBER DATA ===", member);
+          //console.log("=== AUTO-LOGIN TOKEN ===", newToken);
 
           if (newToken) {
-            console.log("=== AUTO-LOGIN SUCCESS ===");
+            //console.log("=== AUTO-LOGIN SUCCESS ===");
             setToken(newToken);
             
             // Store token expiration time (24 hours from now)
             const expirationTime = Date.now() + 24 * 60 * 60 * 1000;
             localStorage.setItem("RedCow-token-expiration", String(expirationTime));
-            console.log("=== TOKEN EXPIRATION SET ===", new Date(expirationTime).toISOString());
+            //console.log("=== TOKEN EXPIRATION SET ===", new Date(expirationTime).toISOString());
             
             // Fetch balance first, then set all data together
             let balance = 0;
             let ml_money = 0;
             try {
               const balanceRes = await fetchBalance(newToken);
-              console.log("=== AUTO-LOGIN BALANCE RESPONSE ===", balanceRes);
+              //console.log("=== AUTO-LOGIN BALANCE RESPONSE ===", balanceRes);
               if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && balanceRes.data) {
-                console.log("Balance response full:", balanceRes);
-                console.log("Balance response data:", balanceRes.data);
+                //console.log("Balance response full:", balanceRes);
+                //console.log("Balance response data:", balanceRes.data);
                 balance = balanceRes.data.balance;
                 ml_money = balanceRes.data.ml_money;
               }
@@ -108,18 +108,18 @@ export default function MainLayout() {
 
             // Set all user info at once (member + balance + ml_money)
             const finalUserInfo = { ...member, yzflag, qk_pwd, balance, ml_money };
-            console.log("=== AUTO-LOGIN FINAL USER INFO ===", finalUserInfo);
+            //console.log("=== AUTO-LOGIN FINAL USER INFO ===", finalUserInfo);
             setUserInfo(finalUserInfo);
           }
         } else {
-          console.log("=== AUTO-LOGIN FAILED ===", res);
+          //console.log("=== AUTO-LOGIN FAILED ===", res);
           // Clear stored credentials if auto-login fails
           localStorage.removeItem("RedCow-username");
           localStorage.removeItem("RedCow-password");
           localStorage.removeItem("RedCow-token-expiration");
         }
       } else {
-        console.log("=== NO STORED CREDENTIALS FOR AUTO-LOGIN ===");
+        //console.log("=== NO STORED CREDENTIALS FOR AUTO-LOGIN ===");
       }
     } catch (error) {
       console.error("=== AUTO-LOGIN ERROR ===", error);

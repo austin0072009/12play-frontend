@@ -19,6 +19,13 @@ import {
 import Lottery2DTimeSectionPopup from "../components/Lottery2DTimeSectionPopup";
 import { showAlert } from "../store/alert";
 import { useTranslation } from "react-i18next";
+import {
+  getMyanmarTimestamp,
+  getMyanmarDateString,
+  getMyanmarDayOfWeek,
+  getTimeDiffFromMyanmarNow,
+  parseServerTime,
+} from "../utils/myanmarTime";
 
 /**
  * Format time from "YYYY-MM-DD HH:MM:SS.mmm" to "HH:MM"
@@ -175,34 +182,34 @@ export default function Lottery2DHome() {
     };
   }, [lotteryToken, lotteryDomain]);
 
-  // Find the next draw (nearest upcoming session)
+  // Find the next draw (nearest upcoming session) using Myanmar time
   const nextDraw = (() => {
     if (!pendingSessions || pendingSessions.length === 0) return null;
-    
-    const now = new Date().getTime();
-    
+
+    const myanmarNow = getMyanmarTimestamp();
+
     // Filter sessions that are in the future and sort by time
     const upcomingSessions = pendingSessions
       .filter(session => {
         try {
-          const sessionTime = new Date(session.win_time.replace(".0", "")).getTime();
-          return sessionTime > now;
+          const sessionTime = parseServerTime(session.win_time);
+          return sessionTime > myanmarNow;
         } catch {
           return false;
         }
       })
       .sort((a, b) => {
-        const timeA = new Date(a.win_time.replace(".0", "")).getTime();
-        const timeB = new Date(b.win_time.replace(".0", "")).getTime();
+        const timeA = parseServerTime(a.win_time);
+        const timeB = parseServerTime(b.win_time);
         return timeA - timeB;
       });
-    
+
     return upcomingSessions.length > 0 ? upcomingSessions[0] : null;
   })();
 
   const drawTime = nextDraw ? nextDraw.win_time.split(" ")[1]?.split(".")[0] : "N/A";
 
-  // Countdown timer effect
+  // Countdown timer effect using Myanmar time
   useEffect(() => {
     const updateCountdown = () => {
       if (!nextDraw || !nextDraw.win_time) {
@@ -211,9 +218,7 @@ export default function Lottery2DHome() {
       }
 
       try {
-        const drawDate = new Date(nextDraw.win_time.replace(".0", ""));
-        const now = new Date();
-        const diff = drawDate.getTime() - now.getTime();
+        const diff = getTimeDiffFromMyanmarNow(nextDraw.win_time);
 
         if (diff <= 0) {
           setCountdown("00:00:00");
@@ -251,22 +256,15 @@ export default function Lottery2DHome() {
 
   const yesterdayResults = getYesterdayResults();
 
-  // Check if today is a closed day
+  // Check if today is a closed day (using Myanmar time)
   const isClosedDay = () => {
     if (!Array.isArray(closedDays) || closedDays.length === 0) {
       return false;
     }
-    
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    const todayDate = `${year}-${month}-${day}`; // YYYY-MM-DD local format
-    const todayDayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-    
-    // Convert Sunday (0) to 7 for API format (1=Monday, 7=Sunday)
-    const todayDayNum = todayDayOfWeek === 0 ? 7 : todayDayOfWeek;
-    
+
+    const todayDate = getMyanmarDateString(); // YYYY-MM-DD in Myanmar timezone
+    const todayDayNum = getMyanmarDayOfWeek(); // 1=Monday, 7=Sunday
+
     return closedDays.some((closedDay: any) => {
       // Type 1: Recurring day of week
       if (closedDay.type === 1 && closedDay.day) {

@@ -24,40 +24,40 @@ export default function ChangePassword() {
     const isValidPassword = (pwd: string) => pwd.length >= 6;
 
     const handleSubmit = async (e: React.FormEvent) => {
-        console.log("submit password change");
+        //console.log("submit password change");
         e.preventDefault();
 
         // Validation
         if (!oldPassword.trim()) {
-            console.log('Error: Old password is empty');
+            //console.log('Error: Old password is empty');
             setAlertMessage('Please enter your old password');
             setAlertOpen(true);
             return;
         }
 
         if (!newPassword.trim()) {
-            console.log('Error: New password is empty');
+            //console.log('Error: New password is empty');
             setAlertMessage('Please enter your new password');
             setAlertOpen(true);
             return;
         }
 
         if (!isValidPassword(newPassword)) {
-            console.log('Error: New password too short');
+            //console.log('Error: New password too short');
             setAlertMessage('New password must be at least 6 characters');
             setAlertOpen(true);
             return;
         }
 
         if (newPassword !== confirmPassword) {
-            console.log('Error: Passwords do not match');
+            //console.log('Error: Passwords do not match');
             setAlertMessage('Passwords do not match');
             setAlertOpen(true);
             return;
         }
 
         if (oldPassword === newPassword) {
-            console.log('Error: Old and new password are the same');
+            //console.log('Error: Old and new password are the same');
             setAlertMessage('New password must be different from old password');
             setAlertOpen(true);
             return;
@@ -68,10 +68,10 @@ export default function ChangePassword() {
 
             const username = (userInfo as any)?.username || (userInfo as any)?.user_name || (userInfo as any)?.name;
 
-            console.log('Account username:', { username });
+            //console.log('Account username:', { username });
 
             if (!username) {
-                console.log('Error: No username found');
+                //console.log('Error: No username found');
                 setAlertMessage('Unable to identify account information');
                 setAlertOpen(true);
                 return;
@@ -83,14 +83,14 @@ export default function ChangePassword() {
                 password: newPassword,
             };
 
-            console.log('Sending payload:', payload);
+            //console.log('Sending payload:', payload);
 
             const response = await resetPassword(payload);
 
-            console.log('Response:', response);
+            //console.log('Response:', response);
 
             if (response && response.status && response.status.errorCode === 0) {
-                console.log('Password changed successfully');
+                //console.log('Password changed successfully');
                 setAlertMessage('Password changed successfully!');
                 setIsSuccess(true);
                 setAlertOpen(true);
@@ -101,7 +101,7 @@ export default function ChangePassword() {
             } else {
                 // Handle error response
                 const errorMsg = response?.status?.mess || response?.status?.msg || 'Failed to change password. Please try again.';
-                console.log('Password change failed:', errorMsg);
+                //console.log('Password change failed:', errorMsg);
                 setAlertMessage(errorMsg);
                 setAlertOpen(true);
             }
@@ -113,7 +113,7 @@ export default function ChangePassword() {
                 err?.response?.data?.message ||
                 err?.message ||
                 'Failed to change password. Please try again.';
-            console.log('Setting error message:', errorMsg);
+            //console.log('Setting error message:', errorMsg);
             setAlertMessage(errorMsg);
             setAlertOpen(true);
         } finally {

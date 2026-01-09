@@ -126,6 +126,8 @@
   "lottery2d.betNow": "ယခုလောင်းမည်",
   "lottery2d.betExceedsLimit": "လောင်းမည်ငွေပမာဏသည်အောက်ပါနံပါတ်များ၏အများဆုံးကန့်သတ်ချက်ထက်အလွန်နီးစပ်သည်",
   "lottery2d.reduceAmount": "သင့်လောင်းမည်ငွေပမာဏကိုလျှော့ချပါ။",
+  "lottery2d.pleaseSelectNumbers": "လောင်းမည်ရန်အနည်းဆုံးနံပါတ်တစ်ခုရွေးချယ်ပါ။",
+  "lottery2d.pleaseEnterAmount": "လောင်းမည်ငွေပမာဏထည့်သွင်းပါ။",
   "lottery2d.value": "တန်ဖိုး",
   "lottery2d.closedBadge": "ပိတ်",
   "lottery2d.openBadge": "ဖွင့်",

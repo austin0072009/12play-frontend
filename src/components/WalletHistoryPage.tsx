@@ -45,7 +45,7 @@ export default function WalletHistoryPage() {
         const type = activeTab === "deposit" ? 1 : 2;
         fetchActionLog({ type })
             .then((res) => {
-                console.log("Fetched action log:", res);
+                //console.log("Fetched action log:", res);
                 if (res.status.errorCode === 0 && res.data?.data) {
                     setRecords(res.data.data);
                 } else {

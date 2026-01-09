@@ -150,6 +150,8 @@
   "lottery2d.betNow": "BET NOW",
   "lottery2d.betExceedsLimit": "Bet amount exceeds maximum limit for the following numbers",
   "lottery2d.reduceAmount": "Please reduce your bet amount.",
+  "lottery2d.pleaseSelectNumbers": "Please select at least one number to bet.",
+  "lottery2d.pleaseEnterAmount": "Please enter a bet amount.",
 
   "lottery3d.title": "3D Lottery",
   "lottery3d.rank": "Rank",

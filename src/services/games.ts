@@ -73,7 +73,7 @@ export async function startGame(
 
   const res = await request.post<KyLoginResp>("/nweb/Ky_login", body);
 
-  console.log("KY 登录响应：", res);
+  //console.log("KY 登录响应：", res);
   if (!res || typeof res !== "object") {
     throw new Error("响应为空或格式不正确");
   }
@@ -126,7 +126,7 @@ export async function startLotteryGame(
   };
 
   const kyRes = await request.post<KyLoginResp>("/nweb/Ky_login", body);
-  console.log("KY 彩票登录响应：", kyRes);
+  //console.log("KY 彩票登录响应：", kyRes);
 
   if (!kyRes || typeof kyRes !== "object") {
     throw new Error("响应为空或格式不正确");

@@ -92,7 +92,7 @@ export async function getBetSessions(gameId: number, winState: number): Promise<
     { gameId, winState }
   )) as LotteryBetSessionResp;
 
-  console.log('Bet sessions response:', res);
+  //console.log('Bet sessions response:', res);
   if (!res || res.code !== 200) {
     throw new Error(res?.message || 'Failed to get bet sessions');
   }

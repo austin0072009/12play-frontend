@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getClosedDays } from "../services/lottery";
 import { useLotteryStore } from "../store/lottery";
 import type { ClosedDay } from "../services/types";
+import { getMyanmarDateString } from "../utils/myanmarTime";
 
 export default function Lottery2DClosedDays() {
   const navigate = useNavigate();
@@ -116,7 +117,7 @@ export default function Lottery2DClosedDays() {
         )}
 
         <div className={styles.footer}>
-          <p>{t("lottery2d.lastUpdated")}: {new Date().toLocaleDateString()}</p>
+          <p>{t("lottery2d.lastUpdated")}: {getMyanmarDateString()}</p>
           <p>{t("lottery2d.planBetsAccordingly")}</p>
         </div>
       </div>

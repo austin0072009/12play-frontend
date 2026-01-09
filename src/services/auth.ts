@@ -18,7 +18,7 @@ export function loginApi(payload: LoginReq) {
         {},
         { params: { name: payload.name, password: payload.password } }
     ).then((res) => {
-        console.log("=== LOGIN RESULT ===", res);
+        //console.log("=== LOGIN RESULT ===", res);
         return res;
     }).catch((error) => {
         console.error("=== LOGIN ERROR ===", error);

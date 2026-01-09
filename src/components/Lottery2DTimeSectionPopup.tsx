@@ -1,6 +1,11 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import styles from "./Lottery2DTimeSectionPopup.module.css";
 import { useTranslation } from "react-i18next";
+import {
+  getMyanmarDateString,
+  getMyanmarTomorrowDateString,
+  isMyanmarTimeAfter,
+} from "../utils/myanmarTime";
 
 interface BetSession {
   issue: string;
@@ -17,48 +22,6 @@ interface Lottery2DTimeSectionPopupProps {
   onSelectSection: (issue: string) => void;
 }
 
-/**
- * Get today's date in YYYY-MM-DD format
- */
-function getTodayDate(): string {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-/**
- * Get tomorrow's date in YYYY-MM-DD format
- */
-function getTomorrowDate(): string {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const year = tomorrow.getFullYear();
-  const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
-  const day = String(tomorrow.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-/**
- * Check if current time is after 16:30
- */
-function isAfter1630(): boolean {
-  const now = new Date();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  return hours > 16 || (hours === 16 && minutes >= 30);
-}
-
-/**
- * Check if current time is after 12:00
- */
-function isAfter1200(): boolean {
-  const now = new Date();
-  const hours = now.getHours();
-  return hours >= 12;
-}
-
 export default function Lottery2DTimeSectionPopup({
   sessions,
   onClose,
@@ -70,10 +33,11 @@ export default function Lottery2DTimeSectionPopup({
     onClose();
   };
 
-  const todayDate = getTodayDate();
-  const tomorrowDate = getTomorrowDate();
-  const after1630 = isAfter1630();
-  const after1200 = isAfter1200();
+  // Use Myanmar time for all date/time checks
+  const todayDate = getMyanmarDateString();
+  const tomorrowDate = getMyanmarTomorrowDateString();
+  const after1630 = isMyanmarTimeAfter(16, 30);
+  const after1200 = isMyanmarTimeAfter(12, 0);
 
   // Find today's and tomorrow's sessions
   const todaySession12 = sessions.find((s) => 

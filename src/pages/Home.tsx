@@ -184,7 +184,7 @@ export default function Home() {
           tgp: '',
         });
         if (url) {
-          console.log('Game URL:', url);
+          //console.log('Game URL:', url);
           // Check is_outopen field: 1 = direct assignment, 2 = iframe
           if (g.is_outopen === 1) {
             window.location.assign(url);

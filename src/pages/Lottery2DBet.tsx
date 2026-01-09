@@ -128,7 +128,14 @@ export default function Lottery2DBet() {
   };
 
   const confirmBet = () => {
-    if (selectedNums.length === 0 || betAmount <= 0) return;
+    if (selectedNums.length === 0) {
+      showAlert(t("lottery2d.pleaseSelectNumbers"));
+      return;
+    }
+    if (betAmount <= 0) {
+      showAlert(t("lottery2d.pleaseEnterAmount"));
+      return;
+    }
 
     // Validate bet amount against max bet limits
     const overLimitNumbers: string[] = [];
@@ -276,9 +283,8 @@ export default function Lottery2DBet() {
             </div>
                         {/* BET Button */}
             <button
-              className={styles.betBtn}
+              className={`${styles.betBtn} ${selectedNums.length === 0 || betAmount <= 0 ? styles.betBtnDisabled : ""}`}
               onClick={confirmBet}
-              disabled={selectedNums.length === 0 || betAmount <= 0}
             >
               {t("lottery2d.betNow")}
             </button>
