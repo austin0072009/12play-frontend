@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './GameFrame.module.css';
 import BackIcon from '../assets/icons/back.svg?react';
-import HotIcon from '../assets/icons/hot.svg?react';
 import RefreshIcon from '../assets/icons/refresh.svg?react';
 import DepositIcon from '../assets/icons/deposit.svg?react';
 import ChatIcon from '../assets/icons/chat.svg?react';
@@ -35,9 +34,7 @@ export default function GameFrame() {
     navigate(-1);
   };
 
-  const handleHot = () => {
-    navigate('/');
-  };
+
 
   const handleRefresh = () => {
     if (iframeRef.current) {
@@ -51,7 +48,8 @@ export default function GameFrame() {
 
   const handleChat = () => {
     // Open live chat - could be a modal, new window, or external chat service
-    window.open('https://example.com/chat', 'livechat', 'width=400,height=600');
+    // window.open('https://example.com/chat', 'livechat', 'width=400,height=600');
+    navigate('/contact');
   };
 
   const handleFullscreen = async () => {
@@ -72,11 +70,6 @@ export default function GameFrame() {
         <button className={styles.navButton} onClick={handleBack} title="Back">
           <BackIcon className={styles.icon} />
           <span className={styles.label}>Back</span>
-        </button>
-
-        <button className={styles.navButton} onClick={handleHot} title="Hot">
-          <HotIcon className={styles.icon} />
-          <span className={styles.label}>Hot</span>
         </button>
 
         <button className={styles.navButton} onClick={handleRefresh} title="Refresh">
