@@ -18,3 +18,35 @@ body,
   padding: 0;
   overflow-y: auto; /* 允许页面滚动 */
 }
+
+/**
+ * iOS Safari Auto-Zoom Prevention
+ * iOS Safari automatically zooms in on input fields with font-size < 16px
+ * Setting minimum font-size to 16px prevents this unwanted zoom behavior
+ */
+input,
+textarea,
+select {
+  font-size: 16px !important; /* Minimum 16px to prevent iOS zoom */
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation; /* Prevents double-tap zoom delay */
+}
+
+/* For larger screens, allow the designed font sizes */
+@media screen and (min-width: 768px) {
+  input,
+  textarea,
+  select {
+    font-size: inherit !important;
+  }
+}
+
+/* Ensure input fields don't trigger zoom on focus (iOS specific) */
+@supports (-webkit-touch-callout: none) {
+  /* iOS specific styles */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    font-size: 16px !important;
+  }
+}
