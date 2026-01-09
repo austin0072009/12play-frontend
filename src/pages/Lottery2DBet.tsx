@@ -102,14 +102,84 @@ export default function Lottery2DBet() {
   const [page, setPage] = useState(0);
   const [selectedNums, setSelectedNums] = useState<string[]>([]);
   const [betAmount, setBetAmount] = useState<number>(0);
+  const [selectedNumInfo, setSelectedNumInfo] = useState<NumInfo | null>(null);
+  const [showFastPick, setShowFastPick] = useState(false);
+
+  // Fast pick number generators for 2D (00-99)
+  const fastPickOptions = useMemo(() => {
+    // Get available numbers (not full)
+    const availableNums = allNumbers.filter(n => n.remain > 0).map(n => n.num);
+
+    // Twin numbers: 00, 11, 22, ..., 99
+    const twins = Array.from({ length: 10 }, (_, i) =>
+      String(i).repeat(2)
+    ).filter(n => availableNums.includes(n));
+
+    // Small numbers: 00-49
+    const small = availableNums.filter(n => parseInt(n) <= 49);
+
+    // Big numbers: 50-99
+    const big = availableNums.filter(n => parseInt(n) >= 50);
+
+    // Odd numbers: 01, 03, 05, ..., 99
+    const odd = availableNums.filter(n => parseInt(n) % 2 === 1);
+
+    // Even numbers: 00, 02, 04, ..., 98
+    const even = availableNums.filter(n => parseInt(n) % 2 === 0);
+
+    // Lucky endings
+    const endsWith8 = availableNums.filter(n => n.endsWith('8'));
+    const endsWith7 = availableNums.filter(n => n.endsWith('7'));
+    const endsWith6 = availableNums.filter(n => n.endsWith('6'));
+    const endsWith9 = availableNums.filter(n => n.endsWith('9'));
+
+    // Random pick function
+    const getRandomPick = (count: number) => {
+      const shuffled = [...availableNums].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, count);
+    };
+
+    return {
+      twins,
+      small,
+      big,
+      odd,
+      even,
+      endsWith8,
+      endsWith7,
+      endsWith6,
+      endsWith9,
+      getRandomPick,
+      availableCount: availableNums.length,
+    };
+  }, [allNumbers]);
+
+  // Handle fast pick selection
+  const handleFastPick = (numbers: string[], append: boolean = true) => {
+    if (append) {
+      // Add to existing selection (avoid duplicates)
+      setSelectedNums(prev => {
+        const newSet = new Set([...prev, ...numbers]);
+        return Array.from(newSet);
+      });
+    } else {
+      // Replace selection
+      setSelectedNums(numbers);
+    }
+    setShowFastPick(false);
+  };
+
+  // Clear all selections
+  const clearAllSelections = () => {
+    setSelectedNums([]);
+    setShowFastPick(false);
+  };
 
   const pageCount = Math.ceil(allNumbers.length / PAGE_SIZE);
   const currentNumbers = allNumbers.slice(
     page * PAGE_SIZE,
     (page + 1) * PAGE_SIZE
   );
-
-  const [selectedNumInfo, setSelectedNumInfo] = useState<NumInfo | null>(null);
 
   const toggleNumber = (numInfo: NumInfo) => {
     if (numInfo.remain <= 0) return;
@@ -231,6 +301,14 @@ export default function Lottery2DBet() {
           <div className={styles.loading}>{t("lottery2d.loadingNumbers")}</div>
         ) : (
           <>
+            {/* Fast Pick Button */}
+            <button
+              className={styles.fastPickBtn}
+              onClick={() => setShowFastPick(true)}
+            >
+              ⚡ Fast
+            </button>
+
             <div className={styles.numberGrid}>
               {currentNumbers.map((numInfo) => {
                 const selected = selectedNums.includes(numInfo.num);
@@ -291,6 +369,186 @@ export default function Lottery2DBet() {
           </>
         )}
       </div>
+
+      {/* ===== Fast Pick Modal ===== */}
+      {showFastPick && (
+        <div className={styles.fastPickOverlay}>
+          <div className={styles.fastPickModal}>
+            <div className={styles.fastPickHeader}>
+              <h2>⚡ Fast Pick</h2>
+              <button
+                className={styles.fastPickClose}
+                onClick={() => setShowFastPick(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.fastPickContent}>
+              {/* Pattern Section */}
+              <div className={styles.fastPickSection}>
+                <h3>📊 Patterns</h3>
+                <div className={styles.fastPickGrid}>
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.twins)}
+                    disabled={fastPickOptions.twins.length === 0}
+                  >
+                    <span className={styles.fastPickIcon}>👯</span>
+                    <span className={styles.fastPickLabel}>Twins</span>
+                    <span className={styles.fastPickDesc}>00, 11, 22...</span>
+                    <span className={styles.fastPickCount}>{fastPickOptions.twins.length}</span>
+                  </button>
+
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.small)}
+                    disabled={fastPickOptions.small.length === 0}
+                  >
+                    <span className={styles.fastPickIcon}>🔽</span>
+                    <span className={styles.fastPickLabel}>Small</span>
+                    <span className={styles.fastPickDesc}>00-49</span>
+                    <span className={styles.fastPickCount}>{fastPickOptions.small.length}</span>
+                  </button>
+
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.big)}
+                    disabled={fastPickOptions.big.length === 0}
+                  >
+                    <span className={styles.fastPickIcon}>🔼</span>
+                    <span className={styles.fastPickLabel}>Big</span>
+                    <span className={styles.fastPickDesc}>50-99</span>
+                    <span className={styles.fastPickCount}>{fastPickOptions.big.length}</span>
+                  </button>
+
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.odd)}
+                    disabled={fastPickOptions.odd.length === 0}
+                  >
+                    <span className={styles.fastPickIcon}>1️⃣</span>
+                    <span className={styles.fastPickLabel}>Odd</span>
+                    <span className={styles.fastPickDesc}>01, 03, 05...</span>
+                    <span className={styles.fastPickCount}>{fastPickOptions.odd.length}</span>
+                  </button>
+
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.even)}
+                    disabled={fastPickOptions.even.length === 0}
+                  >
+                    <span className={styles.fastPickIcon}>2️⃣</span>
+                    <span className={styles.fastPickLabel}>Even</span>
+                    <span className={styles.fastPickDesc}>00, 02, 04...</span>
+                    <span className={styles.fastPickCount}>{fastPickOptions.even.length}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Lucky Endings Section */}
+              <div className={styles.fastPickSection}>
+                <h3>🍀 Lucky Endings</h3>
+                <div className={styles.fastPickGrid}>
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.endsWith8)}
+                    disabled={fastPickOptions.endsWith8.length === 0}
+                  >
+                    <span className={styles.fastPickIcon}>8️⃣</span>
+                    <span className={styles.fastPickLabel}>Ends 8</span>
+                    <span className={styles.fastPickDesc}>08, 18, 28...</span>
+                    <span className={styles.fastPickCount}>{fastPickOptions.endsWith8.length}</span>
+                  </button>
+
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.endsWith9)}
+                    disabled={fastPickOptions.endsWith9.length === 0}
+                  >
+                    <span className={styles.fastPickIcon}>9️⃣</span>
+                    <span className={styles.fastPickLabel}>Ends 9</span>
+                    <span className={styles.fastPickDesc}>09, 19, 29...</span>
+                    <span className={styles.fastPickCount}>{fastPickOptions.endsWith9.length}</span>
+                  </button>
+
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.endsWith7)}
+                    disabled={fastPickOptions.endsWith7.length === 0}
+                  >
+                    <span className={styles.fastPickIcon}>7️⃣</span>
+                    <span className={styles.fastPickLabel}>Ends 7</span>
+                    <span className={styles.fastPickDesc}>07, 17, 27...</span>
+                    <span className={styles.fastPickCount}>{fastPickOptions.endsWith7.length}</span>
+                  </button>
+
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.endsWith6)}
+                    disabled={fastPickOptions.endsWith6.length === 0}
+                  >
+                    <span className={styles.fastPickIcon}>6️⃣</span>
+                    <span className={styles.fastPickLabel}>Ends 6</span>
+                    <span className={styles.fastPickDesc}>06, 16, 26...</span>
+                    <span className={styles.fastPickCount}>{fastPickOptions.endsWith6.length}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Random Section */}
+              <div className={styles.fastPickSection}>
+                <h3>🎲 Random Pick</h3>
+                <div className={styles.fastPickGrid}>
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.getRandomPick(5))}
+                    disabled={fastPickOptions.availableCount < 5}
+                  >
+                    <span className={styles.fastPickIcon}>🎯</span>
+                    <span className={styles.fastPickLabel}>Random 5</span>
+                    <span className={styles.fastPickDesc}>5 lucky numbers</span>
+                  </button>
+
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.getRandomPick(10))}
+                    disabled={fastPickOptions.availableCount < 10}
+                  >
+                    <span className={styles.fastPickIcon}>🎯</span>
+                    <span className={styles.fastPickLabel}>Random 10</span>
+                    <span className={styles.fastPickDesc}>10 lucky numbers</span>
+                  </button>
+
+                  <button
+                    className={styles.fastPickOption}
+                    onClick={() => handleFastPick(fastPickOptions.getRandomPick(20))}
+                    disabled={fastPickOptions.availableCount < 20}
+                  >
+                    <span className={styles.fastPickIcon}>🎯</span>
+                    <span className={styles.fastPickLabel}>Random 20</span>
+                    <span className={styles.fastPickDesc}>20 lucky numbers</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Selection Info & Clear */}
+              <div className={styles.fastPickFooter}>
+                <span className={styles.fastPickSelected}>
+                  Selected: {selectedNums.length} numbers
+                </span>
+                <button
+                  className={styles.fastPickClear}
+                  onClick={clearAllSelections}
+                  disabled={selectedNums.length === 0}
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

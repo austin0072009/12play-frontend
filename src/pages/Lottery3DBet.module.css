@@ -174,6 +174,26 @@
   min-width: 150px;
 }
 
+.clearSearch {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  color: #aaa;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -32px;
+}
+
+.clearSearch:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
 .rangeSelect option {
   background: #1a1a1a;
   color: #fff;
@@ -299,4 +319,220 @@
   min-height: 60vh;
   font-size: 1.1rem;
   color: #aaa;
+}
+
+/* ===== Bottom BET Button ===== */
+.betBtn {
+  width: 100%;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ff3b3b, #cb0000);
+  border: none;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(203, 0, 0, 0.4);
+  transition: all 0.2s ease;
+}
+
+.betBtn:hover:not(.betBtnDisabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(203, 0, 0, 0.5);
+}
+
+.betBtnDisabled {
+  background: #555 !important;
+  color: #999 !important;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
+/* ===== Fast Pick Button ===== */
+.fastPickBtn {
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  color: #000;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.fastPickBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
+}
+
+/* ===== Fast Pick Modal ===== */
+.fastPickOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.fastPickModal {
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.fastPickHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 140, 0, 0.1));
+}
+
+.fastPickHeader h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #ffd700;
+}
+
+.fastPickClose {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fastPickClose:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.fastPickContent {
+  padding: 1rem;
+}
+
+.fastPickSection {
+  margin-bottom: 1.2rem;
+}
+
+.fastPickSection h3 {
+  margin: 0 0 0.8rem 0;
+  font-size: 0.9rem;
+  color: #aaa;
+  font-weight: 600;
+}
+
+.fastPickGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.fastPickOption {
+  background: linear-gradient(135deg, #2a2a2a, #1f1f1f);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fastPickOption:hover:not(:disabled) {
+  border-color: rgba(255, 215, 0, 0.5);
+  background: linear-gradient(135deg, #333, #2a2a2a);
+  transform: translateY(-2px);
+}
+
+.fastPickOption:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.fastPickIcon {
+  font-size: 1.5rem;
+}
+
+.fastPickLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.fastPickDesc {
+  font-size: 0.7rem;
+  color: #888;
+}
+
+.fastPickCount {
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  margin-top: 0.2rem;
+}
+
+.fastPickFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 0.5rem;
+}
+
+.fastPickSelected {
+  font-size: 0.9rem;
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.fastPickClear {
+  background: rgba(255, 80, 80, 0.2);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fastPickClear:hover:not(:disabled) {
+  background: rgba(255, 80, 80, 0.3);
+}
+
+.fastPickClear:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
