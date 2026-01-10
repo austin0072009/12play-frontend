@@ -28,7 +28,7 @@ export default function Promotions() {
         setLoading(true);
         const res = await fetchActivityData();
         if (res?.data?.list) {
-          //console.log("Fetched activities:", res.data.list);
+          console.log("Fetched activities:", res.data.list);
           setActivities(res.data.list);
         }
       } catch (error) {
@@ -70,7 +70,7 @@ export default function Promotions() {
               </div>
               <div className={styles.cardBody}>
                 <p className={styles.title}>{activity.title}</p>
-                <p className={styles.subtitle}>{activity.flag}</p>
+                {/* <p className={styles.subtitle}>{activity.flag}</p> */}
               </div>
             </div>
           ))

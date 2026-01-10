@@ -1,0 +1,315 @@
+.container {
+  background: linear-gradient(135deg, var(--color-bg-muted), rgba(30, 30, 30, 0.9));
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #667eea;
+  margin: 0 0 1.25rem 0;
+  text-align: center;
+}
+
+.loading,
+.error,
+.loginPrompt {
+  text-align: center;
+  padding: 2rem;
+  color: #9c9c9c;
+  font-size: 1rem;
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+/* Round Info Section */
+.roundInfo {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.roundRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+  .roundRow {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.roundItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.roundLabel {
+  font-size: 0.85rem;
+  color: #9c9c9c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.roundValue {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.newRoundHint {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 204, 102, 0.15));
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  color: #00ff88;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Streak Info */
+.streakInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 165, 0, 0.15));
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 165, 0, 0.3);
+}
+
+.streakIcon {
+  font-size: 2rem;
+  animation: flame 1s ease-in-out infinite;
+}
+
+@keyframes flame {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.streakText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.streakCount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffa500;
+}
+
+.streakLabel {
+  font-size: 0.85rem;
+  color: #9c9c9c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Calendar Grid */
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .calendarGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.dayCard {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.dayCard.today {
+  border-color: #667eea;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+  }
+}
+
+.dayCard.checked {
+  border-color: #00ff88;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 204, 102, 0.15));
+}
+
+.dayCard.milestone {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.15));
+}
+
+.dayCard.milestone.checked {
+  border-color: #00ff88;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 102, 0.2));
+}
+
+.dayCard.milestone.today {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+}
+
+.dayNumber {
+  font-size: 0.75rem;
+  color: #9c9c9c;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+}
+
+.rewardIcon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.rewardAmount {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffd700;
+}
+
+.rewardUnit {
+  font-size: 0.65rem;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.emptyDay {
+  height: 2.5rem;
+}
+
+/* Action Section */
+.actionSection {
+  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.checkinBtn {
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checkinBtn:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.checkinBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.checkedToday {
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 102, 0.2));
+  color: #00ff88;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: span 2;
+}
+
+@media (max-width: 480px) {
+  .actionSection {
+    grid-template-columns: 1fr;
+  }
+  
+  .checkedToday {
+    grid-column: span 1;
+  }
+}
+
+.bonusBtn {
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #ffd700, #ffaa00);
+  color: #000;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bonusBtn:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.bonusBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Next Reward */
+.nextReward {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+}
+
+.nextRewardLabel {
+  color: #9c9c9c;
+  font-size: 0.9rem;
+}
+
+.nextRewardValue {
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 1rem;
+}

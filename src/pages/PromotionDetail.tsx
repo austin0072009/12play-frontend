@@ -5,6 +5,12 @@ import { fetchActivityDetail } from "../services/api";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useAppStore } from "../store/app";
 import type { ActivityDetail } from "../services/types";
+import FirstDepositBonus from "../components/FirstDepositBonus";
+import CheckinCalendar from "../components/CheckinCalendar";
+
+// Special event IDs
+const FIRST_DEPOSIT_EVENT_ID = 29;
+const CHECKIN_EVENT_ID = 32;
 
 export default function PromotionDetail() {
   const navigate = useNavigate();
@@ -28,6 +34,7 @@ export default function PromotionDetail() {
         setError(null);
         const res = await fetchActivityDetail(id);
         if (res?.data) {
+          console.log("Fetched activity detail:", res.data);
           setActivity(res.data as ActivityDetail);
         } else {
           setError("Failed to load promotion details");
@@ -128,7 +135,17 @@ export default function PromotionDetail() {
                 <span className={styles.dateValue}>{activity.end_at}</span>
               </div>
             )}
+            {!activity.start_at && !activity.end_at && (
+              <div className={`${styles.dateItem} ${styles.longTermEvent}`}>
+                <span className={styles.dateValue}>Ongoing Event</span>
+              </div>
+            )}
           </div>
+
+          {/* Special Component: Check-in Calendar (Event ID 32) - Under date section */}
+          {activity.id === CHECKIN_EVENT_ID && (
+            <CheckinCalendar />
+          )}
 
           {/* Promotion Content (HTML) */}
           {activity.title_content && (
@@ -163,8 +180,13 @@ export default function PromotionDetail() {
             </div>
           )}
 
-          {/* Action Button */}
-          {activity.button && (
+          {/* Special Component: First Deposit Bonus (Event ID 29) */}
+          {activity.id === FIRST_DEPOSIT_EVENT_ID && (
+            <FirstDepositBonus />
+          )}
+
+          {/* Action Button - Hide for special events */}
+          {activity.button && activity.id !== FIRST_DEPOSIT_EVENT_ID && activity.id !== CHECKIN_EVENT_ID && (
             <button className={styles.actionBtn}>
               {activity.button}
             </button>

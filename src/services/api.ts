@@ -189,6 +189,24 @@ export async function fetchDepositBonusInfo() {
     return res as any;
 }
 
+export async function fetchCheckinInfo() {
+    const token = useUserStore.getState().token || "";
+
+    const res = await postData<any>("/nweb/grabCheckinInfo", {
+        token,
+    });
+    return res as any;
+}
+
+export async function checkinToday() {
+    const token = useUserStore.getState().token || "";
+
+    const res = await postData<any>("/nweb/checkinToday", {
+        token,
+    });
+    return res as any;
+}
+
 
 export async function transferOut() {
 

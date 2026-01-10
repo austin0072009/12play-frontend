@@ -1,0 +1,250 @@
+.container {
+  background: linear-gradient(135deg, var(--color-bg-muted), rgba(30, 30, 30, 0.9));
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffd700;
+  margin: 0 0 1.25rem 0;
+  text-align: center;
+}
+
+.loading,
+.error,
+.noData,
+.loginPrompt {
+  text-align: center;
+  padding: 2rem;
+  color: #9c9c9c;
+  font-size: 1rem;
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+/* Summary Card */
+.summaryCard {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.summaryRow:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.label {
+  color: #9c9c9c;
+  font-size: 0.95rem;
+}
+
+.value {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.bonusValue {
+  color: #00ff88;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Progress Section */
+.progressSection {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.progressLabel {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.progressPercent {
+  color: #ffd700;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.progressBarWrapper {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #ff3333, #ff6600);
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+
+.progressBar.complete {
+  background: linear-gradient(90deg, #00ff88, #00cc66);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.progressDetails {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progressCurrent {
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.progressDivider {
+  color: #666;
+}
+
+.progressRequired {
+  color: #9c9c9c;
+  font-size: 0.95rem;
+}
+
+/* Status Section */
+.statusSection {
+  text-align: center;
+}
+
+.claimedBadge {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 102, 0.2));
+  color: #00ff88;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.claimBtn {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #ffd700, #ffaa00);
+  color: #000;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.claimBtn:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.claimBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.applyBtn {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.applyBtn:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.applyBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.appliedBadge {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 102, 0.2));
+  color: #00ff88;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.completeMessage {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 102, 0.1));
+  color: #00ff88;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.infoBox {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.infoBox p {
+  margin: 0;
+  color: #9c9c9c;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.pendingMessage {
+  color: #9c9c9c;
+  font-size: 0.95rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+}
