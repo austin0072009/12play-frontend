@@ -16,7 +16,7 @@ import goddaddyIcon from '../assets/icons/license-godaddy.png';
 
 const Footer = () => {
   const { t } = useTranslation();
-  const APP_VERSION = '1.0.6'
+  const APP_VERSION = '1.0.7'; // Example version, replace with actual versioning logic if needed
   
   const socialLinks = [
     { name: 'facebook', icon: facebookIcon, url: '#' },

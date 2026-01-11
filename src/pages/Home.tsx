@@ -15,7 +15,6 @@ import { useUserStore } from "../store/user";
 import { normalizeInitData } from "../utils/transform";
 import { startGame, startLotteryGame } from "../services/games";
 import { showAlert } from "../store/alert";
-import { usePageSEO } from "../hooks/useSEO";
 
 import SlotIcon from '../assets/icons/slot.svg?react';
 import FishIcon from '../assets/icons/fish.svg?react';
@@ -37,7 +36,6 @@ export default function Home() {
   const [activeCat, setActiveCat] = useState('');
 
   // Set SEO metadata for home page
-  usePageSEO('home');
 
   // URL to category type mapping (kept for future use)
   // const url2Cate: Record<string, string> = {
