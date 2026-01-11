@@ -1,360 +1,508 @@
 .downloadPage {
   min-height: 100vh;
-  background: linear-gradient(180deg, #0a0a0a 0%, #1a0a0a 100%);
-  padding-bottom: 60px;
+  background: linear-gradient(180deg, #0d0d0d 0%, #1a0a0a 100%);
+  padding: 0 0 40px;
 }
 
-.heroSection {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  padding: 60px 20px;
+/* Header */
+.header {
   text-align: center;
-  position: relative;
-  overflow: hidden;
+  padding: 48px 20px 32px;
+  background: linear-gradient(180deg, rgba(255, 2, 2, 0.1) 0%, transparent 100%);
 }
 
-.heroSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  opacity: 0.3;
-}
-
-.heroContent {
-  position: relative;
-  z-index: 1;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.heroTitle {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: white;
-  margin-bottom: 16px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.heroSubtitle {
-  font-size: 1.125rem;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 32px;
-  line-height: 1.6;
-}
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  margin-top: 32px;
-}
-
-.feature {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  color: white;
-  font-size: 0.9rem;
-}
-
-.feature svg {
-  flex-shrink: 0;
-  color: #fff;
-}
-
-/* Platform Selection */
-.platformSection {
-  padding: 40px 20px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.platformButtons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.platformBtn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.platformBtn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-.platformBtn.active {
-  background: linear-gradient(135deg, #ff0202 0%, #c00000 100%);
-  border-color: #ff0202;
-  color: white;
-  box-shadow: 0 8px 24px rgba(255, 2, 2, 0.3);
-}
-
-.platformBtn svg {
-  width: 40px;
-  height: 40px;
-}
-
-/* Steps Section */
-.stepsSection {
-  padding: 60px 20px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.sectionTitle {
-  font-size: 2rem;
+.title {
+  font-size: 1.75rem;
   font-weight: 700;
   color: white;
-  text-align: center;
-  margin-bottom: 48px;
+  margin: 0 0 8px;
 }
 
-.steps {
+.subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* Platform Tabs */
+.platformTabs {
   display: flex;
-  flex-direction: column;
-  gap: 32px;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 20px 32px;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
-.step {
-  display: flex;
-  gap: 24px;
-  padding: 32px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.step:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(0, 102, 204, 0.3);
-  transform: translateX(8px);
-}
-
-.stepNumber {
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+.tabBtn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
-  border-radius: 50%;
+  gap: 10px;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tabBtn.active {
+  background: linear-gradient(135deg, #ff0202 0%, #c00000 100%);
+  border-color: transparent;
   color: white;
-  font-size: 1.5rem;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+  box-shadow: 0 4px 16px rgba(255, 2, 2, 0.4);
 }
 
-.stepContent {
-  flex: 1;
+.tabIcon {
+  width: 22px;
+  height: 22px;
 }
 
-.stepTitle {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 12px;
+/* Content Section */
+.contentSection {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-.stepDescription {
-  font-size: 1rem;
+/* QR Section */
+.qrSection {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.qrCard {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.qrCode {
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.qrPlaceholder {
+  width: 100%;
+  height: 100%;
+  color: #333;
+}
+
+.qrLabel {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Download Section */
+.downloadSection {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.downloadHint {
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
-  margin-bottom: 16px;
+  margin: 0 0 16px;
 }
 
 .downloadBtn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 40px;
   background: linear-gradient(135deg, #ff0202 0%, #c00000 100%);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 2, 2, 0.3);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(255, 2, 2, 0.4);
 }
 
 .downloadBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 2, 2, 0.4);
+  box-shadow: 0 6px 24px rgba(255, 2, 2, 0.5);
 }
 
 .downloadBtn:active {
   transform: translateY(0);
 }
 
-.note {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 12px;
-  background: rgba(255, 165, 0, 0.1);
-  border-left: 3px solid #ffa500;
-  border-radius: 4px;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 0.9rem;
-  line-height: 1.5;
+.downloadIcon {
+  width: 20px;
+  height: 20px;
 }
 
-.note svg {
-  flex-shrink: 0;
-  color: #ffa500;
-  margin-top: 2px;
+.orText {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 16px 0 0;
 }
 
-/* QR Section */
-.qrSection {
-  padding: 60px 20px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.02);
+/* Steps Section */
+.stepsSection {
+  margin-bottom: 40px;
 }
 
-.qrTitle {
-  font-size: 1.5rem;
+.stepsTitle {
+  font-size: 1.25rem;
   font-weight: 700;
   color: white;
-  margin-bottom: 12px;
+  text-align: center;
+  margin: 0 0 24px;
 }
 
-.qrDescription {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 32px;
-}
-
-.qrCode {
-  display: inline-flex;
+.stepsGrid {
+  display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 16px;
 }
 
-.qrPlaceholder {
-  width: 200px;
-  height: 200px;
+.stepCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.stepCard:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 2, 2, 0.2);
+}
+
+.stepNumber {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-.qrPlaceholder svg {
-  color: #333;
-}
-
-.qrLabel {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* Info Section */
-.infoSection {
-  padding: 60px 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-.infoCard {
-  padding: 32px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-.infoCard:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(0, 102, 204, 0.3);
-  transform: translateY(-4px);
-}
-
-.infoCard svg {
-  color: #0066cc;
-  margin-bottom: 16px;
-}
-
-.infoCard h4 {
-  font-size: 1.125rem;
-  font-weight: 700;
+  background: linear-gradient(135deg, #ff0202 0%, #c00000 100%);
+  border-radius: 50%;
   color: white;
-  margin-bottom: 12px;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
-.infoCard p {
-  font-size: 0.95rem;
+.stepContent h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 6px;
+}
+
+.stepContent p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.noteBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: rgba(255, 165, 0, 0.1);
+  border-left: 3px solid #ffa500;
+  border-radius: 0 8px 8px 0;
+  margin-top: 20px;
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: #ffa500;
+}
+
+.noteBox span {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+/* iOS Header */
+.iosHeader {
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  margin-bottom: 32px;
+}
+
+.pwaIcon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.safariIcon {
+  width: 28px;
+  height: 28px;
+  color: white;
+}
+
+.iosHint {
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* iOS Steps */
+.iosSteps {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 4px 0 20px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.iosSteps::-webkit-scrollbar {
+  display: none;
+}
+
+.iosStepCard {
+  flex: 0 0 260px;
+  min-width: 260px;
+  scroll-snap-align: start;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+}
+
+.iosStepNumber {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ff0202 0%, #c00000 100%);
+  border-radius: 50%;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  z-index: 1;
+}
+
+.iosImageWrapper {
+  width: 100%;
+  aspect-ratio: 9/16;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.iosStepImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.iosStepCaption {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* Safari Button */
+.safariSection {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.safariBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.4);
+}
+
+.safariBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 122, 255, 0.5);
+}
+
+.safariBtn .safariIcon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Benefits Section */
+.benefitsSection {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.benefitCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 100px;
+}
+
+.benefitIcon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 2, 2, 0.1);
+  border-radius: 12px;
+}
+
+.benefitIcon svg {
+  width: 22px;
+  height: 22px;
+  color: #ff0202;
+}
+
+.benefitText {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  font-weight: 500;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .heroTitle {
-    font-size: 2rem;
+@media (max-width: 480px) {
+  .header {
+    padding: 32px 16px 24px;
   }
 
-  .heroSubtitle {
-    font-size: 1rem;
-  }
-
-  .features {
-    grid-template-columns: 1fr;
-  }
-
-  .sectionTitle {
+  .title {
     font-size: 1.5rem;
   }
 
-  .step {
-    flex-direction: column;
-    padding: 24px;
+  .platformTabs {
+    padding: 0 16px 24px;
+  }
+
+  .tabBtn {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+
+  .tabIcon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .contentSection {
+    padding: 0 16px;
+  }
+
+  .qrCard {
+    padding: 20px;
+  }
+
+  .qrCode {
+    width: 150px;
+    height: 150px;
+  }
+
+  .downloadBtn {
+    padding: 14px 32px;
+    font-size: 0.95rem;
+  }
+
+  .stepsTitle {
+    font-size: 1.125rem;
+  }
+
+  .stepCard {
+    padding: 16px;
   }
 
   .stepNumber {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .iosStepCard {
+    flex: 0 0 220px;
+    min-width: 220px;
+  }
+
+  .benefitsSection {
+    gap: 16px;
+    padding: 32px 16px;
+  }
+
+  .benefitCard {
+    min-width: 80px;
+  }
+
+  .benefitIcon {
     width: 40px;
     height: 40px;
-    font-size: 1.25rem;
   }
 
-  .infoSection {
-    grid-template-columns: 1fr;
+  .benefitIcon svg {
+    width: 20px;
+    height: 20px;
   }
 
-  .platformButtons {
-    grid-template-columns: 1fr;
+  .benefitText {
+    font-size: 0.75rem;
   }
 }

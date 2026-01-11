@@ -1,7 +1,7 @@
 # Download Page Implementation
 
 ## Overview
-A complete download page for 12Play mobile app has been implemented, inspired by the reference design at https://www.12playaffth.com/th-TH/download?platform=android.
+A complete download page for redcow mobile app has been implemented, inspired by the reference design at https://www.redcowaffth.com/th-TH/download?platform=android.
 
 ## Files Created
 
@@ -21,7 +21,7 @@ Main React component featuring:
 
 ### 2. **Styling** - [src/pages/Download.module.css](src/pages/Download.module.css)
 Comprehensive CSS styling including:
-- Modern gradient backgrounds (red theme matching 12Play branding)
+- Modern gradient backgrounds (red theme matching redcow branding)
 - Responsive grid layouts
 - Smooth animations and hover effects
 - Mobile-first responsive design
@@ -71,7 +71,7 @@ Three clear steps with platform-specific information:
 - Touch-friendly buttons and spacing
 
 ### 4. **Visual Design**
-- Red gradient theme matching 12Play branding
+- Red gradient theme matching redcow branding
 - Icons for visual interest
 - Clear typography hierarchy
 - Smooth transitions and hover effects
@@ -88,8 +88,8 @@ Three clear steps with platform-specific information:
 1. **Download URLs** (in Download.tsx):
    ```tsx
    const downloadUrl = selectedPlatform === "android" 
-     ? "https://example.com/12play.apk"    // Update with actual Android APK URL
-     : "https://example.com/12play-ios";   // Update with actual iOS URL
+     ? "https://example.com/redcow.apk"    // Update with actual Android APK URL
+     : "https://example.com/redcow-ios";   // Update with actual iOS URL
    ```
 
 2. **QR Code** (in Download.tsx):
