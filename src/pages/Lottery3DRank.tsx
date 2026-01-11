@@ -65,7 +65,7 @@ export default function Lottery3DRank() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>Leaderboard</h1>
+        <h1 className={styles.title}>ထီပေါက်သူ</h1>
       </header>
 
       <div className={styles.content}>

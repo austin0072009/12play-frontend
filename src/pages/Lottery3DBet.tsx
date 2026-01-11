@@ -303,19 +303,18 @@ export default function Lottery3DBet() {
           </button>
           <h1 className={styles.title}>3D</h1>
         </header>
-        <div className={styles.loading}>Loading numbers...</div>
+        <div className={styles.loading}>{t("lottery3d.loading")}</div>
       </div>
     );
   }
 
   return (
     <div className={styles.container}>
-      {/* ===== Header ===== */}
       <header className={styles.header}>
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>3D</h1>
+        <h1 className={styles.title}>{t("lottery3d.title")}</h1>
       </header>
 
       {/* ===== Info Card ===== */}
@@ -324,7 +323,7 @@ export default function Lottery3DBet() {
         <div className={styles.infoTop}>
           <div>
             <div className={styles.round}>{roundInfo.round}</div>
-            <div className={styles.time}>Draw {roundInfo.drawTime}</div>
+            <div className={styles.time}>{t("lottery3d.draw")} {roundInfo.drawTime}</div>
           </div>
           <div className={styles.balance}>
             MMK {roundInfo.balance.toLocaleString()}
@@ -333,7 +332,7 @@ export default function Lottery3DBet() {
 
         {/* 已选号码 */}
         <div className={styles.selectedInfo}>
-          Selected Numbers:{" "}
+          {t("lottery3d.selectedNumbers")}{" "}
           <span className={styles.selectedCount}>
             {selectedNums.length}
           </span>
@@ -343,15 +342,15 @@ export default function Lottery3DBet() {
         {selectedNumInfo && (
           <div className={styles.betLimits}>
             <div className={styles.limitItem}>
-              <span className={styles.limitLabel}>Min Bet:</span>
+              <span className={styles.limitLabel}>{t("lottery3d.minBet")}</span>
               <span className={styles.limitValue}>MMK {selectedNumInfo.minBet}</span>
             </div>
             <div className={styles.limitItem}>
-              <span className={styles.limitLabel}>Max Bet:</span>
+              <span className={styles.limitLabel}>{t("lottery3d.maxBet")}</span>
               <span className={styles.limitValue}>MMK {selectedNumInfo.maxBet}</span>
             </div>
             <div className={styles.limitItem}>
-              <span className={styles.limitLabel}>Odds:</span>
+              <span className={styles.limitLabel}>{t("lottery3d.odds")}</span>
               <span className={styles.limitValue}>1:{selectedNumInfo.odds}</span>
             </div>
           </div>
@@ -361,7 +360,7 @@ export default function Lottery3DBet() {
         <input
           type="number"
           min={selectedNumInfo?.minBet || 0}
-          placeholder={selectedNumInfo ? `Min: ${selectedNumInfo.minBet} - Max: ${selectedNumInfo.maxBet}` : t("lottery2d.enterAmount")}
+          placeholder={ t("lottery2d.enterAmount")}
           value={betAmount || ""}
           onChange={(e) => setBetAmount(Number(e.target.value))}
           className={styles.amountInput}
@@ -372,7 +371,7 @@ export default function Lottery3DBet() {
       <div className={styles.filterSection}>
         {/* Range Selector */}
         <div className={styles.filterGroup}>
-          <label className={styles.filterLabel}>Number Range:</label>
+          <label className={styles.filterLabel}>{t("lottery3d.numberRange")}</label>
           <select 
             value={selectedRange}
             onChange={(e) => {
@@ -391,10 +390,10 @@ export default function Lottery3DBet() {
 
         {/* Search Input */}
         <div className={styles.filterGroup}>
-          <label className={styles.filterLabel}>Search:</label>
+          <label className={styles.filterLabel}>{t("lottery3d.search")}:</label>
           <input
             type="text"
-            placeholder="Search all (e.g., 123)"
+            placeholder={t("lottery3d.searchPlaceholder")}
             value={searchNum}
             onChange={(e) => {
               // Only allow digits
@@ -430,7 +429,7 @@ export default function Lottery3DBet() {
               }}
               className={styles.checkbox}
             />
-            <span>Available Only</span>
+            <span>{t("lottery3d.availableOnly")}</span>
           </label>
         </div>
 
@@ -439,12 +438,12 @@ export default function Lottery3DBet() {
           className={styles.fastPickBtn}
           onClick={() => setShowFastPick(true)}
         >
-          ⚡ Fast
+          {t("lottery3d.fast")}
         </button>
 
         {/* Results Count */}
         <div className={styles.resultsCount}>
-          {filteredNumbers.length} numbers found
+          {filteredNumbers.length} {t("lottery3d.numbersFound")}
         </div>
       </div>
 
@@ -473,7 +472,7 @@ export default function Lottery3DBet() {
                   />
                 </div>
                 <span className={styles.availability}>
-                  {full ? "FULL" : `${availablePercentage}%`}
+                  {full ? t("lottery3d.full") : `${availablePercentage}%`}
                 </span>
               </button>
             );
@@ -482,7 +481,7 @@ export default function Lottery3DBet() {
 
         {filteredNumbers.length === 0 && (
           <div className={styles.noResults}>
-            No numbers found matching your filter
+            {t("lottery3d.noResults")}
           </div>
         )}
 
@@ -521,7 +520,7 @@ export default function Lottery3DBet() {
         <div className={styles.fastPickOverlay}>
           <div className={styles.fastPickModal}>
             <div className={styles.fastPickHeader}>
-              <h2>⚡ Fast Pick</h2>
+              <h2>{t("lottery3d.fastPick")}</h2>
               <button
                 className={styles.fastPickClose}
                 onClick={() => setShowFastPick(false)}
@@ -533,7 +532,7 @@ export default function Lottery3DBet() {
             <div className={styles.fastPickContent}>
               {/* Pattern Section */}
               <div className={styles.fastPickSection}>
-                <h3>📊 Patterns</h3>
+                <h3>{t("lottery3d.patterns")}</h3>
                 <div className={styles.fastPickGrid}>
                   <button
                     className={styles.fastPickOption}
@@ -541,8 +540,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.triples.length === 0}
                   >
                     <span className={styles.fastPickIcon}>🎰</span>
-                    <span className={styles.fastPickLabel}>Triple</span>
-                    <span className={styles.fastPickDesc}>000, 111, 222...</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.triple")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.tripleDesc")}</span>
                     <span className={styles.fastPickCount}>{fastPickOptions.triples.length}</span>
                   </button>
 
@@ -552,8 +551,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.doubles.length === 0}
                   >
                     <span className={styles.fastPickIcon}>👯</span>
-                    <span className={styles.fastPickLabel}>Double</span>
-                    <span className={styles.fastPickDesc}>001, 011, 100...</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.double")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.doubleDesc")}</span>
                     <span className={styles.fastPickCount}>{fastPickOptions.doubles.length}</span>
                   </button>
 
@@ -563,8 +562,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.seqUp.length === 0}
                   >
                     <span className={styles.fastPickIcon}>📈</span>
-                    <span className={styles.fastPickLabel}>Seq Up</span>
-                    <span className={styles.fastPickDesc}>012, 123, 234...</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.seqUp")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.seqUpDesc")}</span>
                     <span className={styles.fastPickCount}>{fastPickOptions.seqUp.length}</span>
                   </button>
 
@@ -574,8 +573,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.seqDown.length === 0}
                   >
                     <span className={styles.fastPickIcon}>📉</span>
-                    <span className={styles.fastPickLabel}>Seq Down</span>
-                    <span className={styles.fastPickDesc}>987, 876, 765...</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.seqDown")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.seqDownDesc")}</span>
                     <span className={styles.fastPickCount}>{fastPickOptions.seqDown.length}</span>
                   </button>
                 </div>
@@ -583,7 +582,7 @@ export default function Lottery3DBet() {
 
               {/* Lucky Endings Section */}
               <div className={styles.fastPickSection}>
-                <h3>🍀 Lucky Endings</h3>
+                <h3>{t("lottery3d.luckyEndings")}</h3>
                 <div className={styles.fastPickGrid}>
                   <button
                     className={styles.fastPickOption}
@@ -591,8 +590,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.endsWith8.length === 0}
                   >
                     <span className={styles.fastPickIcon}>8️⃣</span>
-                    <span className={styles.fastPickLabel}>Ends 8</span>
-                    <span className={styles.fastPickDesc}>008, 018, 028...</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.ends8")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.ends8Desc")}</span>
                     <span className={styles.fastPickCount}>{fastPickOptions.endsWith8.length}</span>
                   </button>
 
@@ -602,8 +601,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.endsWith7.length === 0}
                   >
                     <span className={styles.fastPickIcon}>7️⃣</span>
-                    <span className={styles.fastPickLabel}>Ends 7</span>
-                    <span className={styles.fastPickDesc}>007, 017, 027...</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.ends7")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.ends7Desc")}</span>
                     <span className={styles.fastPickCount}>{fastPickOptions.endsWith7.length}</span>
                   </button>
 
@@ -613,8 +612,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.endsWith6.length === 0}
                   >
                     <span className={styles.fastPickIcon}>6️⃣</span>
-                    <span className={styles.fastPickLabel}>Ends 6</span>
-                    <span className={styles.fastPickDesc}>006, 016, 026...</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.ends6")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.ends6Desc")}</span>
                     <span className={styles.fastPickCount}>{fastPickOptions.endsWith6.length}</span>
                   </button>
                 </div>
@@ -622,7 +621,7 @@ export default function Lottery3DBet() {
 
               {/* Random Section */}
               <div className={styles.fastPickSection}>
-                <h3>🎲 Random Pick</h3>
+                <h3>{t("lottery3d.randomPick")}</h3>
                 <div className={styles.fastPickGrid}>
                   <button
                     className={styles.fastPickOption}
@@ -630,8 +629,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.availableCount < 5}
                   >
                     <span className={styles.fastPickIcon}>🎯</span>
-                    <span className={styles.fastPickLabel}>Random 5</span>
-                    <span className={styles.fastPickDesc}>5 lucky numbers</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.random5")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.random5Desc")}</span>
                   </button>
 
                   <button
@@ -640,8 +639,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.availableCount < 10}
                   >
                     <span className={styles.fastPickIcon}>🎯</span>
-                    <span className={styles.fastPickLabel}>Random 10</span>
-                    <span className={styles.fastPickDesc}>10 lucky numbers</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.random10")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.random10Desc")}</span>
                   </button>
 
                   <button
@@ -650,8 +649,8 @@ export default function Lottery3DBet() {
                     disabled={fastPickOptions.availableCount < 20}
                   >
                     <span className={styles.fastPickIcon}>🎯</span>
-                    <span className={styles.fastPickLabel}>Random 20</span>
-                    <span className={styles.fastPickDesc}>20 lucky numbers</span>
+                    <span className={styles.fastPickLabel}>{t("lottery3d.random20")}</span>
+                    <span className={styles.fastPickDesc}>{t("lottery3d.random20Desc")}</span>
                   </button>
                 </div>
               </div>
@@ -659,14 +658,14 @@ export default function Lottery3DBet() {
               {/* Selection Info & Clear */}
               <div className={styles.fastPickFooter}>
                 <span className={styles.fastPickSelected}>
-                  Selected: {selectedNums.length} numbers
+                  {t("lottery3d.selected")} {selectedNums.length}
                 </span>
                 <button
                   className={styles.fastPickClear}
                   onClick={clearAllSelections}
                   disabled={selectedNums.length === 0}
                 >
-                  Clear All
+                  {t("lottery3d.clearAll")}
                 </button>
               </div>
             </div>

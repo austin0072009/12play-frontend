@@ -154,7 +154,7 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
       <div className={styles.filterSection}>
         <div className={styles.filterDropdowns}>
           <div className={styles.filterDropdown}>
-            <label className={styles.filterLabel}>服务提供商</label>
+            <label className={styles.filterLabel}>GAME PROVIDER</label>
             <select value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
               {serviceProviders.map((provider) => (
                 <option key={provider.id} value={provider.id}>
@@ -177,7 +177,7 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
         <div className={styles.filterSearch}>
           <input
             type="text"
-            placeholder="搜索"
+            placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

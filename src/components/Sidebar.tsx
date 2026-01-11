@@ -101,7 +101,7 @@ const NAV_ITEMS = [
   { id: "inbox", labelKey: "sidebar.feedback", icon: <InboxIcon />, route: "/feedback" },
   // { id: "vip", labelKey: "sidebar.vip", icon: <VipIcon />, route: null },
   // { id: "affiliate", labelKey: "sidebar.affiliate", icon: <AffiliateIcon />, route: null },
-  { id: "download", labelKey: "sidebar.downloadApp", icon: <DownloadIcon />, route: null },
+  { id: "download", labelKey: "sidebar.downloadApp", icon: <DownloadIcon />, route: "/download" },
 ];
 
 export default function Sidebar() {

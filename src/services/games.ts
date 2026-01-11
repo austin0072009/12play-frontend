@@ -3,6 +3,7 @@ import request from "../utils/request";
 import { useUserStore } from "../store/user";
 import { useLotteryStore } from "../store/lottery";
 import { setLotteryToken } from "../utils/lotteryRequest";
+import { transferOut } from "./api";
 import type {
   KyGetGamesReq,
   KyGameItem,
@@ -58,6 +59,19 @@ export async function startGame(
   const tokenFromStore = useUserStore.getState().token || "";
   if (!tokenFromStore) {
     throw new Error("未登录或 token 缺失");
+  }
+
+  // Check if user is in lottery wallet, transfer out first
+  const isInLotteryWallet = useUserStore.getState().isInLotteryWallet;
+  if (isInLotteryWallet) {
+    try {
+      await transferOut();
+      // Clear the lottery wallet flag after successful transfer
+      useUserStore.getState().setIsInLotteryWallet(false);
+    } catch (error) {
+      console.error("Transfer out error:", error);
+      throw new Error("无法从彩票钱包转出，请稍后再试");
+    }
   }
 
   // 明确展开，避免把多余字段带给后端
@@ -165,6 +179,9 @@ export async function startLotteryGame(
 
   // Set token in request interceptor
   setLotteryToken(lotteryToken);
+
+  // Set lottery wallet flag to true
+  useUserStore.getState().setIsInLotteryWallet(true);
 
   return { token: lotteryToken, apiDomain };
 }

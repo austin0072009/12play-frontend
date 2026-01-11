@@ -1,10 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./Lottery3DBetConfirm.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, TrashIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
 import { placeBet } from "../services/lottery";
 import Dialog from "../components/Dialog";
-import { showAlert } from "../store/alert";
+import { useAlertStore } from "../store/alert";
 
 type BetItem = {
   num: string;
@@ -13,6 +14,8 @@ type BetItem = {
 
 export default function Lottery3DBetConfirm() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { showAlert } = useAlertStore();
   const { state } = useLocation() as any;
 
   const [items, setItems] = useState<BetItem[]>([]);
@@ -52,7 +55,7 @@ export default function Lottery3DBetConfirm() {
   const handleConfirm = async () => {
     if (items.length === 0 || totalAmount <= 0) return;
     if (!state?.issue) {
-      showAlert("Missing issue information. Please try again.");
+      showAlert(t("lottery3d.confirm.missingIssue"));
       return;
     }
 
@@ -75,7 +78,7 @@ export default function Lottery3DBetConfirm() {
       setShowSuccess(true);
     } catch (error: any) {
       setLoading(false);
-      showAlert(error.message || "Failed to place bet. Please try again.");
+      showAlert(error.message || t("lottery3d.confirm.failedToBet"));
       console.error("Place bet error:", error);
     }
   };
@@ -93,7 +96,7 @@ export default function Lottery3DBetConfirm() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>Confirm Bet</h1>
+        <h1 className={styles.title}>{t("lottery3d.confirm.title")}</h1>
       </header>
 
       <div className={styles.content}>
@@ -101,7 +104,7 @@ export default function Lottery3DBetConfirm() {
         <div className={styles.infoCard}>
           <div>
             <div className={styles.round}>{state.round}</div>
-            <div className={styles.time}>Draw {state.drawTime}</div>
+            <div className={styles.time}>{t("lottery3d.draw")} {state.drawTime}</div>
           </div>
           <div className={styles.total}>
             MMK {totalAmount.toLocaleString()}
@@ -137,13 +140,13 @@ export default function Lottery3DBetConfirm() {
 
         {items.length === 0 && (
           <div className={styles.empty}>
-            No numbers selected. Please go back and select numbers.
+            {t("lottery3d.confirm.noNumbersSelected")}
           </div>
         )}
 
         {/* Notice */}
         <div className={styles.notice}>
-          You can adjust or remove any number before confirming the bet.
+          {t("lottery3d.confirm.notice")}
         </div>
 
         {/* Actions */}
@@ -153,14 +156,14 @@ export default function Lottery3DBetConfirm() {
             onClick={() => navigate(-1)}
             disabled={loading}
           >
-            Cancel
+            {t("lottery3d.confirm.cancel")}
           </button>
           <button
             className={styles.confirmBtn}
             disabled={loading || items.length === 0 || totalAmount <= 0}
             onClick={handleConfirm}
           >
-            {loading ? "Processing..." : "Confirm Bet"}
+            {loading ? t("lottery3d.confirm.processing") : t("lottery3d.confirm.confirmBtn")}
           </button>
         </div>
       </div>
@@ -169,30 +172,30 @@ export default function Lottery3DBetConfirm() {
       <Dialog open={showSuccess} onClose={handleSuccessClose}>
         <div className={styles.successModal}>
           <CheckCircleIcon className={styles.successIcon} />
-          <h2 className={styles.successTitle}>Bet Placed Successfully!</h2>
+          <h2 className={styles.successTitle}>{t("lottery3d.confirm.success")}</h2>
           <div className={styles.successInfo}>
             <div className={styles.successRow}>
-              <span>Round:</span>
+              <span>{t("lottery3d.confirm.successRound")}</span>
               <span>{state?.round}</span>
             </div>
             <div className={styles.successRow}>
-              <span>Draw Time:</span>
+              <span>{t("lottery3d.confirm.successDrawTime")}</span>
               <span>{state?.drawTime}</span>
             </div>
             <div className={styles.successRow}>
-              <span>Numbers:</span>
+              <span>{t("lottery3d.confirm.successNumbers")}</span>
               <span>{items.length}</span>
             </div>
             <div className={styles.successRow}>
-              <span>Total Amount:</span>
+              <span>{t("lottery3d.confirm.successTotal")}</span>
               <span className={styles.successAmount}>
                 MMK {totalAmount.toLocaleString()}
               </span>
             </div>
           </div>
-          <button className={styles.successBtn} onClick={handleSuccessClose}>
-            OK
-          </button>
+          {/* <button className={styles.successBtn} onClick={handleSuccessClose}>
+            {t("lottery3d.confirm.ok")}
+          </button> */}
         </div>
       </Dialog>
     </div>

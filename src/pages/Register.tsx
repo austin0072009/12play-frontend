@@ -58,7 +58,7 @@ export default function Register() {
       const res = await registerApi({
         password,
         captcha: "",
-        yqm: "", // referral empty
+        yqm: inviteCode, // referral empty
         name: username,
       });
 
@@ -102,7 +102,6 @@ export default function Register() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>{t("register.title") || "Join RedCow"}</h1>
-        <p style={{ fontSize: 14, color: '#9ca3af', marginTop: 4 }}>{t("register.subtitle")}</p>
       </div>
 
       <Dialog

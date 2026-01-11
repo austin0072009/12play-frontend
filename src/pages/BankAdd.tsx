@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { AddBank } from "../services/api";
 import { useUserStore } from "../store/user";
 import Dialog from "../components/Dialog";
@@ -10,6 +11,7 @@ import styles from "./BankAdd.module.css";
 
 export default function BankAdd() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [selectedBank, setSelectedBank] = useState<string | undefined>();
     const [bankUsername, setBankUsername] = useState("");
     const [bankCard, setBankCard] = useState("");
@@ -21,7 +23,6 @@ export default function BankAdd() {
     const [successMessage, setSuccessMessage] = useState("");
     const [showDialog, setShowDialog] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    // Informational dialog about binding rules
     const [showInfoDialog, setShowInfoDialog] = useState(false);
     const [infoDialogShown, setInfoDialogShown] = useState(false);
 
@@ -49,33 +50,32 @@ export default function BankAdd() {
 
     const validateForm = (): boolean => {
         if (!selectedBank) {
-            setErrorMessage("Please select a bank");
+            setErrorMessage(t("bankAdd.selectBankError"));
             return false;
         }
         if (!bankUsername.trim()) {
-            setErrorMessage("Please enter account name");
+            setErrorMessage(t("bankAdd.enterNameError"));
             return false;
         }
         if (!bankCard.trim()) {
-            setErrorMessage("Please enter account number");
+            setErrorMessage(t("bankAdd.enterNumberError"));
             return false;
         }
         if (!bankCardConfirm.trim()) {
-            setErrorMessage("Please confirm account number");
+            setErrorMessage(t("bankAdd.confirmNumberError"));
             return false;
         }
         if (bankCard !== bankCardConfirm) {
-            setErrorMessage("Account numbers do not match");
+            setErrorMessage(t("bankAdd.numberMismatchError"));
             return false;
         }
         if (!qrFile) {
-            setErrorMessage("Please upload QR code");
+            setErrorMessage(t("bankAdd.uploadQRError"));
             return false;
         }
         return true;
     };
 
-    // Show the info dialog only once when user starts entering data
     const triggerInfoDialogOnce = () => {
         if (!infoDialogShown) {
             setShowInfoDialog(true);
@@ -95,12 +95,6 @@ export default function BankAdd() {
 
         setSubmitting(true);
         try {
-            // console.log("=== SUBMITTING BANK ADD ===", {
-            //     bank_name: selectedBank,
-            //     bank_username: bankUsername,
-            //     bank_card: bankCard,
-            // });
-
             const res = await AddBank({
                 type: 0,
                 bank_name: selectedBank || "",
@@ -110,22 +104,18 @@ export default function BankAdd() {
                 qr_code: qrFile || undefined,
             });
 
-            //console.log("=== BANK ADD RESPONSE ===", res);
-
             if (res && res.status && Number(res.status.errorCode) === 0) {
-                setSuccessMessage("Bank account added successfully!");
+                setSuccessMessage(t("bankAdd.successMessage"));
                 setIsSuccess(true);
                 setShowDialog(true);
-                // Reset form
                 setSelectedBank(undefined);
                 setQrFile(undefined);
-                // Navigate after showing success
                 setTimeout(() => {
                     setShowDialog(false);
                     navigate(-1);
                 }, 2000);
             } else {
-                const errMsg = res?.status?.mess || res?.status?.msg || "Failed to add bank account";
+                const errMsg = res?.status?.mess || res?.status?.msg || t("bankAdd.failedMessage");
                 setErrorMessage(errMsg);
                 setIsSuccess(false);
                 setShowDialog(true);
@@ -136,7 +126,7 @@ export default function BankAdd() {
                 error?.response?.data?.status?.mess ||
                 error?.response?.data?.status?.msg ||
                 error?.message ||
-                "Network error. Please try again.";
+                t("bankAdd.networkError");
             setErrorMessage(errMsg);
             setIsSuccess(false);
             setShowDialog(true);
@@ -154,7 +144,6 @@ export default function BankAdd() {
 
     return (
         <div className={styles.container}>
-            {/* Header */}
             <div className={styles.header}>
                 <button
                     className={styles.backButton}
@@ -177,14 +166,13 @@ export default function BankAdd() {
                         ></path>
                     </svg>
                 </button>
-                <h1 className={styles.title}>Add Bank Account</h1>
+                <h1 className={styles.title}>{t("bankAdd.title")}</h1>
                 <div></div>
             </div>
 
             <div className={styles.content}>
-                {/* Select Bank */}
                 <div className={styles.formSection}>
-                    <label className={styles.sectionTitle}>Select Bank</label>
+                    <label className={styles.sectionTitle}>{t("bankAdd.selectBank")}</label>
                     <div className={styles.bankGrid}>
                         {bankList.map((bank) => (
                             <div
@@ -201,70 +189,63 @@ export default function BankAdd() {
                     </div>
                 </div>
 
-                {/* Account Name */}
                 <div className={styles.formSection}>
-                    <label className={styles.label}>Account Name</label>
+                    <label className={styles.label}>{t("bankAdd.accountName")}</label>
                     <input
                         type="text"
                         value={bankUsername}
                         onFocus={triggerInfoDialogOnce}
                         onChange={(e) => {
                             const value = e.target.value;
-                            // Only allow letters and spaces (no numbers)
                             if (/^[^0-9]*$/.test(value)) {
                                 setBankUsername(value);
                             }
                         }}
                         disabled={!!existingBank}
-                        placeholder="Enter your full name"
+                        placeholder={t("bankAdd.enterFullName")}
                         className={styles.input}
                     />
                     {existingBank && (
-                        <p className={styles.helpText}>Account name is locked (already set)</p>
+                        <p className={styles.helpText}>{t("bankAdd.accountNameLocked")}</p>
                     )}
                 </div>
 
-                {/* Account Number */}
                 <div className={styles.formSection}>
-                    <label className={styles.label}>Account Number</label>
+                    <label className={styles.label}>{t("bankAdd.accountNumber")}</label>
                     <input
                         type="text"
                         value={bankCard}
                         onFocus={triggerInfoDialogOnce}
                         onChange={(e) => {
                             const value = e.target.value;
-                            // Only allow numbers
                             if (/^[0-9]*$/.test(value)) {
                                 setBankCard(value);
                             }
                         }}
-                        placeholder="Enter your account number"
+                        placeholder={t("bankAdd.enterAccountNumber")}
                         className={styles.input}
                     />
                 </div>
 
-                {/* Confirm Account Number */}
                 <div className={styles.formSection}>
-                    <label className={styles.label}>Confirm Account Number</label>
+                    <label className={styles.label}>{t("bankAdd.confirmAccountNumber")}</label>
                     <input
                         type="text"
                         value={bankCardConfirm}
                         onFocus={triggerInfoDialogOnce}
                         onChange={(e) => {
                             const value = e.target.value;
-                            // Only allow numbers
                             if (/^[0-9]*$/.test(value)) {
                                 setBankCardConfirm(value);
                             }
                         }}
-                        placeholder="Re-enter your account number"
+                        placeholder={t("bankAdd.reenterAccountNumber")}
                         className={styles.input}
                     />
                 </div>
 
-                {/* QR Code Upload */}
                 <div className={styles.formSection}>
-                    <label className={styles.label}>Upload QR Code</label>
+                    <label className={styles.label}>{t("bankAdd.uploadQR")}</label>
                     <div
                         className={styles.qrUploadArea}
                         onClick={() => document.getElementById("qr-upload")?.click()}
@@ -272,7 +253,7 @@ export default function BankAdd() {
                         {qrPreview ? (
                             <div className={styles.qrPreview}>
                                 <img src={qrPreview} alt="QR Code Preview" />
-                                <p className={styles.qrLabel}>Click to change QR code</p>
+                                <p className={styles.qrLabel}>{t("bankAdd.clickChangeQR")}</p>
                             </div>
                         ) : (
                             <div className={styles.qrPlaceholder}>
@@ -292,8 +273,8 @@ export default function BankAdd() {
                                         d="M12 5v14m7-7H5"
                                     ></path>
                                 </svg>
-                                <p className={styles.uploadText}>Click to upload QR code</p>
-                                <p className={styles.uploadSubtext}>or drag and drop</p>
+                                <p className={styles.uploadText}>{t("bankAdd.clickUploadQR")}</p>
+                                <p className={styles.uploadSubtext}>{t("bankAdd.dragDrop")}</p>
                             </div>
                         )}
                         <input
@@ -310,7 +291,6 @@ export default function BankAdd() {
                 </div>
             </div>
 
-            {/* Submit Button */}
             <div className={styles.actionContainer}>
                 <button
                     className={styles.submitButton}
@@ -320,19 +300,18 @@ export default function BankAdd() {
                     {submitting ? (
                         <>
                             <span className={styles.spinner}></span>
-                            Submitting...
+                            {t("bankAdd.submitting")}
                         </>
                     ) : (
-                        "Submit"
+                        t("bankAdd.submit")
                     )}
                 </button>
             </div>
 
-            {/* Dialog for errors/success */}
             <Dialog
                 open={showDialog}
                 onClose={handleDialogClose}
-                title={isSuccess ? "Success" : "Error"}
+                title={isSuccess ? t("bankAdd.success") : t("bankAdd.error")}
             >
                 <div className={styles.dialogContent}>
                     {isSuccess ? (
@@ -379,15 +358,14 @@ export default function BankAdd() {
                 </div>
             </Dialog>
 
-            {/* Informational dialog shown when user starts entering data */}
             <Dialog
                 open={showInfoDialog}
                 onClose={() => setShowInfoDialog(false)}
-                title="Notice"
+                title={t("bankAdd.notice")}
             >
                 <div className={styles.dialogContent}>
                     <div className={styles.errorContent} style={{ gap: '1rem', alignItems: 'flex-start' }}>
-                        <svg
+                        {/* <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -402,15 +380,10 @@ export default function BankAdd() {
                                 strokeWidth="2"
                                 d="M12 9v6m0 3v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                             ></path>
-                        </svg>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '.6rem' }}>
-                            <p>
-                                Please ensure your deposit and withdrawal bank accounts are the same
-                                (<strong>one card in, one card out</strong>).
-                            </p>
-                            <p>
-                                After binding a card, you must wait <strong>14 days</strong> to unbind. There will be a cooldown period.
-                            </p>
+                        </svg> */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '.6rem'}}>
+                            {/* <p>{t("bankAdd.noticeText")}</p> */}
+                            <p style={{fontSize:'1.5rem'}}>{t("bankAdd.noticeText2")}</p>
                         </div>
                     </div>
                 </div>

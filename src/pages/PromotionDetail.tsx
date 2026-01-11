@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./PromotionDetail.module.css";
 import { fetchActivityDetail } from "../services/api";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
@@ -15,6 +16,7 @@ const CHECKIN_EVENT_ID = 32;
 export default function PromotionDetail() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
   const appStore = useAppStore();
   const domain = appStore.data?.domain || "";
   const [activity, setActivity] = useState<ActivityDetail | null>(null);
@@ -37,11 +39,11 @@ export default function PromotionDetail() {
           console.log("Fetched activity detail:", res.data);
           setActivity(res.data as ActivityDetail);
         } else {
-          setError("Failed to load promotion details");
+          setError(t("promotionDetail.noPromotion"));
         }
       } catch (err) {
         console.error("Error loading activity detail:", err);
-        setError("Failed to load promotion details");
+        setError(t("promotionDetail.noPromotion"));
       } finally {
         setLoading(false);
       }
@@ -61,10 +63,10 @@ export default function PromotionDetail() {
           <button className={styles.backBtn} onClick={handleBack}>
             <ChevronLeftIcon className={styles.backIcon} />
           </button>
-          <h1 className={styles.title}>Promotion Details</h1>
+          <h1 className={styles.title}>{t("promotionDetail.title")}</h1>
           <span></span>
         </div>
-        <div className={styles.loadingContainer}>Loading...</div>
+        <div className={styles.loadingContainer}>{t("promotionDetail.loading")}</div>
       </div>
     );
   }
@@ -76,11 +78,11 @@ export default function PromotionDetail() {
           <button className={styles.backBtn} onClick={handleBack}>
             <ChevronLeftIcon className={styles.backIcon} />
           </button>
-          <h1 className={styles.title}>Promotion Details</h1>
+          <h1 className={styles.title}>{t("promotionDetail.title")}</h1>
           <span></span>
         </div>
         <div className={styles.errorContainer}>
-          {error || "Promotion not found"}
+          {error || t("promotionDetail.noPromotion")}
         </div>
       </div>
     );
@@ -93,7 +95,7 @@ export default function PromotionDetail() {
         <button className={styles.backBtn} onClick={handleBack}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>Promotion Details</h1>
+        <h1 className={styles.title}>{t("promotionDetail.title")}</h1>
         <span></span>
       </div>
 
@@ -125,19 +127,19 @@ export default function PromotionDetail() {
           <div className={styles.datesContainer}>
             {activity.start_at && (
               <div className={styles.dateItem}>
-                <span className={styles.dateLabel}>Start:</span>
+                <span className={styles.dateLabel}>{t("promotionDetail.startDate")}</span>
                 <span className={styles.dateValue}>{activity.start_at}</span>
               </div>
             )}
             {activity.end_at && (
               <div className={styles.dateItem}>
-                <span className={styles.dateLabel}>End:</span>
+                <span className={styles.dateLabel}>{t("promotionDetail.endDate")}</span>
                 <span className={styles.dateValue}>{activity.end_at}</span>
               </div>
             )}
             {!activity.start_at && !activity.end_at && (
               <div className={`${styles.dateItem} ${styles.longTermEvent}`}>
-                <span className={styles.dateValue}>Ongoing Event</span>
+                <span className={styles.dateValue}>{t("promotionDetail.ongoingEvent")}</span>
               </div>
             )}
           </div>
@@ -150,7 +152,7 @@ export default function PromotionDetail() {
           {/* Promotion Content (HTML) */}
           {activity.title_content && (
             <div className={styles.descriptionContainer}>
-              <h3 className={styles.sectionTitle}>Promotion Details</h3>
+              <h3 className={styles.sectionTitle}>{t("promotionDetail.promotionDetails")}</h3>
               <div
                 className={styles.richContent}
                 dangerouslySetInnerHTML={{ __html: activity.title_content }}
@@ -161,7 +163,7 @@ export default function PromotionDetail() {
           {/* Additional Content */}
           {activity.content && (
             <div className={styles.descriptionContainer}>
-              <h3 className={styles.sectionTitle}>Additional Information</h3>
+              <h3 className={styles.sectionTitle}>{t("promotionDetail.additionalInformation")}</h3>
               <div
                 className={styles.richContent}
                 dangerouslySetInnerHTML={{ __html: activity.content }}
@@ -172,7 +174,7 @@ export default function PromotionDetail() {
           {/* Rules */}
           {activity.rule_content && (
             <div className={styles.descriptionContainer}>
-              <h3 className={styles.sectionTitle}>Rules & Terms</h3>
+              <h3 className={styles.sectionTitle}>{t("promotionDetail.rulesTerms")}</h3>
               <div
                 className={styles.richContent}
                 dangerouslySetInnerHTML={{ __html: activity.rule_content }}

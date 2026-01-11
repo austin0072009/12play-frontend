@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./CheckinCalendar.module.css";
 import { fetchCheckinInfo, checkinToday, claimActivity } from "../services/api";
 import { useUserStore } from "../store/user";
+import { useAlertStore } from "../store/alert";
 
 interface CheckinDay {
   day: number;
@@ -20,12 +22,14 @@ interface CheckinData {
 }
 
 export default function CheckinCalendar() {
+  const { t } = useTranslation();
   const [data, setData] = useState<CheckinData | null>(null);
   const [loading, setLoading] = useState(true);
   const [checkingIn, setCheckingIn] = useState(false);
   const [claimingBonus, setClaimingBonus] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const token = useUserStore((s) => s.token);
+  const { showAlert } = useAlertStore();
 
   useEffect(() => {
     loadCheckinInfo();
@@ -49,7 +53,7 @@ export default function CheckinCalendar() {
       }
     } catch (err) {
       console.error("Error loading checkin info:", err);
-      setError("Failed to load check-in information");
+      setError(t("checkin.errorLoading"));
     } finally {
       setLoading(false);
     }
@@ -65,13 +69,13 @@ export default function CheckinCalendar() {
       if (res?.status === 200) {
         // Reload checkin info after successful check-in
         await loadCheckinInfo();
-        alert(res?.msg || "Check-in successful!");
+        showAlert(res?.msg || t("checkin.checkInSuccess"));
       } else {
-        alert(res?.msg || "Failed to check in");
+        showAlert(res?.msg || t("checkin.checkInFailed"));
       }
     } catch (err) {
       console.error("Error checking in:", err);
-      alert("Failed to check in");
+      showAlert(t("checkin.checkInFailed"));
     } finally {
       setCheckingIn(false);
     }
@@ -87,13 +91,13 @@ export default function CheckinCalendar() {
       if (res?.status?.errorCode === 0) {
         // Reload checkin info after successful bonus claim
         await loadCheckinInfo();
-        alert(res?.status?.msg || "Bonus claimed successfully!");
+        showAlert(res?.status?.msg || t("checkin.bonusClaimedSuccess"));
       } else {
-        alert(res?.status?.msg || res?.status?.mess || "Failed to claim bonus");
+        showAlert(res?.status?.msg || res?.status?.mess || t("checkin.bonusClaimFailed"));
       }
     } catch (err) {
       console.error("Error claiming bonus:", err);
-      alert("Failed to claim bonus");
+      showAlert(t("checkin.bonusClaimFailed"));
     } finally {
       setClaimingBonus(false);
     }
@@ -103,7 +107,7 @@ export default function CheckinCalendar() {
     return (
       <div className={styles.container}>
         <div className={styles.loginPrompt}>
-          Please login to view your check-in progress
+          {t("checkin.loginPrompt")}
         </div>
       </div>
     );
@@ -112,7 +116,7 @@ export default function CheckinCalendar() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading check-in information...</div>
+        <div className={styles.loading}>{t("checkin.loadingInfo")}</div>
       </div>
     );
   }
@@ -128,7 +132,7 @@ export default function CheckinCalendar() {
   if (!data) {
     return (
       <div className={styles.container}>
-        <div className={styles.noData}>No check-in information available</div>
+        <div className={styles.noData}>{t("checkin.noData")}</div>
       </div>
     );
   }
@@ -151,21 +155,21 @@ export default function CheckinCalendar() {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>📅 Daily Check-in</h3>
+      <h3 className={styles.title}>{t("checkin.title")}</h3>
       
       {/* Round & Progress Info */}
       <div className={styles.roundInfo}>
         <div className={styles.roundRow}>
           <div className={styles.roundItem}>
-            <span className={styles.roundLabel}>🔁 Current Round</span>
+            <span className={styles.roundLabel}>{t("checkin.currentRound")}</span>
             <span className={styles.roundValue}>{data.currentRound}</span>
           </div>
           <div className={styles.roundItem}>
-            <span className={styles.roundLabel}>📅 This Round</span>
+            <span className={styles.roundLabel}>{t("checkin.thisRound")}</span>
             <span className={styles.roundValue}>{data.totalDays} / 10</span>
           </div>
           <div className={styles.roundItem}>
-            <span className={styles.roundLabel}>📊 Total Days</span>
+            <span className={styles.roundLabel}>{t("checkin.totalDays")}</span>
             <span className={styles.roundValue}>{data.totalAccumulatedDays}</span>
           </div>
         </div>
@@ -173,7 +177,7 @@ export default function CheckinCalendar() {
         {/* New Round Started Hint */}
         {isNewRound && (
           <div className={styles.newRoundHint}>
-            🎉 New round started! Begin your 10-day journey again.
+            {t("checkin.newRoundStarted")}
           </div>
         )}
       </div>
@@ -185,7 +189,7 @@ export default function CheckinCalendar() {
             key={day.day}
             className={`${styles.dayCard} ${day.checked ? styles.checked : ''} ${day.is_today ? styles.today : ''} ${day.reward > 0 ? styles.milestone : ''}`}
           >
-            <div className={styles.dayNumber}>Day {day.day}</div>
+            <div className={styles.dayNumber}>{t("checkin.day")} {day.day}</div>
             <div className={styles.rewardIcon}>
               {day.checked ? '✅' : day.reward > 0 ? '⭐' : ''}
             </div>
@@ -207,7 +211,7 @@ export default function CheckinCalendar() {
       <div className={styles.actionSection}>
         {data.todaySigned ? (
           <div className={styles.checkedToday}>
-            ✅ Already checked in today
+            {t("checkin.checkedToday")}
           </div>
         ) : (
           <button 
@@ -215,7 +219,7 @@ export default function CheckinCalendar() {
             onClick={handleCheckinToday}
             disabled={checkingIn}
           >
-            {checkingIn ? "Checking in..." : "✨ Check In Today"}
+            {checkingIn ? t("checkin.checkingIn") : t("checkin.checkInToday")}
           </button>
         )}
         
@@ -225,7 +229,7 @@ export default function CheckinCalendar() {
             onClick={handleClaimBonus}
             disabled={claimingBonus}
           >
-            {claimingBonus ? "Claiming..." : "🎁 Claim Bonus"}
+            {claimingBonus ? t("checkin.claiming") : t("checkin.claimBonus")}
           </button>
         )}
       </div>

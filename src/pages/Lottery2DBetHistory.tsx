@@ -130,11 +130,11 @@ export default function Lottery2DBetHistory() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>{t("lottery2d.betHistory")}</h1>
+        <h1 className={styles.title}>Bet History</h1>
       </header>
 
       <div className={styles.content}>
-        {/* Tabs */}
+        {/*  */}
         <div className={styles.tabs}>
           {["all", "won", "lost", "pending"].map((tab) => (
             <button
@@ -150,7 +150,7 @@ export default function Lottery2DBetHistory() {
         </div>
 
         {/* Loading / Error */}
-        {loading && <div className={styles.noData}>{t("common.loading")}</div>}
+        {loading && <div className={styles.noData}>Loading...</div>}
         {error && <div className={styles.noData}>{error}</div>}
 
         {/* Orders */}
@@ -175,7 +175,7 @@ export default function Lottery2DBetHistory() {
                     <span className={`${styles.status} ${
                       order.netAmount > 0 ? styles.won : order.netAmount < 0 ? styles.lost : styles.pending
                     }`}>
-                      {order.netAmount > 0 ? t("lottery2d.statusWon") : order.netAmount < 0 ? t("lottery2d.statusLost") : t("lottery2d.statusPending")}
+                      {order.netAmount > 0 ? "Won" : order.netAmount < 0 ? "Lost" : "Pending"}
                     </span>
                     {isExpanded ? (
                       <ChevronUpIcon className={styles.expandIcon} />
@@ -197,13 +197,13 @@ export default function Lottery2DBetHistory() {
                 {/* Summary Footer */}
                 <div className={styles.footer}>
                   <div>
-                    <div className={styles.label}>{t("lottery2d.totalBet")}</div>
+                    <div className={styles.label}>Total Bet</div>
                     <div className={styles.value}>
                       MMK {order.totalAmount.toFixed(2)}
                     </div>
                   </div>
                   <div>
-                    <div className={styles.label}>{t("lottery2d.totalWin")}</div>
+                    <div className={styles.label}>Total Win</div>
                     <div
                       className={`${styles.value} ${
                         order.netAmount > 0 ? styles.win : order.netAmount < 0 ? styles.loss : ""
@@ -217,22 +217,22 @@ export default function Lottery2DBetHistory() {
                 {/* Expanded Details */}
                 {isExpanded && (
                   <div className={styles.detailsSection}>
-                    <div className={styles.detailsHeader}>{t("lottery2d.betDetails")}</div>
+                    <div className={styles.detailsHeader}>Bet Details</div>
                     {order.details.map((detail, idx) => (
                       <div key={`${detail.id}-detail-${idx}`} className={styles.detailRow}>
                         <div className={styles.detailNumber}>
                           {detail.num}
                           <span className={`${styles.status} ${styles[detail.status]}`}>
-                            {detail.status === "won" ? t("lottery2d.statusWon") : detail.status === "lost" ? t("lottery2d.statusLost") : t("lottery2d.statusPending")}
+                            {detail.status === "won" ? "Won" : detail.status === "lost" ? "Lost" : "Pending"}
                           </span>
                         </div>
                         <div className={styles.detailAmounts}>
                           <div className={styles.detailItem}>
-                            <span className={styles.detailLabel}>{t("lottery2d.bet")}:</span>
+                            <span className={styles.detailLabel}>Bet:</span>
                             <span className={styles.detailValue}>MMK {detail.amount.toFixed(2)}</span>
                           </div>
                           <div className={styles.detailItem}>
-                            <span className={styles.detailLabel}>{t("lottery2d.win")}:</span>
+                            <span className={styles.detailLabel}>Win:</span>
                             <span className={`${styles.detailValue} ${
                               detail.winAmount > 0 ? styles.win : ""
                             }`}>MMK {detail.winAmount.toFixed(2)}</span>
@@ -247,7 +247,7 @@ export default function Lottery2DBetHistory() {
           })}
 
           {!loading && !error && filtered.length === 0 && (
-            <div className={styles.noData}>{t("lottery2d.noBetsFound")}</div>
+            <div className={styles.noData}>No bets found</div>
           )}
         </div>
       </div>

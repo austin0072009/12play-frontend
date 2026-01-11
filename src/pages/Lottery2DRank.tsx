@@ -97,15 +97,15 @@ export default function Lottery2DRank() {
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeftIcon className={styles.backIcon} />
         </button>
-        <h1 className={styles.title}>{t("lottery2d.leaderboard")}</h1>
+        <h1 className={styles.title}>ထီပေါက်သူ</h1>
       </header>
 
       <div className={styles.content}>
-        {loading && <div className={styles.loading}>{t("common.loading")}</div>}
+        {loading && <div className={styles.loading}>Loading...</div>}
         {error && <div className={styles.error}>{error}</div>}
 
         {!loading && !error && sessionRankings.length === 0 && (
-          <div className={styles.noData}>{t("lottery2d.noRankingsAvailable")}</div>
+          <div className={styles.noData}>Issue: </div>
         )}
 
         {!loading && !error && sessionRankings.length > 0 && (
@@ -120,7 +120,7 @@ export default function Lottery2DRank() {
                   }`}
                   onClick={() => setActiveTab(sessionRanking.sessionTime)}
                 >
-                  {sessionRanking.sessionTime} {t("lottery2d.session")}
+                  {sessionRanking.sessionTime} Session
                 </button>
               ))}
             </div>
@@ -129,7 +129,7 @@ export default function Lottery2DRank() {
             {activeSessionRanking && (
               <div className={styles.sessionSection}>
                 <div className={styles.sessionHeader}>
-                  <span className={styles.sessionIssue}>{t("lottery2d.issue")}: {activeSessionRanking.issue}</span>
+                  <span className={styles.sessionIssue}>Issue: {activeSessionRanking.issue}</span>
                 </div>
 
                 {activeSessionRanking.rankings.length > 0 ? (
@@ -157,7 +157,7 @@ export default function Lottery2DRank() {
                     ))}
                   </div>
                 ) : (
-                  <div className={styles.noRankings}>{t("lottery2d.noWinners")}</div>
+                  <div className={styles.noRankings}>No winners for this session</div>
                 )}
               </div>
             )}

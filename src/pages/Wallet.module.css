@@ -47,9 +47,10 @@
   }
 
   span {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     font-weight: 600;
     letter-spacing: 0.02em;
+    white-space: nowrap;
   }
 }
 
@@ -137,13 +138,17 @@
 }
 
 .channelItem::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(203, 0, 0, 0.2) 0%, rgba(160, 0, 0, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(203, 0, 0, 0.2) 0%,
+    rgba(160, 0, 0, 0.1) 100%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -184,7 +189,11 @@
   align-items: center;
   justify-content: start;
   gap: 1.2rem;
-  background: linear-gradient(135deg, rgba(203, 0, 0, 0.15) 0%, rgba(160, 0, 0, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(203, 0, 0, 0.15) 0%,
+    rgba(160, 0, 0, 0.1) 100%
+  );
   padding: 1.6rem;
   border-radius: 1.2rem;
   margin-top: 2rem;
@@ -206,7 +215,11 @@
 /* Bank Account Card */
 .bankCard {
   padding: 2rem;
-  background: linear-gradient(135deg, rgba(51, 51, 51, 0.8) 0%, rgba(30, 30, 30, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(51, 51, 51, 0.8) 0%,
+    rgba(30, 30, 30, 0.9) 100%
+  );
   border-radius: 1.6rem;
   display: flex;
   align-items: center;
@@ -246,7 +259,7 @@
   color: var(--color-secondary);
   font-size: 1.4rem;
   margin-bottom: 0.4rem;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   letter-spacing: 0.1em;
 }
 
@@ -333,11 +346,11 @@
   }
 }
 
-.selectBtn:focus{
+.selectBtn:focus {
   outline: none;
 }
 
-.selectContentDiv{
+.selectContentDiv {
   position: absolute;
   display: flex;
   left: 10;
@@ -351,13 +364,13 @@
   border-radius: 1.6rem;
 }
 
-.selectItem{
+.selectItem {
   padding: 1rem;
   font-size: 1.8rem;
   width: 100%;
 }
 
-.inputEl{
+.inputEl {
   width: 100%;
   background-color: var(--color-bg-muted);
   border: 2px solid transparent;
@@ -368,6 +381,9 @@
   color: var(--color-white);
   border-radius: 1.2rem;
   transition: all 0.3s ease;
+  border-color: var(--color-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(203, 0, 0, 0.15);
 }
 
 .inputEl:focus {
@@ -463,7 +479,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
-  background: linear-gradient(135deg, rgba(203, 0, 0, 0.1) 0%, rgba(160, 0, 0, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(203, 0, 0, 0.1) 0%,
+    rgba(160, 0, 0, 0.05) 100%
+  );
   border-radius: 1.2rem;
   margin-bottom: 2rem;
   border: 1px solid rgba(203, 0, 0, 0.2);

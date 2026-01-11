@@ -19,19 +19,24 @@ export default function WalletHistoryPage() {
         3: t('walletHistory.failed'),
     };
 
-    // Withdrawal status: 1=PENDING, 2=APPROVED, 5=FAIL, 3=FAIL(fallback), others=UNKNOWN
+    // Withdrawal status: 2,3=PENDING, 4=SUCCESS, others=UNKNOWN
     const STATUS_TEXT_WITHDRAWAL: Record<number, string> = {
-        1: t('walletHistory.pending'),
-        2: t('walletHistory.approved'),
-        3: t('walletHistory.failed'), // Fallback for fail
-        5: t('walletHistory.failed'),
+        2: t('walletHistory.pending'),
+        3: t('walletHistory.pending'),
+        4: t('walletHistory.approved'),
     };
 
-    const getStatusColor = (status: number) => {
-        if (status === 1) return '#a8a29e'; // Gray: pending
-        if (status === 2) return '#16a34a'; // Green: approved
-        // Fail statuses: withdrawal=5, deposit=3, or any 3/4/5
-        if (status === 3 || status === 4 || status === 5) return '#dc2626'; // Red: fail
+    const getStatusColor = (status: number, tab: 'deposit' | 'withdrawal') => {
+        if (tab === 'withdrawal') {
+            // Withdrawal: 2,3=pending (gray), 4=success (green)
+            if (status === 2 || status === 3) return '#a8a29e'; // Gray: pending
+            if (status === 4) return '#16a34a'; // Green: success
+        } else {
+            // Deposit: 1=pending, 2=approved, 3=failed
+            if (status === 1) return '#a8a29e'; // Gray: pending
+            if (status === 2) return '#16a34a'; // Green: approved
+            if (status === 3) return '#dc2626'; // Red: failed
+        }
         return '#6b7280'; // Gray for unknown statuses
     };
 
@@ -45,7 +50,7 @@ export default function WalletHistoryPage() {
         const type = activeTab === "deposit" ? 1 : 2;
         fetchActionLog({ type })
             .then((res) => {
-                //console.log("Fetched action log:", res);
+                console.log("Fetched action log:", res);
                 if (res.status.errorCode === 0 && res.data?.data) {
                     setRecords(res.data.data);
                 } else {
@@ -56,10 +61,11 @@ export default function WalletHistoryPage() {
             .finally(() => setLoading(false));
     }, [activeTab]);
 
-    // Get payment icon based on payment_type
-    const getPaymentIcon = (paymentType: number) => {
-        // payment_type 7 = KBZPay, others = WavePay
-        if (paymentType === 7) {
+    // Get payment icon based on account
+    const getPaymentIcon = (account: string | undefined) => {
+        if (!account) return wavepayIcon;
+        const accountUpper = account.toUpperCase();
+        if (accountUpper.includes("KBZPAY")) {
             return kbzpayIcon;
         }
         return wavepayIcon;
@@ -116,7 +122,7 @@ export default function WalletHistoryPage() {
                                     <span style={{ fontWeight: 'bold', fontSize: '1.4rem', color: '#fff' }}>{item.bill_no}</span>
                                     {activeTab === "deposit" && (
                                         <img 
-                                            src={getPaymentIcon(item.payment_type)} 
+                                            src={getPaymentIcon(item.account)} 
                                             alt="payment" 
                                             style={{ width: '2rem', height: '2rem', borderRadius: '4px', objectFit: 'cover' }}
                                         />
@@ -152,7 +158,7 @@ export default function WalletHistoryPage() {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                 <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#fff' }}>{item.money}</div>
                                 <div style={{
-                                    backgroundColor: getStatusColor(item.status),
+                                    backgroundColor: getStatusColor(item.status, activeTab),
                                     color: '#fff',
                                     fontSize: '1.2rem',
                                     borderRadius: '4px',

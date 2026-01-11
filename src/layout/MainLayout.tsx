@@ -19,14 +19,20 @@ export default function MainLayout() {
     if (!token) return;
     try {
       const userInfo = useUserStore.getState().userInfo;
-      const balanceRes = await fetchBalance();
+      const balanceRes = await fetchBalance(token);
       //console.log("Fetched balance response:", balanceRes);
       // balanceRes structure: { status: { errorCode: 0, ... }, data: { balance, ml_money }, url: "" }
       if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && balanceRes.data) {
         //console.log("Fetched balance:", balanceRes.data.balance);
         //console.log("Fetched turnover:", balanceRes.data.ml_money);
         // Data contains both balance and ml_money (turnover), merge with existing member data
-        setUserInfo({ ...userInfo, balance: balanceRes.data.balance, ml_money: balanceRes.data.ml_money });
+        // Create new object to ensure Zustand detects the change
+        const updatedUserInfo = { 
+          ...userInfo, 
+          balance: balanceRes.data.balance, 
+          ml_money: balanceRes.data.ml_money 
+        };
+        setUserInfo(updatedUserInfo);
       }
     } catch (error) {
       console.error("Failed to fetch balance:", error);

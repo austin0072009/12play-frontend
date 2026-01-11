@@ -47,16 +47,15 @@ export default function Lottery3DBetHistory() {
           const created = r.created_at || "";
           const [date, time] = created.split(" ");
 
-          // Determine status based on is_lottery and award amount
-          // is_lottery: 1 = pending, 2 = drawn/completed
+          // Determine status based on is_win field
+          // is_win: null = pending (result not drawn yet), 1 = won, 0 = lost
           let betStatus: "won" | "lost" | "pending";
-          if (r.is_lottery === 1) {
-            betStatus = "pending";
-          } else if (r.is_lottery === 2) {
-            // Lottery drawn - check if won based on award amount
-            betStatus = winAmount > 0 ? "won" : "lost";
+          if (r.is_win === null) {
+            betStatus = "pending"; // Result not drawn yet
+          } else if (r.is_win === 1) {
+            betStatus = "won";
           } else {
-            betStatus = "pending"; // fallback
+            betStatus = "lost";
           }
 
           const detail: BetDetail = {

@@ -8,7 +8,7 @@ import GameCard from '../components/GameCard';
 import styles from './CategoryPage.module.css';
 import { useAppStore } from '../store/app';
 import { useUserStore } from '../store/user';
-import { startGame } from '../services/games';
+import { startGame, startLotteryGame } from '../services/games';
 import { showAlert } from '../store/alert';
 import SlotIcon from '../assets/icons/slot.svg?react';
 import FishIcon from '../assets/icons/fish.svg?react';
@@ -76,6 +76,11 @@ export default function CategoryPage() {
       return;
     }
 
+    if (g.maintain) {
+      showAlert(t('home.gameMaintenance'));
+      return;
+    }
+
     try {
       // If this is a game brand (is_cate = 1), find the bound game
       let gameToStart = g;
@@ -88,23 +93,59 @@ export default function CategoryPage() {
         }
       }
 
-      const url = await startGame({ 
-        id: gameToStart.id, 
-        plat_type: gameToStart.plat_type, 
-        game_code: gameToStart.game_code, 
-        game_type: 0, 
-        devices: 0 
-      });
-      if (url) {
-        // Check is_outopen field of the actual game being started: 1 = direct assignment, 2 = iframe
-        if (gameToStart.is_outopen === 1) {
-          window.location.assign(url);
+      const gameId = gameToStart.id || gameToStart.game_id;
+      const platType = gameToStart.plat_type || gameToStart.productCode;
+      const gameCode = gameToStart.game_code || gameToStart.code;
+
+      if (!gameId || !platType) {
+        throw new Error('Missing required game parameters: id or plat_type');
+      }
+
+      // Check if this is a lottery game (L2D or L3D)
+      const isLotteryGame = platType && (
+        platType.toUpperCase() === 'L2D' || 
+        platType.toUpperCase() === 'L3D'
+      );
+
+      if (isLotteryGame) {
+        // Handle lottery games
+        await startLotteryGame({
+          id: gameId,
+          plat_type: platType,
+          game_code: gameCode,
+          game_type: 0,
+          devices: 0,
+          tgp: '',
+        });
+        
+        // Navigate to lottery pages
+        if (platType.toUpperCase() === 'L2D') {
+          navigate('/2d');
         } else {
-          // Default to iframe for is_outopen === 2 or undefined
-          navigate('/game', { state: { gameUrl: url } });
+          navigate('/3d');
+        }
+      } else {
+        // Handle regular games
+        const url = await startGame({
+          id: gameId,
+          plat_type: platType,
+          game_code: gameCode,
+          game_type: 0,
+          devices: 0,
+          tgp: '',
+        });
+        if (url) {
+          // Check is_outopen field of the actual game being started: 1 = direct assignment, 2 = iframe
+          if (gameToStart.is_outopen === 1) {
+            window.location.assign(url);
+          } else {
+            // Default to iframe for is_outopen === 2 or undefined
+            navigate('/game', { state: { gameUrl: url } });
+          }
         }
       }
     } catch (err) {
+      console.error('Game launch error:', err);
       showAlert(String(err));
     }
   };
