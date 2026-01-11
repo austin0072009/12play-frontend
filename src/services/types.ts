@@ -355,6 +355,7 @@ export type ActionLogItem = {
   payer_name: string; // at here payer_name is the 6 digit tailNumber
   status: number;
   payment_type: number;
+  account?: string; // Payment account (KBZPAY, WAVEPAY, etc.)
   bank_card?: string;
   bank_name?: string;
   fail_reason?: string;

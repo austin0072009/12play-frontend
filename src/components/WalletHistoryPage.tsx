@@ -61,11 +61,11 @@ export default function WalletHistoryPage() {
             .finally(() => setLoading(false));
     }, [activeTab]);
 
-    // Get payment icon based on account
-    const getPaymentIcon = (account: string | undefined) => {
+    // Get payment icon based on account or payment_type
+    const getPaymentIcon = (account: string | number | undefined) => {
         if (!account) return wavepayIcon;
-        const accountUpper = account.toUpperCase();
-        if (accountUpper.includes("KBZPAY")) {
+        const accountStr = String(account).toUpperCase();
+        if (accountStr.includes("KBZPAY") || accountStr === "1") {
             return kbzpayIcon;
         }
         return wavepayIcon;
@@ -122,7 +122,7 @@ export default function WalletHistoryPage() {
                                     <span style={{ fontWeight: 'bold', fontSize: '1.4rem', color: '#fff' }}>{item.bill_no}</span>
                                     {activeTab === "deposit" && (
                                         <img 
-                                            src={getPaymentIcon(item.account)} 
+                                            src={getPaymentIcon(item.account || item.payment_type)} 
                                             alt="payment" 
                                             style={{ width: '2rem', height: '2rem', borderRadius: '4px', objectFit: 'cover' }}
                                         />
