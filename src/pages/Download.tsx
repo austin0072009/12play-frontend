@@ -41,7 +41,8 @@ export default function Download() {
 
   const handleDownload = () => {
     // Replace with actual download URL from backend
-    const downloadUrl = "https://example.com/redcow.apk";
+    // Serve APK from public/ via Vite base URL so it works under any deploy base path
+    const downloadUrl = `${import.meta.env.BASE_URL}redcow.apk`;
     window.open(downloadUrl, "_blank");
   };
 
