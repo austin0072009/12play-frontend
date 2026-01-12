@@ -28,8 +28,11 @@
 }
 
 .logoImage {
-  height: 8.5rem;
+  height: 4rem;
   width: auto;
+  max-height: 100%;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .menuButton {
@@ -40,6 +43,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  min-width: 4rem;
+  min-height: 4rem;
 }
 
 .menuButton:focus {
@@ -48,8 +54,11 @@
 
 .menuIcon {
   color: #fff;
-  width: 2.4rem; /* Reduced from larger size */
+  width: 2.4rem;
   height: 2.4rem;
+  min-width: 2.4rem;
+  min-height: 2.4rem;
+  flex-shrink: 0;
 }
 
 .loginButton,
@@ -58,9 +67,10 @@
   outline: none;
   border: none;
   border-radius: 1.2rem;
-  text-wrap-mode: nowrap;
-  font-size: 1.4rem; /* Reduced from 1.6rem */
-  padding: 0.8rem 1.2rem; /* Reduced from 1rem 1.5rem */
+  white-space: nowrap;
+  font-size: 1.4rem;
+  padding: 0.8rem 1.2rem;
+  flex-shrink: 0;
 }
 
 .loginButton {

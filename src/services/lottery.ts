@@ -123,6 +123,10 @@ export async function placeBet(payload: LotteryBetReq): Promise<LotteryBetResp['
   const res = (await lotteryRequest.post('/api/v3/bet', payload)) as LotteryBetResp;
 
   if (!res || res.code !== 200) {
+    // Special case: code 2103 means the current period has ended
+    if (res?.code === 2103) {
+      throw new Error('ပွဲချိန်ပြီးသွားပါပြီ');
+    }
     throw new Error(res?.message || 'Failed to place bet');
   }
 

@@ -48,7 +48,7 @@
 .form_input {
   width: 100%;
   padding: 1.2rem 1.6rem 1.2rem 4.4rem; /* Reduced padding */
-  font-size: 1.4rem; /* Reduced from 1.6rem */
+  font-size: 1.6rem; /* 16px minimum to prevent iOS auto-zoom */
   color: #fff;
   background-color: #111;
   border: 1px solid #333;
