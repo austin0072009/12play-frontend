@@ -8,6 +8,7 @@ import kbzpayImg from "../assets/kbzpay.jpg";
 import wavepayImg from "../assets/wavepay.jpg";
 
 export default function DepositPage() {
+    const MINIMUM_DEPOSIT = 3000;
     const { t } = useTranslation();
     // Initial dummy state to match UI, will be replaced by API
     const [banks, setBanks] = useState<Bank[]>([]);
@@ -39,7 +40,7 @@ export default function DepositPage() {
     function parseMinimum(remark: unknown, fallback: number): number {
         if (typeof remark !== "string") return fallback;
         const m = remark.match(/^\s*(\d+)\s*-\s*\d+\s*$/);
-        return m ? Number(m[1]) : fallback;
+        return Math.max(m ? Number(m[1]) : fallback, MINIMUM_DEPOSIT);
     }
 
     // Helper function to map title to image
@@ -54,6 +55,7 @@ export default function DepositPage() {
         // Basic setup similar to rk
         fetchRecharegeAmount("1").then((res) => {
             if (res?.status?.errorCode === 0 && Array.isArray(res.data)) {
+                console.log("Fetched recharge amounts:", res.data);
                 // Map to our Bank type
                 const mapped = res.data.map((item: any, idx: number) => {
                     const title = item.title || "Channel " + idx;
@@ -61,7 +63,7 @@ export default function DepositPage() {
 
                     const d = item.charge?.[0];
                     const amounts = parseAmounts(d?.price_str);
-                    const min = parseMinimum(d?.remark, 1000);
+                    const min = parseMinimum(d?.remark, MINIMUM_DEPOSIT);
 
                     return {
                         id: item.tid || idx,
@@ -76,7 +78,7 @@ export default function DepositPage() {
                 setBanks(mapped);
                 if (mapped.length > 0) {
                     setSelectedBankId(mapped[0].id);
-                    setSelectedAmount(String(mapped[0].minimumAmount));
+                    setSelectedAmount(String(Math.max(mapped[0].minimumAmount, MINIMUM_DEPOSIT)));
                 }
             }
         });
@@ -219,7 +221,14 @@ export default function DepositPage() {
                         {rechargeAmounts.map(amt => (
                             <button
                                 key={amt}
-                                onClick={() => setSelectedAmount(amt)}
+                                onClick={() => {
+                                    const nextAmount = Number(amt);
+                                    if (selectedBank) {
+                                        setSelectedAmount(String(Math.max(nextAmount, selectedBank.minimumAmount)));
+                                    } else {
+                                        setSelectedAmount(amt);
+                                    }
+                                }}
                                 className={`${styles.amountQuick} ${selectedAmount === amt ? styles.active : ''}`}
                             >
                                 {Number(amt).toLocaleString()}
