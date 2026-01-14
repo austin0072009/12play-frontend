@@ -149,6 +149,9 @@ export default function Lottery2DRank() {
                         </div>
 
                         <div className={styles.winAmount}>
+                          <p className={styles.label}>Bet</p>
+                          <p className={styles.amount}>MMK {player.betAmount.toLocaleString()}</p>
+                          <p className={styles.label}>Win</p>
                           <p className={styles.amount}>MMK {player.winAmount.toLocaleString()}</p>
                         </div>
                       </div>
