@@ -1,42 +1,53 @@
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import styles from "../pages/Wallet.module.css";
 import { fetchRecharegeAmount, buildOrder, initiatePayment } from "../services/api";
-import type { Bank } from "../services/types";
-import { showAlert } from "../store/alert";
 import kbzpayImg from "../assets/kbzpay.jpg";
 import wavepayImg from "../assets/wavepay.jpg";
+
+// Type for individual payment channel
+type PaymentChannel = {
+    id: number;
+    title: string;
+    recharge_type: number;
+    price_str: string[];
+    is_zhizhu: number;
+    remark?: string;
+};
+
+// Type for payment method (KBZpay, WAVEpay)
+type PaymentMethod = {
+    tid: number;
+    title: string;
+    recharge_type: string;
+    charge: PaymentChannel[];
+};
 
 export default function DepositPage() {
     const MINIMUM_DEPOSIT = 3000;
     const { t } = useTranslation();
-    // Initial dummy state to match UI, will be replaced by API
-    const [banks, setBanks] = useState<Bank[]>([]);
-    const [selectedBankId, setSelectedBankId] = useState<number>(0);
+    const navigate = useNavigate();
+    
+    const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+    const [selectedMethodId, setSelectedMethodId] = useState<number>(0);
+    const [selectedChannelId, setSelectedChannelId] = useState<number>(0);
     const [selectedAmount, setSelectedAmount] = useState<string>("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
 
-    // To match original UI's "depositChannels" which seemed to be the payment TYPES (like Pay vs Bank vs Crypto) 
-    // vs "banks" which were specific banks? 
-    // Looking at rk logic: it gets "channels" which contain "banks" or "types". 
-    // In rk: "banks" are the main list.
+    const selectedMethod = useMemo(() => {
+        return paymentMethods.find(m => m.tid === selectedMethodId) ?? null;
+    }, [paymentMethods, selectedMethodId]);
 
-    const selectedBank = useMemo(() => {
-        return banks.find(b => b.id === selectedBankId) ?? null;
-    }, [banks, selectedBankId]);
+    const selectedChannel = useMemo(() => {
+        if (!selectedMethod) return null;
+        return selectedMethod.charge.find(c => c.id === selectedChannelId) ?? null;
+    }, [selectedMethod, selectedChannelId]);
 
-    const rechargeAmounts = selectedBank?.rechargeAmounts ?? [];
+    const rechargeAmounts = selectedChannel?.price_str ?? [];
 
     // Helper parsing logic
-    function parseAmounts(input: unknown): string[] {
-        if (Array.isArray(input)) return input.map(String);
-        if (typeof input === "string") {
-            return input.split(/[,|\s]+/).map(s => s.trim()).filter(Boolean);
-        }
-        return [];
-    }
-
     function parseMinimum(remark: unknown, fallback: number): number {
         if (typeof remark !== "string") return fallback;
         const m = remark.match(/^\s*(\d+)\s*-\s*\d+\s*$/);
@@ -52,33 +63,20 @@ export default function DepositPage() {
     }
 
     useEffect(() => {
-        // Basic setup similar to rk
         fetchRecharegeAmount("1").then((res) => {
             if (res?.status?.errorCode === 0 && Array.isArray(res.data)) {
                 console.log("Fetched recharge amounts:", res.data);
-                // Map to our Bank type
-                const mapped = res.data.map((item: any, idx: number) => {
-                    const title = item.title || "Channel " + idx;
-                    const img = getImageByTitle(title);
-
-                    const d = item.charge?.[0];
-                    const amounts = parseAmounts(d?.price_str);
-                    const min = parseMinimum(d?.remark, MINIMUM_DEPOSIT);
-
-                    return {
-                        id: item.tid || idx,
-                        name: title,
-                        image: img,
-                        type: item.recharge_type,
-                        rechargeAmounts: amounts,
-                        minimumAmount: min,
-                        rechargeId: item.tid // Store the actual recharge config ID for payment
-                    };
-                });
-                setBanks(mapped);
-                if (mapped.length > 0) {
-                    setSelectedBankId(mapped[0].id);
-                    setSelectedAmount(String(Math.max(mapped[0].minimumAmount, MINIMUM_DEPOSIT)));
+                setPaymentMethods(res.data);
+                
+                // Auto-select first method and first channel
+                if (res.data.length > 0) {
+                    setSelectedMethodId(res.data[0].tid);
+                    if (res.data[0].charge.length > 0) {
+                        setSelectedChannelId(res.data[0].charge[0].id);
+                        const firstChannel = res.data[0].charge[0];
+                        const min = parseMinimum(firstChannel.remark, MINIMUM_DEPOSIT);
+                        setSelectedAmount(String(min));
+                    }
                 }
             }
         });
@@ -86,14 +84,16 @@ export default function DepositPage() {
 
     const handleSubmit = async () => {
         if (loading) return;
-        if (!selectedBank) {
+        if (!selectedChannel) {
             setError(t('deposit.selectChannel'));
             return;
         }
 
         const amount = Number(selectedAmount);
-        if (isNaN(amount) || amount < selectedBank.minimumAmount) {
-            setError(`${t('deposit.minimumAmount')} ${selectedBank.minimumAmount}`);
+        const minimumAmount = parseMinimum(selectedChannel.remark, MINIMUM_DEPOSIT);
+        
+        if (isNaN(amount) || amount < minimumAmount) {
+            setError(`${t('deposit.minimumAmount')} ${minimumAmount}`);
             return;
         }
 
@@ -101,23 +101,31 @@ export default function DepositPage() {
         setError("");
 
         try {
+            // Determine if this is a self-service or third-party channel
+            const isSelfService = selectedChannel.is_zhizhu === 1;
+            
+            // Determine recharge_type based on payment method: 7 for KBZpay, 8 for WAVEpay
+            const methodTitle = selectedMethod?.title.toLowerCase() || '';
+            const rechargeType = methodTitle.includes('kbz') ? 7 : methodTitle.includes('wave') ? 8 : 7;
+            
             // Step 1: Create the order
             const orderRes = await buildOrder({
                 amount: amount,
                 payer_name: "",
-                recharge_id: (selectedBank as any).rechargeId || 99,
-                recharge_type: Number(selectedBank.type) || 0,
+                recharge_id: selectedChannel.id,
+                recharge_type: rechargeType,
             });
 
             if (orderRes?.status?.errorCode === 0 && orderRes.data) {
                 const { tid, order_type } = orderRes.data;
+                console.log("Order created:", orderRes.data);
 
                 // Step 2: Check if this is a third-party payment requiring redirect
-                if (order_type === 1) {
+                if (order_type === 1 || !isSelfService) {
                     // Third-party payment (like BCATPAY) - need to get payment URL
                     const paymentRes = await initiatePayment({
                         order_id: tid,
-                        recharge_id: (selectedBank as any).rechargeId || 99,
+                        recharge_id: selectedChannel.id,
                     });
 
                     if (paymentRes?.status?.errorCode === 0 && paymentRes.data?.pay_url) {
@@ -127,9 +135,11 @@ export default function DepositPage() {
                         setError(paymentRes?.status?.msg || "Failed to initiate payment");
                     }
                 } else {
-                    // Self-service payment (order_type === 0)
-                    showAlert(`${t('deposit.orderCreated')} ${tid}`);
-                    // Could navigate to a self-service payment page here
+                    // Self-service payment (order_type === 0 or is_zhizhu === 1)
+                    // Navigate to deposit confirm page with order details
+                    navigate("/deposit/confirm", {
+                        state: { orderId: tid, amount: selectedAmount }
+                    });
                 }
             } else {
                 setError(orderRes?.status?.msg || "Failed to create order");
@@ -171,36 +181,80 @@ export default function DepositPage() {
             </div> */}
 
             <div className={styles.channelDiv}>
-                <h1>{t('deposit.channelLabel')} <span>*</span></h1>
+                {/* <h1>{t('deposit.methodLabel') || 'Payment Method'} <span>*</span></h1> */}
+                    <h1>{t('deposit.channelLabel') || 'Channel'} <span>*</span></h1>
 
-                {/* Render Banks/Channels */}
+                {/* Render Payment Methods (KBZpay, WAVEpay) */}
                 <div className={styles.channelBankDiv}>
-                    {banks.map((channel) => (
+                    {paymentMethods.map((method) => (
                         <div
-                            key={channel.id}
+                            key={method.tid}
                             className={styles.channelItem}
                             style={{
-                                border: selectedBankId === channel.id ? '2px solid #cb0000' : '2px solid transparent',
-                                opacity: selectedBankId === channel.id ? 1 : 0.6,
+                                border: selectedMethodId === method.tid ? '2px solid #cb0000' : '2px solid transparent',
+                                opacity: selectedMethodId === method.tid ? 1 : 0.6,
                                 cursor: 'pointer',
                                 transition: 'all 0.3s'
                             }}
                             onClick={() => {
-                                setSelectedBankId(channel.id);
+                                setSelectedMethodId(method.tid);
+                                // Auto-select first channel of this method
+                                if (method.charge.length > 0) {
+                                    setSelectedChannelId(method.charge[0].id);
+                                    const min = parseMinimum(method.charge[0].remark, MINIMUM_DEPOSIT);
+                                    setSelectedAmount(String(min));
+                                }
                             }}
                         >
-                            <img src={channel.image} alt={channel.name} className={styles.bankImage} />
-                            {/* <p className={styles.bankName}>{channel.name}</p> */}
+                            <img src={getImageByTitle(method.title)} alt={method.title} className={styles.bankImage} />
                         </div>
                     ))}
-                    {banks.length === 0 && <div style={{ padding: '10px', color: '#888' }}>{t('deposit.loadingChannels')}</div>}
+                    {paymentMethods.length === 0 && <div style={{ padding: '10px', color: '#888' }}>{t('deposit.loadingChannels')}</div>}
                 </div>
-
-                {/* <div className={styles.channelInfoDiv}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
-                    <p>{t('deposit.failureHint')}</p>
-                </div> */}
             </div>
+
+            {/* Show Channels when method is selected */}
+            {selectedMethod && selectedMethod.charge.length > 0 && (
+                <div className={styles.channelDiv} style={{ marginTop: '2rem' }}>
+                    <h1>{'Channel'} <span>*</span></h1>
+                    <div className={styles.channelBankDiv}>
+                        {selectedMethod.charge.map((channel, idx) => (
+                            <div
+                                key={channel.id}
+                                className={styles.channelItem}
+                                style={{
+                                    border: selectedChannelId === channel.id ? '2px solid #cb0000' : '2px solid #444',
+                                    opacity: selectedChannelId === channel.id ? 1 : 0.6,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s',
+                                    padding: '1rem',
+                                    borderRadius: '8px',
+                                    backgroundColor: '#1a1a1a',
+                                    minHeight: '60px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                                onClick={() => {
+                                    setSelectedChannelId(channel.id);
+                                    const min = parseMinimum(channel.remark, MINIMUM_DEPOSIT);
+                                    setSelectedAmount(String(min));
+                                }}
+                            >
+                                <p style={{ 
+                                    color: '#fff', 
+                                    fontSize: '1.4rem',
+                                    fontWeight: '500',
+                                    textAlign: 'center',
+                                    margin: 0
+                                }}>
+                                    {selectedMethod.title.toLowerCase()}-{idx + 1}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             <div style={{ padding: "2rem", marginTop: "1rem", paddingBottom: "5rem" }}>
                 {/* Error Message Display */}
@@ -223,8 +277,9 @@ export default function DepositPage() {
                                 key={amt}
                                 onClick={() => {
                                     const nextAmount = Number(amt);
-                                    if (selectedBank) {
-                                        setSelectedAmount(String(Math.max(nextAmount, selectedBank.minimumAmount)));
+                                    if (selectedChannel) {
+                                        const min = parseMinimum(selectedChannel.remark, MINIMUM_DEPOSIT);
+                                        setSelectedAmount(String(Math.max(nextAmount, min)));
                                     } else {
                                         setSelectedAmount(amt);
                                     }
@@ -254,14 +309,17 @@ export default function DepositPage() {
                         value={selectedAmount}
                         onChange={(e) => setSelectedAmount(e.target.value)}
                         onBlur={() => {
-                            if (selectedBank) {
+                            if (selectedChannel) {
                                 const val = Number(selectedAmount);
-                                if (val < selectedBank.minimumAmount) setSelectedAmount(String(selectedBank.minimumAmount));
+                                const min = parseMinimum(selectedChannel.remark, MINIMUM_DEPOSIT);
+                                if (val < min) setSelectedAmount(String(min));
                             }
                         }}
                     />
                     <p className={styles.helperText}>
-                        {t('deposit.minimumLabel')} <span className={styles.primary}>{selectedBank?.minimumAmount?.toLocaleString() || 0}</span>
+                        {t('deposit.minimumLabel')} <span className={styles.primary}>
+                            {selectedChannel ? parseMinimum(selectedChannel.remark, MINIMUM_DEPOSIT).toLocaleString() : MINIMUM_DEPOSIT.toLocaleString()}
+                        </span>
                     </p>
                 </div>
 

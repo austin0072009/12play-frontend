@@ -1,0 +1,252 @@
+.container {
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.6rem 2rem;
+  background: var(--color-bg-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.backBtn:hover {
+  color: var(--color-primary);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-white);
+  margin: 0;
+}
+
+.content {
+  padding: 2rem;
+  padding-bottom: 10rem;
+}
+
+/* Timer Card */
+.timerCard {
+  background: linear-gradient(135deg, rgba(203, 0, 0, 0.15) 0%, rgba(160, 0, 0, 0.1) 100%);
+  border: 1px solid rgba(203, 0, 0, 0.3);
+  border-radius: 1.2rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.timerText {
+  font-size: 1.6rem;
+  color: var(--color-white);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.timerHighlight {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+/* Info Cards */
+.infoCard {
+  background: var(--color-bg-muted);
+  border-radius: 1.2rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cardTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-white);
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.infoRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.infoLabel {
+  font-size: 1.4rem;
+  color: var(--color-secondary);
+}
+
+.infoValue {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--color-white);
+  text-align: right;
+}
+
+.infoValueWithCopy {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.copyBtn {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 0.8rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.copyBtn:hover {
+  background: #e00000;
+  transform: translateY(-1px);
+}
+
+/* Input Section */
+.inputHint {
+  font-size: 1.4rem;
+  color: var(--color-secondary);
+  margin: 0 0 1rem 0;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.inputEl {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--color-primary);
+  outline: none;
+  padding: 1.6rem 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-white);
+  border-radius: 1.2rem;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3em;
+  text-align: center;
+}
+
+.inputEl:focus {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(203, 0, 0, 0.15);
+}
+
+.inputEl::placeholder {
+  color: var(--color-secondary);
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+  font-size: 1.6rem;
+}
+
+.inputCounter {
+  font-size: 1.6rem;
+  color: var(--color-secondary);
+  font-weight: 500;
+  min-width: 4rem;
+}
+
+/* Submit Button */
+.submitBtn {
+  width: 100%;
+  padding: 1.8rem 2rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(203, 0, 0, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(203, 0, 0, 0.6);
+  background: linear-gradient(135deg, #e00000 0%, #cb0000 100%);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #555;
+  box-shadow: none;
+}
+
+/* Reminder Card */
+.reminderCard {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.reminderText {
+  font-size: 1.3rem;
+  color: var(--color-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Loading & Error States */
+.loadingCard,
+.errorCard {
+  background: var(--color-bg-muted);
+  border-radius: 1.2rem;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.loadingCard p,
+.errorCard p {
+  font-size: 1.6rem;
+  color: var(--color-secondary);
+  margin: 0;
+}
+
+.errorCard {
+  border: 1px solid rgba(255, 68, 68, 0.3);
+}
+
+.errorCard p {
+  color: #ff6b6b;
+}

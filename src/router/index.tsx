@@ -14,6 +14,7 @@ import ChangePassword from "../pages/ChangePassword";
 import ContactSection from "../components/ContactSection";
 import Feedback from "../pages/Feedback";
 import Download from "../pages/Download";
+import DepositConfirm from "../pages/DepositConfirm";
 // import Referral from "../pages/Referral";
 
 // 2D Lottery Pages
@@ -40,6 +41,7 @@ export default function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/bank/add" element={<BankAdd />} />
+        <Route path="/deposit/confirm" element={<DepositConfirm />} />
         <Route path="/game" element={<GameFrame />} />
 
         {/* Layout routes */}
