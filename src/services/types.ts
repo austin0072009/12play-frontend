@@ -509,17 +509,17 @@ export type LotteryRankReq = {
 };
 
 export type LotteryRankRespItem = {
-  userId: number;
-  username: string;
+  user_id: number;
+  betAmount: number;
   winAmount: number;
+  phone: string;
+  nickname: string;
 };
 
 export type LotteryRankResp = {
   code: number;
   message: string;
-  data: {
-    ranking: LotteryRankRespItem[];
-  };
+  data: LotteryRankRespItem[];
 };
 
 /** User Bet Statistics per Session */

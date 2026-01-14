@@ -4,17 +4,22 @@ import { useEffect, useState } from "react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { getBetSessions, getWinRanking } from "../services/lottery";
 import { useLotteryStore } from "../store/lottery";
+import type { LotteryRankRespItem } from "../services/types";
 
-interface RankingItem {
-  userId: number;
-  username: string;
-  winAmount: number;
-}
+const getDisplayName = (player: LotteryRankRespItem) => {
+  const isAllStars = (value?: string | null) => !value || value.replace(/\*/g, "").length === 0;
+
+  if (isAllStars(player.phone) && !isAllStars(player.nickname)) return player.nickname;
+  if (isAllStars(player.nickname) && !isAllStars(player.phone)) return player.phone;
+
+  // Prefer nickname when both are available/not masked
+  return player.nickname || player.phone || "-";
+};
 
 export default function Lottery3DRank() {
   const navigate = useNavigate();
   const { lotteryToken } = useLotteryStore();
-  const [rankings, setRankings] = useState<RankingItem[]>([]);
+  const [rankings, setRankings] = useState<LotteryRankRespItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sessionIssue, setSessionIssue] = useState<string>("");
@@ -41,7 +46,7 @@ export default function Lottery3DRank() {
           
           try {
             const rankingData = await getWinRanking(2, latestSession.issue);
-            setRankings(rankingData.ranking || []);
+            setRankings(rankingData || []);
           } catch (err) {
             console.error("Error fetching ranking:", err);
             setError("Failed to load rankings");
@@ -83,7 +88,7 @@ export default function Lottery3DRank() {
             {rankings.length > 0 ? (
               <div className={styles.rankingsList}>
                 {rankings.map((player, idx) => (
-                  <div key={player.userId} className={styles.rankCard}>
+                  <div key={player.user_id} className={styles.rankCard}>
                     <div className={styles.rankPosition}>
                       {idx + 1 <= 3 ? (
                         <span className={styles.medal}>
@@ -95,7 +100,7 @@ export default function Lottery3DRank() {
                     </div>
 
                     <div className={styles.playerInfo}>
-                      <p className={styles.username}>{player.username}</p>
+                      <p className={styles.username}>{getDisplayName(player)}</p>
                     </div>
 
                     <div className={styles.winAmount}>

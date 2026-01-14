@@ -3,6 +3,7 @@ import styles from "./Lottery3DBetHistory.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { getBetRecords } from "../services/lottery";
+import type { BetRecord } from "../services/types";
 
 type BetDetail = {
   id: number;
@@ -30,12 +31,27 @@ export default function Lottery3DBetHistory() {
   const [error, setError] = useState<string | null>(null);
   const [expandedIssues, setExpandedIssues] = useState<Set<string>>(new Set());
 
+  const fetchAllRecords = async (gameId: number): Promise<BetRecord[]> => {
+    const pageSize = 200; // large page to reduce round-trips
+    let page = 1;
+    const all: BetRecord[] = [];
+
+    while (true) {
+      const batch = await getBetRecords(gameId, "", page, pageSize);
+      all.push(...batch);
+      if (!batch.length || batch.length < pageSize) break;
+      page += 1;
+    }
+
+    return all;
+  };
+
   useEffect(() => {
     const fetchHistory = async () => {
       setLoading(true);
       setError(null);
       try {
-        const records = await getBetRecords(2, "", 1, 10); // 2 = 3D game
+        const records = await fetchAllRecords(2); // 2 = 3D game
 
         // Group records by issue
         const groupedMap = new Map<string, BetOrder>();
@@ -194,11 +210,12 @@ export default function Lottery3DBetHistory() {
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span className={`${styles.status} ${
-                      order.netAmount > 0 ? styles.won : order.netAmount < 0 ? styles.lost : styles.pending
-                    }`}>
-                      {order.netAmount > 0 ? "WIN" : order.netAmount < 0 ? "LOSS" : "PENDING"}
-                    </span>
+                    {(() => {
+                      const hasPending = order.details.some((d) => d.status === "pending");
+                      const statusClass = hasPending ? styles.pending : (order.netAmount > 0 ? styles.won : order.netAmount < 0 ? styles.lost : styles.pending);
+                      const statusText = hasPending ? "PENDING" : (order.netAmount > 0 ? "WIN" : order.netAmount < 0 ? "LOSS" : "PENDING");
+                      return <span className={`${styles.status} ${statusClass}`}>{statusText}</span>;
+                    })()}
                     {isExpanded ? (
                       <ChevronUpIcon className={styles.expandIcon} />
                     ) : (
@@ -224,16 +241,18 @@ export default function Lottery3DBetHistory() {
                       MMK {order.totalAmount.toFixed(2)}
                     </div>
                   </div>
-                  <div>
-                    <div className={styles.label}>Total Win</div>
-                    <div
-                      className={`${styles.value} ${
-                        order.netAmount > 0 ? styles.win : order.netAmount < 0 ? styles.loss : ""
-                      }`}
-                    >
-                      {order.netAmount > 0 ? "+" : ""}MMK {order.netAmount.toFixed(2)}
+                  {!order.details.every((d) => d.status === "pending") && (
+                    <div>
+                      <div className={styles.label}>Total Win</div>
+                      <div
+                        className={`${styles.value} ${
+                          order.netAmount > 0 ? styles.win : order.netAmount < 0 ? styles.loss : ""
+                        }`}
+                      >
+                        {order.netAmount > 0 ? "+" : ""}MMK {order.netAmount.toFixed(2)}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 {/* Expanded Details */}

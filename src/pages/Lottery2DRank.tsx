@@ -6,16 +6,22 @@ import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { getBetSessions, getWinRanking } from "../services/lottery";
 import { useLotteryStore } from "../store/lottery";
 
-interface RankingItem {
-  userId: number;
-  username: string;
-  winAmount: number;
-}
+import type { LotteryRankRespItem } from "../services/types";
+
+const getDisplayName = (player: LotteryRankRespItem) => {
+  const isAllStars = (value?: string | null) => !value || value.replace(/\*/g, "").length === 0;
+
+  if (isAllStars(player.phone) && !isAllStars(player.nickname)) return player.nickname;
+  if (isAllStars(player.nickname) && !isAllStars(player.phone)) return player.phone;
+
+  // Prefer nickname when both are available/not masked
+  return player.nickname || player.phone || "-";
+};
 
 interface SessionRanking {
   sessionTime: string;
   issue: string;
-  rankings: RankingItem[];
+  rankings: LotteryRankRespItem[];
 }
 
 export default function Lottery2DRank() {
@@ -41,50 +47,42 @@ export default function Lottery2DRank() {
         // Fetch completed sessions (winState=3 for drawn/completed)
         const completedSessions = await getBetSessions(1, 3);
 
-        // Find latest 12:00 and 16:30 sessions
-        const session12 = completedSessions.find(s => s.win_time.includes("12:00"));
-        const session1630 = completedSessions.find(s => s.win_time.includes("16:30"));
-
         const rankingsData: SessionRanking[] = [];
 
-        // Fetch rankings for 12:00 session
-        if (session12) {
-          try {
-            const ranking12 = await getWinRanking(1, session12.issue);
-            rankingsData.push({
-              sessionTime: "12:00",
-              issue: session12.issue,
-              rankings: ranking12.ranking || [],
-            });
-          } catch (err) {
-            console.error("Error fetching 12:00 ranking:", err);
-          }
-        }
+        // Process up to 2 latest completed sessions
+        const sessionsToProcess = completedSessions.slice(0, 2);
 
-        // Fetch rankings for 16:30 session
-        if (session1630) {
+        for (const session of sessionsToProcess) {
           try {
-            const ranking1630 = await getWinRanking(1, session1630.issue);
+            const rankings = await getWinRanking(1, session.issue);
+            // Extract time from win_time (format may vary, e.g., "2026-01-14 16:30:00" or similar)
+            const timeMatch = session.win_time.match(/(\d{1,2}:\d{2})/);
+            const sessionTime = timeMatch ? timeMatch[1] : session.issue;
+
             rankingsData.push({
-              sessionTime: "16:30",
-              issue: session1630.issue,
-              rankings: ranking1630.ranking || [],
+              sessionTime,
+              issue: session.issue,
+              rankings: rankings || [],
             });
           } catch (err) {
-            console.error("Error fetching 16:30 ranking:", err);
+            console.error(`Error fetching ranking for session ${session.issue}:`, err);
           }
         }
 
         setSessionRankings(rankingsData);
-      } catch (err: any) {t("lottery2d.failedLoadRankings")
-        setError(err?.message || "Failed to load rankings");
+        // Set active tab to first session if available
+        if (rankingsData.length > 0) {
+          setActiveTab(rankingsData[0].sessionTime);
+        }
+      } catch (err: any) {
+        setError(err?.message || t("lottery2d.failedLoadRankings"));
       } finally {
         setLoading(false);
       }
     };
 
     fetchRankings();
-  }, [lotteryToken]);
+  }, [lotteryToken, t]);
 
   // Get the currently active session ranking
   const activeSessionRanking = sessionRankings.find(
@@ -135,7 +133,7 @@ export default function Lottery2DRank() {
                 {activeSessionRanking.rankings.length > 0 ? (
                   <div className={styles.rankingsList}>
                     {activeSessionRanking.rankings.map((player, idx) => (
-                      <div key={player.userId} className={styles.rankCard}>
+                      <div key={player.user_id} className={styles.rankCard}>
                         <div className={styles.rankPosition}>
                           {idx + 1 <= 3 ? (
                             <span className={styles.medal}>
@@ -147,7 +145,7 @@ export default function Lottery2DRank() {
                         </div>
 
                         <div className={styles.playerInfo}>
-                          <p className={styles.username}>{player.username}</p>
+                          <p className={styles.username}>{getDisplayName(player)}</p>
                         </div>
 
                         <div className={styles.winAmount}>

@@ -4,6 +4,7 @@ import styles from "./Lottery2DBetHistory.module.css";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { getBetRecords } from "../services/lottery";
+import type { BetRecord } from "../services/types";
 
 type BetDetail = {
   id: number;
@@ -32,12 +33,27 @@ export default function Lottery2DBetHistory() {
   const [error, setError] = useState<string | null>(null);
   const [expandedIssues, setExpandedIssues] = useState<Set<string>>(new Set());
 
+  const fetchAllRecords = async (gameId: number): Promise<BetRecord[]> => {
+    const pageSize = 200; // large page to reduce round-trips
+    let page = 1;
+    const all: BetRecord[] = [];
+
+    while (true) {
+      const batch = await getBetRecords(gameId, "", page, pageSize);
+      all.push(...batch);
+      if (!batch.length || batch.length < pageSize) break;
+      page += 1;
+    }
+
+    return all;
+  };
+
   useEffect(() => {
     const fetchHistory = async () => {
       setLoading(true);
       setError(null);
       try {
-        const records = await getBetRecords(1, "", 1, 10); // 1 = 2D game, empty issue means all
+        const records = await fetchAllRecords(1); // 1 = 2D game, empty issue means all
         //console.log("Fetched bet records:", records);
 
         // Group records by issue
@@ -47,17 +63,19 @@ export default function Lottery2DBetHistory() {
           const issue = r.issue;
           const amount = parseFloat(r.bet_amount || "0") || 0;
           const winAmount = parseFloat(r.award || "0") || 0;
+          const netBet = parseFloat(r.net_bet || "0") || 0;
           const created = r.created_at || "";
           const [date, time] = created.split(" ");
 
-          // Determine status based on is_lottery and award amount
-          // is_lottery: 1 = pending, 2 = drawn/completed
+          // Determine status based on is_lottery
+          // is_lottery: 1 = pending (result not drawn yet), 2 = drawn/completed
           let betStatus: "won" | "lost" | "pending";
           if (r.is_lottery === 1) {
+            // Result not drawn yet, always pending
             betStatus = "pending";
           } else if (r.is_lottery === 2) {
-            // Lottery drawn - check if won based on award amount
-            betStatus = winAmount > 0 ? "won" : "lost";
+            // Lottery drawn - check net_bet to determine win/loss
+            betStatus = netBet > 0 ? "won" : netBet < 0 ? "lost" : "pending";
           } else {
             betStatus = "pending"; // fallback
           }
@@ -172,11 +190,12 @@ export default function Lottery2DBetHistory() {
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span className={`${styles.status} ${
-                      order.netAmount > 0 ? styles.won : order.netAmount < 0 ? styles.lost : styles.pending
-                    }`}>
-                      {order.netAmount > 0 ? "Won" : order.netAmount < 0 ? "Lost" : "Pending"}
-                    </span>
+                    {(() => {
+                      const hasPending = order.details.some((d) => d.status === "pending");
+                      const statusClass = hasPending ? styles.pending : (order.netAmount > 0 ? styles.won : order.netAmount < 0 ? styles.lost : styles.pending);
+                      const statusText = hasPending ? "Pending" : (order.netAmount > 0 ? "Won" : order.netAmount < 0 ? "Lost" : "Pending");
+                      return <span className={`${styles.status} ${statusClass}`}>{statusText}</span>;
+                    })()}
                     {isExpanded ? (
                       <ChevronUpIcon className={styles.expandIcon} />
                     ) : (
@@ -202,16 +221,18 @@ export default function Lottery2DBetHistory() {
                       MMK {order.totalAmount.toFixed(2)}
                     </div>
                   </div>
-                  <div>
-                    <div className={styles.label}>Total Win</div>
-                    <div
-                      className={`${styles.value} ${
-                        order.netAmount > 0 ? styles.win : order.netAmount < 0 ? styles.loss : ""
-                      }`}
-                    >
-                      {order.netAmount > 0 ? "+" : ""}MMK {order.netAmount.toFixed(2)}
+                  {!order.details.every((d) => d.status === "pending") && (
+                    <div>
+                      <div className={styles.label}>Total Win</div>
+                      <div
+                        className={`${styles.value} ${
+                          order.netAmount > 0 ? styles.win : order.netAmount < 0 ? styles.loss : ""
+                        }`}
+                      >
+                        {order.netAmount > 0 ? "+" : ""}MMK {order.netAmount.toFixed(2)}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 {/* Expanded Details */}
