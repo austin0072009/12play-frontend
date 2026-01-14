@@ -213,8 +213,8 @@ export default function DepositPage() {
                 </div>
             </div>
 
-            {/* Show Channels when method is selected */}
-            {selectedMethod && selectedMethod.charge.length > 0 && (
+            {/* Show Channels when method is selected and has multiple channels */}
+            {selectedMethod && selectedMethod.charge.length > 1 && (
                 <div className={styles.channelDiv} style={{ marginTop: '2rem' }}>
                     <h1>{'Channel'} <span>*</span></h1>
                     <div className={styles.channelBankDiv}>
