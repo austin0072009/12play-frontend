@@ -199,7 +199,7 @@ export function useWinRanking(issueId: string | null) {
       setLoading(true);
       setError('');
       const data = await lotteryAPI.getWinRanking(1, issueId);
-      setRanking(data.ranking || []);
+      setRanking(data || []);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load ranking';
       setError(message);
