@@ -1,13 +1,24 @@
 /* Overlay base */
 .overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100dvh;
+  height: 100vh; /* Fallback for older browsers */
   background: rgba(0, 0, 0, 0);
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
   pointer-events: none;
   backdrop-filter: blur(0px);
+}
+
+@supports (height: 100dvh) {
+  .overlay {
+    height: 100dvh;
+  }
 }
 
 .show {
@@ -33,7 +44,8 @@
   left: 0;
   width: 85%;
   max-width: 340px;
-  height: 100%;
+  height: 100vh; /* Fallback for older browsers */
+  height: 100dvh;
   background: linear-gradient(180deg, #1d1d1d 0%, #0f0f0f 100%);
   box-shadow: 8px 0 32px rgba(0, 0, 0, 0.8);
   transform: translateX(-100%);
@@ -41,6 +53,12 @@
   display: flex;
   flex-direction: column;
   border-right: 1px solid rgba(203, 0, 0, 0.2);
+}
+
+@supports (height: 100dvh) {
+  .sidebar {
+    height: 100dvh;
+  }
 }
 
 .sidebar::-webkit-scrollbar {
