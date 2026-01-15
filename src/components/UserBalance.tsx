@@ -14,7 +14,13 @@ export default function UserBalance({ headerStyle = false }: UserBalanceProps) {
     return null;
   }
 
-  const balance = userInfo?.balance || 0;
+  const rawBalance = userInfo?.balance;
+  const balanceNumber = typeof rawBalance === "number"
+    ? rawBalance
+    : typeof rawBalance === "string"
+    ? Number(rawBalance)
+    : 0;
+  const displayBalance = Number.isFinite(balanceNumber) ? balanceNumber : 0;
 
   const handleWalletClick = () => {
     navigate("/wallet");
@@ -65,7 +71,7 @@ export default function UserBalance({ headerStyle = false }: UserBalanceProps) {
           <path d="M1 10h22" />
           <circle cx="17" cy="15" r="2" />
         </svg>
-        <span>MMK {typeof balance === 'number' ? balance.toFixed(2) : '0.00'}</span>
+        <span>MMK {displayBalance.toFixed(2)}</span>
       </button>
     );
   }
@@ -124,7 +130,7 @@ export default function UserBalance({ headerStyle = false }: UserBalanceProps) {
             color: "#cb0000",
           }}
         >
-          MMK {typeof balance === 'number' ? balance.toFixed(2) : '0.00'}
+          MMK {displayBalance.toFixed(2)}
         </span>
       </div>
     </div>

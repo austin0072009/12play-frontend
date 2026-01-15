@@ -189,6 +189,9 @@
   "wallet.withdrawal": "取款",
   "wallet.history": "历史记录",
 
+  "forgotPassword.title": "忘记密码？",
+  "forgotPassword.subtitle": "通过 Viber 或 Telegram 联系我们的支持团队以重置密码",
+
   "contact.title": "24/7 联系服务",
   "contact.subtitle": "我们随时随地为您服务",
   "contact.viber": "Viber",

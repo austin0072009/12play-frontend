@@ -93,6 +93,7 @@ export default function DepositConfirm() {
         setSubmitting(true);
         try {
             const res = await payOrder(orderId, tailNo);
+            console.log("Pay order response:", res);
             if (res?.code === 200) {
                 showAlert(t("depositConfirm.success"));
                 navigate("/wallet");

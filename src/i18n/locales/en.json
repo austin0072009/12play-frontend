@@ -181,6 +181,9 @@
   "wallet.withdrawal": "Withdrawal",
   "wallet.history": "History",
 
+  "forgotPassword.title": "Forgot Password?",
+  "forgotPassword.subtitle": "Contact our support team via Viber or Telegram to reset your password",
+
   "contact.title": "24/7 Contact Service",
   "contact.subtitle": "We're here to help anytime, anywhere",
   "contact.viber": "Viber",

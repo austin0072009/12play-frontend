@@ -8,7 +8,7 @@ import { loginApi } from '../services/auth';
 import { fetchBalance } from '../services/api';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
-import { showAlert } from '../store/alert';
+import ForgotPasswordModal from '../components/ForgotPasswordModal';
 
 export default function Login() {
   const { t } = useTranslation();
@@ -38,6 +38,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState("");
+  const [showForgotModal, setShowForgotModal] = useState(false);
 
   async function handleSubmit(e?: React.FormEvent) {
     if (e) e.preventDefault();
@@ -190,13 +191,18 @@ export default function Login() {
       </form>
 
       <div className={styles.form_actions}>
-        <span className={styles.link} onClick={() => showAlert(t("login.forgotPrompt"))}>
+        <span className={styles.link} onClick={() => setShowForgotModal(true)}>
           {t("login.forgot") || "Forgot Password?"}
         </span>
         <span className={styles.link} onClick={() => navigate("/register")}>
           {t("login.register") || "Register Here"}
         </span>
       </div>
+
+      <ForgotPasswordModal 
+        isOpen={showForgotModal} 
+        onClose={() => setShowForgotModal(false)} 
+      />
     </div>
   );
 }

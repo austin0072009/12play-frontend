@@ -165,6 +165,8 @@
   "wallet.deposit": "ငွေသွင်းမည်",
   "wallet.withdrawal": "ငွေထုတ်မည်",
   "wallet.history": "မှတ်တမ်း",
+  "forgotPassword.title": "စကားဝှက်မေ့နေပါသလား?",
+  "forgotPassword.subtitle": "စကားဝှက်ပြန်လည်သတ်မှတ်ရန် Viber သို့မဟုတ် Telegram မှတစ်ဆင့် ကျွန်ုပ်တို့၏ပံ့ပိုးကူညီမှုအဖွဲ့ကိုဆက်သွယ်ပါ",
   "contact.title": "24/7 ဆက်သွယ်ရေး ဝန်ဆောင်မှု",
   "contact.subtitle": "အချိန်မရွေး၊ နေရာမရွေး ကူညီပေးပါမည်",
   "contact.viber": "Viber",

@@ -8,6 +8,15 @@ import { useUserStore } from "../store/user";
 import { fetchBalance } from "../services/api";
 import { loginApi } from "../services/auth";
 
+const normalizeNumber = (value: any) => {
+  if (typeof value === "number") return value;
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+  return 0;
+};
+
 export default function MainLayout() {
   const token = useUserStore((s) => s.token);
   const setToken = useUserStore((s) => s.setToken);
@@ -29,8 +38,8 @@ export default function MainLayout() {
         // Create new object to ensure Zustand detects the change
         const updatedUserInfo = { 
           ...userInfo, 
-          balance: balanceRes.data.balance, 
-          ml_money: balanceRes.data.ml_money 
+          balance: normalizeNumber(balanceRes.data.balance), 
+          ml_money: normalizeNumber(balanceRes.data.ml_money) 
         };
         setUserInfo(updatedUserInfo);
       }
@@ -105,8 +114,8 @@ export default function MainLayout() {
               if (balanceRes && balanceRes.status && Number(balanceRes.status.errorCode) === 0 && balanceRes.data) {
                 //console.log("Balance response full:", balanceRes);
                 //console.log("Balance response data:", balanceRes.data);
-                balance = balanceRes.data.balance;
-                ml_money = balanceRes.data.ml_money;
+                balance = normalizeNumber(balanceRes.data.balance);
+                ml_money = normalizeNumber(balanceRes.data.ml_money);
               }
             } catch (err) {
               console.error("Failed to fetch balance after auto-login:", err);
