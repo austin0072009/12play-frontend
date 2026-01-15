@@ -136,19 +136,19 @@ export default function WalletHistoryPage() {
                                     </div>
                                 )}
 
-                                {/* For withdrawal: show bank info OR fail reason (but not if approved) */}
+                                {/* For withdrawal: show bank info for status 2,3,4; show fail reason only for other statuses */}
                                 {activeTab === "withdrawal" && (
-                                    item.status === 2 ? (
+                                    (item.status === 2 || item.status === 3 || item.status === 4) ? (
                                         <div style={{ color: '#aaa', fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '4px' }}>
                                             {item.bank_name}: {item.bank_card}
                                         </div>
-                                    ) : !item.fail_reason ? (
-                                        <div style={{ color: '#aaa', fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '4px' }}>
-                                            {item.bank_name}: {item.bank_card}
-                                        </div>
-                                    ) : (
+                                    ) : item.fail_reason ? (
                                         <div style={{ color: '#dc2626', fontSize: '1.2rem', marginBottom: '4px' }}>
                                             {t('walletHistory.reason')}: {item.fail_reason}
+                                        </div>
+                                    ) : (
+                                        <div style={{ color: '#aaa', fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '4px' }}>
+                                            {item.bank_name}: {item.bank_card}
                                         </div>
                                     )
                                 )}
