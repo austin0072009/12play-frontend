@@ -59,7 +59,7 @@ export default function ContactSection({
           </div>
         </a>
 
-        {/* Telegram Section */}
+        {/* Telegram CS Section */}
         <a href={telegramLink} className={styles.contactCard}>
           <div className={styles.iconWrapper}>
             <FontAwesomeIcon icon={faTelegram} className={styles.icon} />
@@ -68,6 +68,18 @@ export default function ContactSection({
             <h3 className={styles.cardTitle}>{t('contact.telegram')}</h3>
             <p className={styles.cardStatus}>{t('contact.available')}</p>
             <p className={styles.cardDesc}>{t('contact.telegramDesc')}</p>
+          </div>
+        </a>
+
+        {/* Telegram Official Channel */}
+        <a href="https://t.me/redcowx" target="_blank" rel="noopener noreferrer" className={styles.contactCard}>
+          <div className={styles.iconWrapper} style={{ background: 'linear-gradient(135deg, #0088cc 0%, #005f99 100%)' }}>
+            <FontAwesomeIcon icon={faTelegram} className={styles.icon} />
+          </div>
+          <div className={styles.cardContent}>
+            <h3 className={styles.cardTitle}>{t('contact.officialChannel')}</h3>
+            <p className={styles.cardStatus}>@redcowx</p>
+            <p className={styles.cardDesc}>{t('contact.officialChannelDesc')}</p>
           </div>
         </a>
 

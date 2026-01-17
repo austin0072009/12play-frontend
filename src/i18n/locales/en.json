@@ -194,6 +194,8 @@
   "contact.viberDesc": "Quick response on Viber",
   "contact.telegramDesc": "Instant messaging support",
   "contact.liveChatDesc": "Chat directly with support",
+  "contact.officialChannel": "Official Channel",
+  "contact.officialChannelDesc": "News, updates & promotions",
 
   "deposit.selectChannel": "Please select a payment channel",
   "deposit.minimumAmount": "Minimum deposit amount is",

@@ -202,6 +202,8 @@
   "contact.viberDesc": "Viber 快速回复",
   "contact.telegramDesc": "即时消息支持",
   "contact.liveChatDesc": "直接与客服聊天",
+  "contact.officialChannel": "官方频道",
+  "contact.officialChannelDesc": "新闻、更新和促销活动",
 
   "deposit.selectChannel": "请选择一个支付渠道",
   "deposit.minimumAmount": "最低存款金额是",
