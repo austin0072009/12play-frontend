@@ -14,6 +14,8 @@
  * Once a referral code is stored, it is NEVER overwritten by subsequent visits.
  */
 
+import { trackEvent } from './analytics';
+
 const STORAGE_KEY = 'referral_code';
 const COOKIE_NAME = 'ref';
 const COOKIE_EXPIRY_DAYS = 30;
@@ -140,6 +142,15 @@ export function captureReferralFromUrl(): string | null {
 
     if (refCode) {
       const saved = saveReferralCode(refCode);
+
+      // GA4: Track landing_with_ref only on first capture
+      if (saved) {
+        trackEvent('landing_with_ref', {
+          ref_code: refCode,
+          page_path: window.location.pathname,
+        });
+      }
+
       // Return the stored code (could be different if one already existed)
       return saved ? refCode : getReferralCode();
     }

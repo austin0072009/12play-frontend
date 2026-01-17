@@ -5,6 +5,8 @@ import styles from "./DepositConfirm.module.css";
 import { fetchOrderStatus, payOrder } from "../services/api";
 import type { GatheringOrderInfo } from "../services/types";
 import { showAlert } from "../store/alert";
+import { getReferralCode } from "../utils/referral";
+import { trackFirstDeposit } from "../utils/analytics";
 
 export default function DepositConfirm() {
     const { t } = useTranslation();
@@ -95,6 +97,10 @@ export default function DepositConfirm() {
             const res = await payOrder(orderId, tailNo);
             console.log("Pay order response:", res);
             if (res?.code === 200) {
+                // GA4: Track first deposit (only fires once per user)
+                const depositAmount = orderInfo?.gatheringAmount || Number(routeState?.amount) || 0;
+                trackFirstDeposit(getReferralCode(), depositAmount);
+
                 showAlert(t("depositConfirm.success"));
                 navigate("/wallet");
             } else {

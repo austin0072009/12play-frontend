@@ -8,6 +8,7 @@ import { useUserStore } from "../store/user";
 import { useTranslation } from "react-i18next";
 import Dialog from "../components/Dialog";
 import { getReferralCode } from "../utils/referral";
+import { trackEvent } from "../utils/analytics";
 
 // Client-side password rule
 function isValidPassword(password: string): boolean {
@@ -54,6 +55,11 @@ export default function Register() {
     if (!password) { setAlertMessage(t("register.requiredPassword")); return; }
     if (!isValidPassword(password)) { setAlertMessage(t("register.passwordRule")); return; }
     if (password !== confirmPwd) { setAlertMessage(t("register.passwordMismatch")); return; }
+
+    // GA4: Track registration attempt (before API response)
+    trackEvent('register_submit', {
+      ref_code: inviteCode || '',
+    });
 
     setSubmitting(true);
     try {
