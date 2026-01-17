@@ -60,18 +60,21 @@ export default function Lottery3DBetHistory() {
           const issue = r.issue;
           const amount = parseFloat(r.bet_amount || "0") || 0;
           const winAmount = parseFloat(r.award || "0") || 0;
+          const netBet = parseFloat(r.net_bet || "0") || 0;
           const created = r.created_at || "";
           const [date, time] = created.split(" ");
 
-          // Determine status based on is_win field
-          // is_win: null = pending (result not drawn yet), 1 = won, 0 = lost
+          // Determine status based on is_lottery
+          // is_lottery: 1 = pending (result not drawn yet), 2 = drawn/completed
           let betStatus: "won" | "lost" | "pending";
-          if (r.is_win === null) {
-            betStatus = "pending"; // Result not drawn yet
-          } else if (r.is_win === 1) {
-            betStatus = "won";
+          if (r.is_lottery === 1) {
+            // Result not drawn yet, always pending
+            betStatus = "pending";
+          } else if (r.is_lottery === 2) {
+            // Lottery drawn - check net_bet to determine win/loss
+            betStatus = netBet > 0 ? "won" : netBet < 0 ? "lost" : "pending";
           } else {
-            betStatus = "lost";
+            betStatus = "pending"; // fallback
           }
 
           const detail: BetDetail = {
@@ -213,7 +216,7 @@ export default function Lottery3DBetHistory() {
                     {(() => {
                       const hasPending = order.details.some((d) => d.status === "pending");
                       const statusClass = hasPending ? styles.pending : (order.netAmount > 0 ? styles.won : order.netAmount < 0 ? styles.lost : styles.pending);
-                      const statusText = hasPending ? "PENDING" : (order.netAmount > 0 ? "WIN" : order.netAmount < 0 ? "LOSS" : "PENDING");
+                      const statusText = hasPending ? "Pending" : (order.netAmount > 0 ? "Won" : order.netAmount < 0 ? "Lost" : "Pending");
                       return <span className={`${styles.status} ${statusClass}`}>{statusText}</span>;
                     })()}
                     {isExpanded ? (
@@ -264,7 +267,7 @@ export default function Lottery3DBetHistory() {
                         <div className={styles.detailNumber}>
                           {detail.num}
                           <span className={`${styles.status} ${styles[detail.status]}`}>
-                            {detail.status.toUpperCase()}
+                            {detail.status === "won" ? "Won" : detail.status === "lost" ? "Lost" : "Pending"}
                           </span>
                         </div>
                         <div className={styles.detailAmounts}>

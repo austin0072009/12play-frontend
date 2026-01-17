@@ -111,25 +111,25 @@
   gap: 0.5rem;
 }
 
-.statusBadge {
+/* Status */
+.status {
   padding: 0.35rem 0.8rem;
   border-radius: 999px;
   font-size: 0.7rem;
   font-weight: bold;
-  white-space: nowrap;
 }
 
-.statusBadge.won {
+.won {
   background: rgba(0, 208, 132, 0.2);
   color: #00d084;
 }
 
-.statusBadge.lost {
+.lost {
   background: rgba(203, 0, 0, 0.25);
   color: #ff6b6b;
 }
 
-.statusBadge.pending {
+.pending {
   background: rgba(255, 193, 7, 0.25);
   color: #ffc107;
 }
