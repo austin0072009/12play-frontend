@@ -1,5 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Home from "../pages/Home";
+
+// Redirect component that preserves query params
+function RedirectWithQuery({ to }: { to: string }) {
+  const location = useLocation();
+  return <Navigate to={to + location.search} replace />;
+}
 import CategoryPage from "../pages/CategoryPage";
 import Wallet from "../pages/Wallet";
 import Login from "../pages/Login";
@@ -48,7 +54,7 @@ export default function AppRouter() {
 
         {/* Layout routes */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/" element={<RedirectWithQuery to="/home" />} />
           <Route path="/home" element={<Home />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/wallet" element={<Wallet />} />
