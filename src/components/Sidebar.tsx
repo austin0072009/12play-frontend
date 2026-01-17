@@ -260,9 +260,7 @@ export default function Sidebar() {
               </div>
             )}
 
-            <div className={styles.languageSwitcherContainer}>
-              <LanguageSwitcher />
-            </div>
+            <LanguageSwitcher />
           </nav>
         </div>
 

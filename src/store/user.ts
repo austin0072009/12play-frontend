@@ -21,8 +21,18 @@ export const useUserStore = create<UserState>()(
       setUserInfo: (info) => set({ userInfo: info }),
       setIsInLotteryWallet: (flag) => set({ isInLotteryWallet: flag }),
       logout: () => {
-        // Clear token expiration on logout
+        // Clear all auth-related localStorage items
         localStorage.removeItem("RedCow-token-expiration");
+        localStorage.removeItem("RedCow-username");
+        localStorage.removeItem("RedCow-password");
+        localStorage.removeItem("remember-account");
+
+        // Clear lottery store
+        localStorage.removeItem("lottery-store");
+
+        // Clear GA4 first deposit tracking (so new user can trigger it)
+        localStorage.removeItem("ga4_first_deposit_tracked");
+
         set({ token: null, userInfo: {}, isInLotteryWallet: false });
       },
     }),
