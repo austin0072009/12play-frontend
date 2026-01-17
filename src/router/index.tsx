@@ -4,6 +4,7 @@ import CategoryPage from "../pages/CategoryPage";
 import Wallet from "../pages/Wallet";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import ClearReferral from "../pages/ClearReferral";
 import MainLayout from "../layout/MainLayout";
 import Promotions from "../pages/Promotions";
 import PromotionDetail from "../pages/PromotionDetail";
@@ -40,6 +41,7 @@ export default function AppRouter() {
         {/* No layout */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/cleanyqm" element={<ClearReferral />} />
         <Route path="/bank/add" element={<BankAdd />} />
         <Route path="/deposit/confirm" element={<DepositConfirm />} />
         <Route path="/game" element={<GameFrame />} />

@@ -24,7 +24,9 @@ export default function Register() {
   // Fields
   const [username, setUsername] = useState("");
   // Pre-populate invite code from stored referral attribution
-  const [inviteCode, setInviteCode] = useState(() => getReferralCode() || "");
+  const storedReferral = getReferralCode();
+  const [inviteCode, setInviteCode] = useState(storedReferral || "");
+  const hasStoredReferral = !!storedReferral;
   // const [realName, setRealName] = useState(""); // Visual only for now
   // const [phone, setPhone] = useState(""); // Visual for now
 
@@ -187,17 +189,19 @@ export default function Register() {
           <LockClosedIcon className={styles.form_icon} />
         </div>
 
-        {/* Invite Code */}
-        <div className={styles.form_div}>
-          <input
-            type="text"
-            className={styles.form_input}
-            placeholder={t("register.inviteCode") || "Invite Code"}
-            value={inviteCode}
-            onChange={(e) => setInviteCode(e.target.value)}
-          />
-          <LockClosedIcon className={styles.form_icon} />
-        </div>
+        {/* Invite Code - hidden if pre-populated from referral link */}
+        {!hasStoredReferral && (
+          <div className={styles.form_div}>
+            <input
+              type="text"
+              className={styles.form_input}
+              placeholder={t("register.inviteCode") || "Invite Code"}
+              value={inviteCode}
+              onChange={(e) => setInviteCode(e.target.value)}
+            />
+            <LockClosedIcon className={styles.form_icon} />
+          </div>
+        )}
 
         <div className={styles.form_submit}>
           <button className={styles.form_submit_btn} type="submit" disabled={submitting}>
