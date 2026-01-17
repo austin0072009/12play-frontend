@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styles from "./Sidebar.module.css";
 import { useSidebarStore } from "../store/sidebar";
 import { XMarkIcon } from "@heroicons/react/24/solid";
@@ -105,12 +106,40 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar() {
-
   const token = useUserStore((s) => s.token);
   const logout = useUserStore((s) => s.logout);
   const { isOpen, close } = useSidebarStore();
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  // Lock body scroll when sidebar is open (critical for iOS)
+  useEffect(() => {
+    if (isOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.overflow = 'hidden';
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.overflow = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+    }
+    return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   const handleNavClick = (route: string | null) => {
     if (route) {
@@ -145,95 +174,97 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {!token ? (
-          <div className={styles.headerAction}>
-            <button className={styles.joinNowBtn} onClick={() => {
-              navigate("/register");
-              close();
-            }}>{t('sidebar.joinNow')}</button>
-            <div className={styles.alreadyHave}>
-              {t('sidebar.alreadyHave')} <a href="#/login" onClick={close}>{t('sidebar.login')}</a>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className={styles.welcomeSection}>
-              <div className={styles.welcomeGradient}></div>
-              <h2 className={styles.welcomeTitle}>{t('sidebar.welcomeBack')}</h2>
-              <p className={styles.welcomeSubtitle}>{t('sidebar.readyToPlay')}</p>
-            </div>
-
-            {/* User Profile Section */}
-            <div className={styles.userProfile} onClick={() => {
-              navigate("/profile");
-              close();
-            }}>
-              <div className={styles.userAvatar}>
-                {useUserStore.getState().userInfo?.username?.charAt(0).toUpperCase() || 'U'}
-              </div>
-              <div className={styles.userInfo}>
-                <h3 className={styles.userName}>
-                  {useUserStore.getState().userInfo?.username || 'User'}
-                </h3>
-                <p className={styles.userBalance}>
-                  {t('sidebar.balance')}
-                  <span className={styles.userBalanceAmount}>
-                    {Number(useUserStore.getState().userInfo?.balance || 0).toLocaleString()}
-                  </span>
-                </p>
+        <div className={styles.scrollContent}>
+          {!token ? (
+            <div className={styles.headerAction}>
+              <button className={styles.joinNowBtn} onClick={() => {
+                navigate("/register");
+                close();
+              }}>{t('sidebar.joinNow')}</button>
+              <div className={styles.alreadyHave}>
+                {t('sidebar.alreadyHave')} <a href="#/login" onClick={close}>{t('sidebar.login')}</a>
               </div>
             </div>
+          ) : (
+            <>
+              <div className={styles.welcomeSection}>
+                <div className={styles.welcomeGradient}></div>
+                <h2 className={styles.welcomeTitle}>{t('sidebar.welcomeBack')}</h2>
+                <p className={styles.welcomeSubtitle}>{t('sidebar.readyToPlay')}</p>
+              </div>
 
-            <div className={styles.divider}></div>
-          </>
-        )}
-
-        <nav className={styles.navContainer}>
-          {NAV_ITEMS.map((item) => (
-            <div
-              key={item.id}
-              className={styles.navItem}
-              onClick={() => handleNavClick(item.route)}
-              style={{ cursor: item.route ? "pointer" : "default" }}
-            >
-              <div className={styles.navItemContainer}>
-                <div className={styles.navItemLeft}>
-                  {item.icon}
-                  <span className={styles.navLabel}>{t(item.labelKey)}</span>
+              {/* User Profile Section */}
+              <div className={styles.userProfile} onClick={() => {
+                navigate("/profile");
+                close();
+              }}>
+                <div className={styles.userAvatar}>
+                  {useUserStore.getState().userInfo?.username?.charAt(0).toUpperCase() || 'U'}
                 </div>
-                <div className={styles.navItemRight}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
+                <div className={styles.userInfo}>
+                  <h3 className={styles.userName}>
+                    {useUserStore.getState().userInfo?.username || 'User'}
+                  </h3>
+                  <p className={styles.userBalance}>
+                    {t('sidebar.balance')}
+                    <span className={styles.userBalanceAmount}>
+                      {Number(useUserStore.getState().userInfo?.balance || 0).toLocaleString()}
+                    </span>
+                  </p>
                 </div>
               </div>
-            </div>
-          ))}
 
-          {token && (
-            <div
-              className={styles.navItem}
-              onClick={handleLogout}
-              style={{ cursor: "pointer" }}
-            >
-              <div className={styles.navItemContainer}>
-                <div className={styles.navItemLeft}>
-                  <LogoutIcon />
-                  <span className={styles.navLabel}>{t('sidebar.logout')}</span>
-                </div>
-                <div className={styles.navItemRight}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </div>
-              </div>
-            </div>
+              <div className={styles.divider}></div>
+            </>
           )}
 
-          <div className={styles.languageSwitcherContainer}>
-            <LanguageSwitcher />
-          </div>
-        </nav>
+          <nav className={styles.navContainer}>
+            {NAV_ITEMS.map((item) => (
+              <div
+                key={item.id}
+                className={styles.navItem}
+                onClick={() => handleNavClick(item.route)}
+                style={{ cursor: item.route ? "pointer" : "default" }}
+              >
+                <div className={styles.navItemContainer}>
+                  <div className={styles.navItemLeft}>
+                    {item.icon}
+                    <span className={styles.navLabel}>{t(item.labelKey)}</span>
+                  </div>
+                  <div className={styles.navItemRight}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {token && (
+              <div
+                className={styles.navItem}
+                onClick={handleLogout}
+                style={{ cursor: "pointer" }}
+              >
+                <div className={styles.navItemContainer}>
+                  <div className={styles.navItemLeft}>
+                    <LogoutIcon />
+                    <span className={styles.navLabel}>{t('sidebar.logout')}</span>
+                  </div>
+                  <div className={styles.navItemRight}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className={styles.languageSwitcherContainer}>
+              <LanguageSwitcher />
+            </div>
+          </nav>
+        </div>
 
       </aside>
     </div>

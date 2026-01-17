@@ -7,6 +7,7 @@ import { registerApi, loginApi } from "../services/auth";
 import { useUserStore } from "../store/user";
 import { useTranslation } from "react-i18next";
 import Dialog from "../components/Dialog";
+import { getReferralCode } from "../utils/referral";
 
 // Client-side password rule
 function isValidPassword(password: string): boolean {
@@ -22,7 +23,8 @@ export default function Register() {
 
   // Fields
   const [username, setUsername] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
+  // Pre-populate invite code from stored referral attribution
+  const [inviteCode, setInviteCode] = useState(() => getReferralCode() || "");
   // const [realName, setRealName] = useState(""); // Visual only for now
   // const [phone, setPhone] = useState(""); // Visual for now
 
@@ -54,11 +56,11 @@ export default function Register() {
     setSubmitting(true);
     try {
       // NOTE: We map the visuals to the backend API as best as possible.
-      // 'username' -> 'name'
+      // 'username' -> 'name', inviteCode -> 'yqm' (referral code, optional)
       const res = await registerApi({
         password,
         captcha: "",
-        yqm: inviteCode, // referral empty
+        ...(inviteCode && { yqm: inviteCode }), // Only include if referral code exists
         name: username,
       });
 
