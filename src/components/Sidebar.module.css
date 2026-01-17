@@ -10,9 +10,11 @@
   background: rgba(0, 0, 0, 0);
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1000;
+  z-index: 99999; /* Must be above header, nav, and all other elements */
   pointer-events: none;
   backdrop-filter: blur(0px);
+  -webkit-transform: translateZ(0); /* Force GPU layer on iOS */
+  transform: translateZ(0);
 }
 
 @supports (height: 100dvh) {
@@ -26,17 +28,19 @@
   background: rgba(0, 0, 0, 0.6);
   pointer-events: auto;
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .hide {
   opacity: 0;
   pointer-events: none;
   backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
 }
 
 /* Sidebar panel */
 .sidebar {
-  position: absolute;
+  position: fixed; /* Changed from absolute to fixed for iOS */
   overflow: hidden; /* Don't scroll on sidebar itself */
   top: 0;
   left: 0;
@@ -51,6 +55,9 @@
   display: flex;
   flex-direction: column;
   border-right: 1px solid rgba(203, 0, 0, 0.2);
+  z-index: 100000; /* Higher than overlay to stay on top */
+  -webkit-transform: translateX(-100%) translateZ(0); /* Force GPU layer on iOS */
+  will-change: transform;
 }
 
 @supports (height: 100dvh) {
@@ -61,11 +68,13 @@
 
 /* Slide animation */
 .slideIn {
-  transform: translateX(0);
+  transform: translateX(0) translateZ(0);
+  -webkit-transform: translateX(0) translateZ(0);
 }
 
 .slideOut {
-  transform: translateX(-100%);
+  transform: translateX(-100%) translateZ(0);
+  -webkit-transform: translateX(-100%) translateZ(0);
 }
 
 .icon {

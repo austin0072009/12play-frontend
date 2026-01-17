@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import styles from "./Sidebar.module.css";
 import { useSidebarStore } from "../store/sidebar";
 import { XMarkIcon } from "@heroicons/react/24/solid";
@@ -154,7 +155,9 @@ export default function Sidebar() {
     navigate("/login");
   };
 
-  return (
+  // Use portal to render sidebar at document.body level
+  // This bypasses all stacking context issues on iOS Safari
+  return createPortal(
     <div
       className={`${styles.overlay} ${isOpen ? styles.show : styles.hide}`}
       onClick={close}
@@ -265,6 +268,7 @@ export default function Sidebar() {
         </div>
 
       </aside>
-    </div>
+    </div>,
+    document.body
   );
 }
