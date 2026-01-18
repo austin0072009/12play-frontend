@@ -1,10 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { initMetaPixelTracking } from "../utils/metaPixelTracking";
 import Home from "../pages/Home";
 
 // Redirect component that preserves query params
 function RedirectWithQuery({ to }: { to: string }) {
   const location = useLocation();
   return <Navigate to={to + location.search} replace />;
+}
+
+// Component to initialize Meta Pixel tracking once
+function MetaPixelInit() {
+  useEffect(() => {
+    initMetaPixelTracking();
+  }, []);
+  return null;
 }
 import CategoryPage from "../pages/CategoryPage";
 import Wallet from "../pages/Wallet";
@@ -43,6 +53,7 @@ import Lottery3DRank from "../pages/Lottery3DRank";
 export default function AppRouter() {
   return (
     <BrowserRouter>
+      <MetaPixelInit />
       <Routes>
         {/* No layout */}
         <Route path="/login" element={<Login />} />
