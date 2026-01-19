@@ -63,7 +63,7 @@ export default function FirstDepositBonus() {
         await loadBonusInfo();
         showAlert(t("bonus.applySuccess"));
       } else {
-        showAlert(res?.status?.msg || res?.status?.mess || t("bonus.applyFailed"));
+        showAlert( res?.status?.mess || t("bonus.applyFailed"));
       }
     } catch (err) {
       console.error("Error applying bonus:", err);
