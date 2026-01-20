@@ -43,18 +43,18 @@ export default function NoticeModal({ visible, list, onClose }: Props) {
                 className={styles.btn}
                 onClick={() => setIndex((i) => (i - 1 + list.length) % list.length)}
               >
-                Prev
+                prev-ရှေ့သို
               </button>
               <button
                 className={styles.btn}
                 onClick={() => setIndex((i) => (i + 1) % list.length)}
               >
-                Next
+                next-နောက်သို
               </button>
             </>
           )}
           <button className={styles.close} onClick={onClose}>
-            Close
+            Close-ပိတ်မည်။
           </button>
         </div>
       </div>
