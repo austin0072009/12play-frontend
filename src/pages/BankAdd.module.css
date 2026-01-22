@@ -144,66 +144,6 @@
   text-align: center;
 }
 
-.qrUploadArea {
-  border: 2px dashed #444;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.qrUploadArea:hover {
-  border-color: #555;
-  background-color: #1a1a1a;
-}
-
-.qrPreview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.qrPreview img {
-  max-width: 100%;
-  max-height: 250px;
-  border-radius: 0.5rem;
-  border: 1px solid #444;
-}
-
-.qrLabel {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #aaa;
-}
-
-.qrPlaceholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 2rem 1rem;
-  color: #666;
-}
-
-.uploadIcon {
-  color: #666;
-  opacity: 0.7;
-}
-
-.uploadText {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #aaa;
-}
-
-.uploadSubtext {
-  margin: 0.5rem 0 0 0;
-  font-size: 0.85rem;
-  color: #666;
-}
-
 .actionContainer {
   padding: 1.5rem;
   background-color: #222;

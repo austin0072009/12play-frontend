@@ -16,8 +16,6 @@ export default function BankAdd() {
     const [bankUsername, setBankUsername] = useState("");
     const [bankCard, setBankCard] = useState("");
     const [bankCardConfirm, setBankCardConfirm] = useState("");
-    const [qrFile, setQrFile] = useState<File | undefined>();
-    const [qrPreview, setQrPreview] = useState<string | undefined>();
     const [submitting, setSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -38,16 +36,6 @@ export default function BankAdd() {
         if (existingBank) setBankUsername(existingBank);
     }, [existingBank]);
 
-    useEffect(() => {
-        if (qrFile) {
-            const u = URL.createObjectURL(qrFile);
-            setQrPreview(u);
-            return () => URL.revokeObjectURL(u);
-        } else {
-            setQrPreview(undefined);
-        }
-    }, [qrFile]);
-
     const validateForm = (): boolean => {
         if (!selectedBank) {
             setErrorMessage(t("bankAdd.selectBankError"));
@@ -67,10 +55,6 @@ export default function BankAdd() {
         }
         if (bankCard !== bankCardConfirm) {
             setErrorMessage(t("bankAdd.numberMismatchError"));
-            return false;
-        }
-        if (!qrFile) {
-            setErrorMessage(t("bankAdd.uploadQRError"));
             return false;
         }
         return true;
@@ -101,7 +85,6 @@ export default function BankAdd() {
                 bank_branch_name: selectedBank || "",
                 bank_username: bankUsername,
                 bank_card: bankCard,
-                qr_code: qrFile || undefined,
             });
 
             if (res && res.status && Number(res.status.errorCode) === 0) {
@@ -109,7 +92,6 @@ export default function BankAdd() {
                 setIsSuccess(true);
                 setShowDialog(true);
                 setSelectedBank(undefined);
-                setQrFile(undefined);
                 setTimeout(() => {
                     setShowDialog(false);
                     navigate(-1);
@@ -244,51 +226,6 @@ export default function BankAdd() {
                     />
                 </div>
 
-                <div className={styles.formSection}>
-                    <label className={styles.label}>{t("bankAdd.uploadQR")}</label>
-                    <div
-                        className={styles.qrUploadArea}
-                        onClick={() => document.getElementById("qr-upload")?.click()}
-                    >
-                        {qrPreview ? (
-                            <div className={styles.qrPreview}>
-                                <img src={qrPreview} alt="QR Code Preview" />
-                                <p className={styles.qrLabel}>{t("bankAdd.clickChangeQR")}</p>
-                            </div>
-                        ) : (
-                            <div className={styles.qrPlaceholder}>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    width="48px"
-                                    height="48px"
-                                    className={styles.uploadIcon}
-                                >
-                                    <path
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M12 5v14m7-7H5"
-                                    ></path>
-                                </svg>
-                                <p className={styles.uploadText}>{t("bankAdd.clickUploadQR")}</p>
-                                <p className={styles.uploadSubtext}>{t("bankAdd.dragDrop")}</p>
-                            </div>
-                        )}
-                        <input
-                            id="qr-upload"
-                            type="file"
-                            accept="image/*"
-                            style={{ display: "none" }}
-                            onChange={(e) => {
-                                const f = e.target.files?.[0];
-                                if (f) setQrFile(f);
-                            }}
-                        />
-                    </div>
-                </div>
             </div>
 
             <div className={styles.actionContainer}>
