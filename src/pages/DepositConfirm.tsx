@@ -105,6 +105,8 @@ export default function DepositConfirm() {
                 navigate("/wallet");
             } else {
                 showAlert(res?.message || t("depositConfirm.error"));
+                navigate("/wallet");
+
             }
         } catch (err) {
             showAlert(t("depositConfirm.error"));
