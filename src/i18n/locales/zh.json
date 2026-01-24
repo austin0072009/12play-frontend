@@ -483,4 +483,17 @@
   "depositConfirm.error": "存款提交失败。请重试。",
   "depositConfirm.noOrder": "未找到订单信息。请返回重试。",
   "depositConfirm.loadError": "加载订单信息失败。"
+  ,
+  "feedback.title": "反馈",
+  "feedback.infoTitle": "我们希望听到您的意见！",
+  "feedback.infoDescription": "您的反馈能帮助我们改进。分享您的想法、建议或报告遇到的问题。",
+  "feedback.labelMessage": "您的留言",
+  "feedback.placeholder": "告诉我们您的想法...",
+  "feedback.charCount": "{{count}}/1000",
+  "feedback.sending": "发送中...",
+  "feedback.submit": "提交反馈",
+  "feedback.contactInfo": "需要紧急帮助？请通过在线客服联系我们的支持团队。",
+  "feedback.dialogTitle": "反馈",
+  "feedback.successDefault": "反馈提交成功！",
+  "feedback.failureDefault": "提交反馈失败，请重试。"
 }

@@ -4,9 +4,11 @@ import styles from './Feedback.module.css';
 import { postFeedback } from '../services/api';
 import { useUserStore } from '../store/user';
 import Dialog from '../components/Dialog';
+import { useTranslation } from 'react-i18next';
 
 export default function Feedback() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [feedback, setFeedback] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const userInfo = useUserStore((s) => s.userInfo);
@@ -31,13 +33,13 @@ export default function Feedback() {
                 phone: phone
             });
 
-            if (res?.status?.errorCode === 0 || res?.status === 0 || res?.code === 0) {
-                const msg = res?.data?.msg || res?.msg || 'Feedback submitted successfully!';
+                if (res?.status?.errorCode === 0 || res?.status === 0 || res?.code === 0) {
+                const msg = res?.data?.msg || res?.msg || t('feedback.successDefault');
                 setFeedback('');
                 setIsSuccess(true);
                 setAlertMessage(msg);
             } else {
-                const msg = res?.msg || 'Failed to submit feedback. Please try again.';
+                const msg = res?.msg || t('feedback.failureDefault');
                 setIsSuccess(false);
                 setAlertMessage(msg);
             }
@@ -45,7 +47,7 @@ export default function Feedback() {
         } catch (error) {
             console.error('Error submitting feedback:', error);
             setIsSuccess(false);
-            setAlertMessage('Failed to submit feedback. Please try again.');
+            setAlertMessage(t('feedback.failureDefault'));
         } finally {
             setIsSubmitting(false);
         }
@@ -59,7 +61,7 @@ export default function Feedback() {
                         <polyline points="15 18 9 12 15 6"></polyline>
                     </svg>
                 </button>
-                <h1 className={styles.title}>Feedback</h1>
+                <h1 className={styles.title}>{t('feedback.title')}</h1>
             </div>
 
             <div className={styles.content}>
@@ -69,29 +71,29 @@ export default function Feedback() {
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
                     </div>
-                    <h2 className={styles.infoTitle}>We'd Love to Hear From You!</h2>
+                    <h2 className={styles.infoTitle}>{t('feedback.infoTitle')}</h2>
                     <p className={styles.infoDescription}>
-                        Your feedback helps us improve. Share your thoughts, suggestions, or report any issues you've encountered.
+                        {t('feedback.infoDescription')}
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.formGroup}>
                         <label htmlFor="message" className={styles.label}>
-                            Your Message
+                            {t('feedback.labelMessage')}
                         </label>
                         <textarea
                             id="message"
                             value={feedback}
                             onChange={(e) => setFeedback(e.target.value)}
-                            placeholder="Tell us what's on your mind..."
+                            placeholder={t('feedback.placeholder')}
                             className={styles.textarea}
                             rows={8}
                             maxLength={1000}
                             disabled={isSubmitting}
                         />
                         <div className={styles.charCount}>
-                            {feedback.length}/1000
+                            {t('feedback.charCount', { count: feedback.length })}
                         </div>
                     </div>
 
@@ -100,10 +102,10 @@ export default function Feedback() {
                         disabled={isSubmitting || !feedback.trim()}
                         className={styles.submitButton}
                     >
-                        {isSubmitting ? (
+                            {isSubmitting ? (
                             <>
                                 <span className={styles.spinner}></span>
-                                Sending...
+                                {t('feedback.sending')}
                             </>
                         ) : (
                             <>
@@ -111,7 +113,7 @@ export default function Feedback() {
                                     <line x1="22" y1="2" x2="11" y2="13"></line>
                                     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                                 </svg>
-                                Submit Feedback
+                                {t('feedback.submit')}
                             </>
                         )}
                     </button>
@@ -124,7 +126,7 @@ export default function Feedback() {
                             <line x1="12" y1="16" x2="12" y2="12"></line>
                             <line x1="12" y1="8" x2="12.01" y2="8"></line>
                         </svg>
-                        Need urgent assistance? Contact our support team via Live Chat.
+                        {t('feedback.contactInfo')}
                     </p>
                 </div>
             </div>
@@ -137,7 +139,7 @@ export default function Feedback() {
                         navigate(-1);
                     }
                 }}
-                title="Feedback"
+                title={t('feedback.dialogTitle')}
             >
                 {alertMessage}
             </Dialog>

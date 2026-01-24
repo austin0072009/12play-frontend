@@ -475,4 +475,17 @@
   "depositConfirm.error": "Failed to submit deposit. Please try again.",
   "depositConfirm.noOrder": "No order information found. Please go back and try again.",
   "depositConfirm.loadError": "Failed to load order information."
+  ,
+  "feedback.title": "Feedback",
+  "feedback.infoTitle": "We'd Love to Hear From You!",
+  "feedback.infoDescription": "Your feedback helps us improve. Share your thoughts, suggestions, or report any issues you've encountered.",
+  "feedback.labelMessage": "Your Message",
+  "feedback.placeholder": "Tell us what's on your mind...",
+  "feedback.charCount": "{{count}}/1000",
+  "feedback.sending": "Sending...",
+  "feedback.submit": "Submit Feedback",
+  "feedback.contactInfo": "Need urgent assistance? Contact our support team via Live Chat.",
+  "feedback.dialogTitle": "Feedback",
+  "feedback.successDefault": "Feedback submitted successfully!",
+  "feedback.failureDefault": "Failed to submit feedback. Please try again."
 }
