@@ -21,11 +21,11 @@ export const useUserStore = create<UserState>()(
       setUserInfo: (info) => set({ userInfo: info }),
       setIsInLotteryWallet: (flag) => set({ isInLotteryWallet: flag }),
       logout: () => {
-        // Clear all auth-related localStorage items
+        // Clear auth-related localStorage items
+        // Note: Keep "remember-account" so username stays pre-filled on login page
         localStorage.removeItem("RedCow-token-expiration");
         localStorage.removeItem("RedCow-username");
         localStorage.removeItem("RedCow-password");
-        localStorage.removeItem("remember-account");
 
         // Clear lottery store
         localStorage.removeItem("lottery-store");

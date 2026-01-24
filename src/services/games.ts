@@ -10,6 +10,8 @@ import type {
   KyGetGamesResponse,
   KyLoginReq,
   KyLoginResp,
+  RecentGameItem,
+  RecentGamesResp,
 } from "./types";
 
 export async function fetchGamesByBrand(
@@ -184,4 +186,44 @@ export async function startLotteryGame(
   useUserStore.getState().setIsInLotteryWallet(true);
 
   return { token: lotteryToken, apiDomain };
+}
+
+/**
+ * Fetch user's recently played games
+ * Only returns data for logged-in users
+ * Uses same pattern as Ky_getgames (POST with token in body)
+ */
+export async function fetchRecentGames(): Promise<RecentGameItem[]> {
+  const token = useUserStore.getState().token;
+  if (!token) {
+    return [];
+  }
+
+  try {
+    const res = await request.post<RecentGamesResp>("/nweb/Ky_recent_games", {
+      token,
+    });
+
+    if (!res || typeof res !== "object") {
+      return [];
+    }
+
+    const status = (res as any).status;
+    if (!status || typeof status.errorCode !== "number") {
+      return [];
+    }
+    if (status.errorCode !== 0) {
+      return [];
+    }
+
+    const data = (res as any).data;
+    if (!Array.isArray(data)) {
+      return [];
+    }
+
+    return data as RecentGameItem[];
+  } catch (error) {
+    console.error("Failed to fetch recent games:", error);
+    return [];
+  }
 }

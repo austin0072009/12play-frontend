@@ -634,3 +634,24 @@ export type LotteryClosedDayResp = {
   message: string;
   data: ClosedDay[];
 };
+
+// Recent Games API
+export type RecentGameItem = {
+  id: number;
+  gameType: string;
+  gameName: string;
+  tcgGameCode: string;
+  productCode: string;
+  productType: number;
+  img: string;
+  m_img: string;
+  is_outopen: number;
+  is_ios_outopen: number;
+  category: string;
+};
+
+export type RecentGamesResp = {
+  status: number;
+  data: RecentGameItem[];
+  msg: string;
+};

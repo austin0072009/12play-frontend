@@ -13,7 +13,7 @@ import { fetchInitMeta, fetchInitData } from "../services/api";
 import { useAppStore } from "../store/app";
 import { useUserStore } from "../store/user";
 import { normalizeInitData } from "../utils/transform";
-import { startGame, startLotteryGame } from "../services/games";
+import { startGame, startLotteryGame, fetchRecentGames } from "../services/games";
 import { showAlert } from "../store/alert";
 
 import SlotIcon from '../assets/icons/slot.svg?react';
@@ -34,6 +34,7 @@ export default function Home() {
   const token = useUserStore((s) => s.token);
 
   const [activeCat, setActiveCat] = useState('');
+  const [recentGames, setRecentGames] = useState<any[]>([]);
 
   // Set SEO metadata for home page
 
@@ -132,6 +133,39 @@ export default function Home() {
       .finally(function () { });
   }, [setMeta, setData]);
 
+  // Fetch recently played games when user is logged in
+  useEffect(function () {
+    if (!token) {
+      setRecentGames([]);
+      return;
+    }
+
+    fetchRecentGames()
+      .then(function (games) {
+        // Transform to match the format used by HorizontalGameList
+        // Get domain from store at transform time to avoid dependency issues
+        const domain = useAppStore.getState().data?.domain || '';
+        const transformed = games.map(function (g) {
+          return {
+            ...g,
+            id: g.id,
+            game_name: g.gameName,
+            title: g.gameName,
+            plat_type: g.productCode,
+            game_code: g.tcgGameCode,
+            is_outopen: g.is_outopen,
+            img: g.m_img ? (g.m_img.startsWith('http') ? g.m_img : domain + g.m_img) : '',
+            m_img: g.m_img ? (g.m_img.startsWith('http') ? g.m_img : domain + g.m_img) : '',
+          };
+        });
+        setRecentGames(transformed);
+      })
+      .catch(function (e) {
+        console.error('Failed to fetch recent games:', e);
+        setRecentGames([]);
+      });
+  }, [token]);
+
   const handleEnterGame = async (g: any) => {
     if (!token) {
       navigate('/login');
@@ -216,6 +250,17 @@ export default function Home() {
           navigate(`/category${url}`);
         }}
       />
+
+      {/* Recently Played Games Section - Only shows when logged in and has data */}
+      {recentGames.length > 0 && (
+        <HorizontalGameList
+          title={t('home.recentlyPlayedGames')}
+          icon="recent"
+          games={recentGames}
+          onGameClick={handleEnterGame}
+          domain={data?.domain || ''}
+        />
+      )}
 
       {/* Special Games Section */}
       {specialGames.length > 0 && (
