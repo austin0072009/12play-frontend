@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useUserStore } from '../store/user';
 import { resetPassword } from '../services/auth';
 import Dialog from '../components/Dialog';
 import styles from './ChangePassword.module.css';
 
 export default function ChangePassword() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const userInfo = useUserStore((s) => s.userInfo);
     const [oldPassword, setOldPassword] = useState('');
@@ -30,35 +32,35 @@ export default function ChangePassword() {
         // Validation
         if (!oldPassword.trim()) {
             //console.log('Error: Old password is empty');
-            setAlertMessage('Please enter your old password');
+            setAlertMessage(t('changePassword.emptyOldPassword'));
             setAlertOpen(true);
             return;
         }
 
         if (!newPassword.trim()) {
             //console.log('Error: New password is empty');
-            setAlertMessage('Please enter your new password');
+            setAlertMessage(t('changePassword.emptyNewPassword'));
             setAlertOpen(true);
             return;
         }
 
         if (!isValidPassword(newPassword)) {
             //console.log('Error: New password too short');
-            setAlertMessage('New password must be at least 6 characters');
+            setAlertMessage(t('changePassword.invalidPassword'));
             setAlertOpen(true);
             return;
         }
 
         if (newPassword !== confirmPassword) {
             //console.log('Error: Passwords do not match');
-            setAlertMessage('Passwords do not match');
+            setAlertMessage(t('changePassword.passwordMismatch'));
             setAlertOpen(true);
             return;
         }
 
         if (oldPassword === newPassword) {
             //console.log('Error: Old and new password are the same');
-            setAlertMessage('New password must be different from old password');
+            setAlertMessage(t('changePassword.samePassword'));
             setAlertOpen(true);
             return;
         }
@@ -72,7 +74,7 @@ export default function ChangePassword() {
 
             if (!username) {
                 //console.log('Error: No username found');
-                setAlertMessage('Unable to identify account information');
+                setAlertMessage(t('changePassword.noUsername'));
                 setAlertOpen(true);
                 return;
             }
@@ -91,7 +93,7 @@ export default function ChangePassword() {
 
             if (response && response.status && response.status.errorCode === 0) {
                 //console.log('Password changed successfully');
-                setAlertMessage('Password changed successfully!');
+                setAlertMessage(t('changePassword.success'));
                 setIsSuccess(true);
                 setAlertOpen(true);
                 // Reset form
@@ -100,7 +102,7 @@ export default function ChangePassword() {
                 setConfirmPassword('');
             } else {
                 // Handle error response
-                const errorMsg = response?.status?.mess || response?.status?.msg || 'Failed to change password. Please try again.';
+                const errorMsg = response?.status?.mess || response?.status?.msg || t('changePassword.failed');
                 //console.log('Password change failed:', errorMsg);
                 setAlertMessage(errorMsg);
                 setAlertOpen(true);
@@ -112,7 +114,7 @@ export default function ChangePassword() {
                 err?.response?.data?.status?.msg ||
                 err?.response?.data?.message ||
                 err?.message ||
-                'Failed to change password. Please try again.';
+                t('changePassword.failed');
             //console.log('Setting error message:', errorMsg);
             setAlertMessage(errorMsg);
             setAlertOpen(true);
@@ -136,19 +138,19 @@ export default function ChangePassword() {
     return (
         <div className={styles.container}>
             <div className={styles.card}>
-                <h1 className={styles.title}>Change Password</h1>
-                <p className={styles.subtitle}>Update your account password</p>
+                <h1 className={styles.title}>{t('changePassword.title')}</h1>
+                <p className={styles.subtitle}>{t('changePassword.subtitle')}</p>
 
                 <form onSubmit={handleSubmit} className={styles.form}>
                     {/* Old Password */}
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>Old Password</label>
+                        <label className={styles.label}>{t('changePassword.oldPassword')}</label>
                         <div className={styles.inputWrapper}>
                             <input
                                 type={showPasswords.old ? 'text' : 'password'}
                                 value={oldPassword}
                                 onChange={(e) => setOldPassword(e.target.value)}
-                                placeholder="Enter your current password"
+                                placeholder={t('changePassword.oldPasswordPlaceholder')}
                                 autoComplete="current-password"
                                 className={styles.input}
                                 disabled={isLoading}
@@ -171,13 +173,13 @@ export default function ChangePassword() {
 
                     {/* New Password */}
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>New Password</label>
+                        <label className={styles.label}>{t('changePassword.newPassword')}</label>
                         <div className={styles.inputWrapper}>
                             <input
                                 type={showPasswords.new ? 'text' : 'password'}
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
-                                placeholder="Enter new password (min. 6 characters)"
+                                placeholder={t('changePassword.newPasswordPlaceholder')}
                                 autoComplete="new-password"
                                 className={styles.input}
                                 disabled={isLoading}
@@ -200,13 +202,13 @@ export default function ChangePassword() {
 
                     {/* Confirm Password */}
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>Confirm Password</label>
+                        <label className={styles.label}>{t('changePassword.confirmPassword')}</label>
                         <div className={styles.inputWrapper}>
                             <input
                                 type={showPasswords.confirm ? 'text' : 'password'}
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                placeholder="Re-enter new password"
+                                placeholder={t('changePassword.confirmPasswordPlaceholder')}
                                 autoComplete="new-password"
                                 className={styles.input}
                                 disabled={isLoading}
@@ -235,14 +237,14 @@ export default function ChangePassword() {
                             disabled={isLoading}
                             className={styles.cancelButton}
                         >
-                            Cancel
+                            {t('changePassword.cancel')}
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading}
                             className={styles.submitButton}
                         >
-                            {isLoading ? 'Changing...' : 'Change Password'}
+                            {isLoading ? t('changePassword.submitting') : t('changePassword.submit')}
                         </button>
                     </div>
                 </form>
@@ -251,7 +253,7 @@ export default function ChangePassword() {
             <Dialog 
                 open={alertOpen} 
                 onClose={handleDialogClose}
-                title="Alert"
+                title={t('common.alert')}
             >
                 {alertMessage}
             </Dialog>

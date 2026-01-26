@@ -503,5 +503,25 @@
   "feedback.contactInfo": "需要紧急帮助？请通过在线客服联系我们的支持团队。",
   "feedback.dialogTitle": "反馈",
   "feedback.successDefault": "反馈提交成功！",
-  "feedback.failureDefault": "提交反馈失败，请重试。"
+  "feedback.failureDefault": "提交反馈失败，请重试。",
+
+  "changePassword.title": "修改密码",
+  "changePassword.subtitle": "更新您的账户密码",
+  "changePassword.oldPassword": "旧密码",
+  "changePassword.oldPasswordPlaceholder": "输入您当前的密码",
+  "changePassword.newPassword": "新密码",
+  "changePassword.newPasswordPlaceholder": "输入新密码（最少6个字符）",
+  "changePassword.confirmPassword": "确认密码",
+  "changePassword.confirmPasswordPlaceholder": "重新输入新密码",
+  "changePassword.cancel": "取消",
+  "changePassword.submit": "修改密码",
+  "changePassword.submitting": "修改中...",
+  "changePassword.emptyOldPassword": "请输入您的旧密码",
+  "changePassword.emptyNewPassword": "请输入您的新密码",
+  "changePassword.invalidPassword": "新密码必须至少6个字符",
+  "changePassword.passwordMismatch": "密码不匹配",
+  "changePassword.samePassword": "新密码必须与旧密码不同",
+  "changePassword.noUsername": "无法识别账户信息",
+  "changePassword.success": "密码修改成功！",
+  "changePassword.failed": "修改密码失败，请重试。"
 }

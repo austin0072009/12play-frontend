@@ -495,5 +495,25 @@
   "feedback.contactInfo": "Need urgent assistance? Contact our support team via Live Chat.",
   "feedback.dialogTitle": "Feedback",
   "feedback.successDefault": "Feedback submitted successfully!",
-  "feedback.failureDefault": "Failed to submit feedback. Please try again."
+  "feedback.failureDefault": "Failed to submit feedback. Please try again.",
+
+  "changePassword.title": "Change Password",
+  "changePassword.subtitle": "Update your account password",
+  "changePassword.oldPassword": "Old Password",
+  "changePassword.oldPasswordPlaceholder": "Enter your current password",
+  "changePassword.newPassword": "New Password",
+  "changePassword.newPasswordPlaceholder": "Enter new password (min. 6 characters)",
+  "changePassword.confirmPassword": "Confirm Password",
+  "changePassword.confirmPasswordPlaceholder": "Re-enter new password",
+  "changePassword.cancel": "Cancel",
+  "changePassword.submit": "Change Password",
+  "changePassword.submitting": "Changing...",
+  "changePassword.emptyOldPassword": "Please enter your old password",
+  "changePassword.emptyNewPassword": "Please enter your new password",
+  "changePassword.invalidPassword": "New password must be at least 6 characters",
+  "changePassword.passwordMismatch": "Passwords do not match",
+  "changePassword.samePassword": "New password must be different from old password",
+  "changePassword.noUsername": "Unable to identify account information",
+  "changePassword.success": "Password changed successfully!",
+  "changePassword.failed": "Failed to change password. Please try again."
 }
