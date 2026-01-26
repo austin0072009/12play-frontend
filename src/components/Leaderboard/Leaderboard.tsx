@@ -64,7 +64,7 @@ export default function Leaderboard({
   const displayKeyCounter = useRef(0);
   const [isLoading, setIsLoading] = useState(true);
   const dataIndexRef = useRef(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Format currency: amount + MMK
   const formatPayout = (amount: number): string => {
