@@ -164,6 +164,15 @@
   "home.popularGames": "လူကြိုက်များသော ဂိမ်းများ",
   "home.recentlyPlayedGames": "လတ်တလော ကစားထားသော ဂိမ်းများ",
   "home.gameMaintenance": "ဂိမ်းကို ပြုပြင်နေပါသည်",
+
+  "leaderboard.latestWinners": "အနိုင်ရသူများ",
+  "leaderboard.highRollers": "အများဆုံးလောင်းကစားသူများ",
+  "leaderboard.betDate": "ရက်စွဲ",
+  "leaderboard.game": "ဂိမ်း",
+  "leaderboard.player": "နာနမည်",
+  "leaderboard.betAmount": "လောင်းငွေ",
+  "leaderboard.payout": "နိုင်ငွေ",
+
   "wallet.deposit": "ငွေသွင်းမည်",
   "wallet.withdrawal": "ငွေထုတ်မည်",
   "wallet.history": "မှတ်တမ်း",

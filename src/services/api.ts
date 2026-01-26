@@ -226,3 +226,28 @@ export async function postFeedback(data: { type: string; content: string; phone:
     });
     return res as any;
 }
+
+// Leaderboard API - Latest Winners & High Rollers
+export interface LeaderboardApiEntry {
+    username: string;
+    gameName: string;
+    gameType: string;
+    productCode: string;
+    betAmount: number;
+    winAmount: number;
+    betTime: string;
+}
+
+export interface LeaderboardApiResponse {
+    status: number;
+    data: {
+        winners: LeaderboardApiEntry[];
+        highRollers: LeaderboardApiEntry[];
+    };
+    msg: string;
+}
+
+export async function fetchLeaderboard() {
+    const res = await getData<LeaderboardApiResponse>("/nweb/Ky_leaderboard");
+    return res as LeaderboardApiResponse;
+}

@@ -179,6 +179,14 @@
   "home.recentlyPlayedGames": "Recently Played",
   "home.gameMaintenance": "Game is under maintenance",
 
+  "leaderboard.latestWinners": "Latest Winners",
+  "leaderboard.highRollers": "High Rollers",
+  "leaderboard.betDate": "Bet Date",
+  "leaderboard.game": "Game",
+  "leaderboard.player": "Player",
+  "leaderboard.betAmount": "Bet Amount",
+  "leaderboard.payout": "Payout",
+
   "wallet.deposit": "Deposit",
   "wallet.withdrawal": "Withdrawal",
   "wallet.history": "History",

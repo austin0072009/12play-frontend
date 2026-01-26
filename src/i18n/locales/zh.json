@@ -187,6 +187,14 @@
   "home.recentlyPlayedGames": "最近玩过",
   "home.gameMaintenance": "游戏正在维护中",
 
+  "leaderboard.latestWinners": "最新获奖者",
+  "leaderboard.highRollers": "高额赌客",
+  "leaderboard.betDate": "投注日期",
+  "leaderboard.game": "游戏",
+  "leaderboard.player": "玩家",
+  "leaderboard.betAmount": "投注金额",
+  "leaderboard.payout": "支付",
+
   "wallet.deposit": "存款",
   "wallet.withdrawal": "取款",
   "wallet.history": "历史记录",

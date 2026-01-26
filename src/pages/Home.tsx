@@ -5,6 +5,7 @@ import Banners from "../components/Banners";
 import GameCategories from "../components/GameCategories";
 import HorizontalGameList from "../components/HorizontalGameList";
 import FeatureCards from "../components/FeatureCards";
+import Leaderboard from "../components/Leaderboard";
 import Footer from "../components/Footer";
 import InitNoticeLayer from "../components/InitNoticeLayer";
 import styles from "./Home.module.css";
@@ -298,6 +299,9 @@ export default function Home() {
 
       {/* Feature Cards Section */}
       <FeatureCards />
+
+      {/* Leaderboard Section - Latest Winners / High Rollers */}
+      <Leaderboard autoScrollInterval={2000} />
 
       {/* Footer Section */}
       <Footer />
