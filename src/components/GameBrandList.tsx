@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/app';
 import { useUserStore } from '../store/user';
@@ -18,8 +18,12 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
   const [selectedBrand, setSelectedBrand] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [brandGames, setBrandGames] = useState<any[]>([]);
+  const [allProvidersGames, setAllProvidersGames] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState<string>('');
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const allGamesLoadedRef = useRef(false);
 
   // Extract unique game providers (plat_type) from app.data.games, filtered by gameType
   const serviceProviders = useMemo(() => {
@@ -55,7 +59,50 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
       setSelectedBrand('');
       setBrandGames([]);
     }
+    // Reset all providers games cache when gameType changes
+    setAllProvidersGames([]);
+    allGamesLoadedRef.current = false;
   }, [gameType, serviceProviders]);
+
+  // Function to fetch games from all providers
+  const fetchAllProvidersGames = useCallback(async () => {
+    if (allGamesLoadedRef.current && allProvidersGames.length > 0) {
+      return allProvidersGames;
+    }
+
+    if (serviceProviders.length === 0) return [];
+
+    setSearchLoading(true);
+    try {
+      const allGamesPromises = serviceProviders.map(async (provider) => {
+        try {
+          const games = await fetchGamesByBrand({
+            productCode: provider.id,
+            cateflag: gameType || '',
+          });
+          return games.map((g: any) => ({
+            ...g,
+            plat_type: g.plat_type || provider.id,
+            _provider_name: provider.name,
+          }));
+        } catch (err) {
+          console.error(`Error fetching games from ${provider.name}:`, err);
+          return [];
+        }
+      });
+
+      const results = await Promise.all(allGamesPromises);
+      const combinedGames = results.flat();
+      setAllProvidersGames(combinedGames);
+      allGamesLoadedRef.current = true;
+      return combinedGames;
+    } catch (err) {
+      console.error('Error fetching all providers games:', err);
+      return [];
+    } finally {
+      setSearchLoading(false);
+    }
+  }, [serviceProviders, gameType, allProvidersGames]);
 
   // Fetch games when brand changes
   useEffect(() => {
@@ -82,10 +129,34 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
     loadGames();
   }, [selectedBrand, gameType]);
 
+  // Handle search input with debounce - trigger fetching all games when user starts typing
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    if (searchQuery.trim().length >= 2 && !allGamesLoadedRef.current) {
+      searchTimeoutRef.current = setTimeout(() => {
+        fetchAllProvidersGames();
+      }, 300);
+    }
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchQuery, fetchAllProvidersGames]);
+
+  // Determine if we're in search mode (searching across all providers)
+  const isSearchMode = searchQuery.trim().length >= 2;
+
   // Filter and search games, and construct proper image URLs
   const filteredGames = useMemo(() => {
     const domain = app?.data?.domain || '';
-    let games = [...brandGames];
+    
+    // If searching, use all providers games; otherwise use current brand games
+    let games = isSearchMode ? [...allProvidersGames] : [...brandGames];
 
     // Filter by search query
     if (searchQuery.trim()) {
@@ -108,7 +179,7 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
         game_code: g.game_code || g.code,
       };
     });
-  }, [brandGames, searchQuery, app?.data?.domain, selectedBrand]);
+  }, [brandGames, allProvidersGames, searchQuery, app?.data?.domain, selectedBrand, isSearchMode]);
 
   const handleEnterGame = async (game: any) => {
     if (!token) {
@@ -187,9 +258,14 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
 
       {/* Games Grid */}
       <div className={styles.gamesContainer}>
-        {loading && <div className={styles.loading}>Loading games...</div>}
+        {(loading || searchLoading) && <div className={styles.loading}>Loading games...</div>}
         {error && <div className={styles.error}>{error}</div>}
-        {!loading && filteredGames.length > 0 && (
+        {isSearchMode && !searchLoading && filteredGames.length > 0 && (
+          <div className={styles.searchInfo}>
+            Showing {filteredGames.length} results across all providers
+          </div>
+        )}
+        {!loading && !searchLoading && filteredGames.length > 0 && (
           <div className={styles.gamesList}>
             {filteredGames.map((game) => (
               <div key={game.id} className={styles.gameItem} onClick={() => handleEnterGame(game)}>
@@ -205,7 +281,7 @@ export default function GameBrandList({ gameType = '' }: GameBrandListProps) {
             ))}
           </div>
         )}
-        {!loading && filteredGames.length === 0 && !error && (
+        {!loading && !searchLoading && filteredGames.length === 0 && !error && (
           <div className={styles.empty}>No games available</div>
         )}
       </div>

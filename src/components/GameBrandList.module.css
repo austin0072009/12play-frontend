@@ -150,3 +150,14 @@
   font-size: 1rem;
   padding: 2rem;
 }
+
+.searchInfo {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
